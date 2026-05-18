@@ -217,10 +217,9 @@ const GEAR_GROUPS = [
     { name: 'Logic Systems VA MAX', price: 12000000 },
   ]},
   { label: '무선 마이크', items: [
-    { name: 'Sennheiser EW-D 핸드', price: 0 },
-    { name: 'Sennheiser EW-D 헤드셋', price: 0 },
-    { name: 'Sennheiser EW-D 라발리에', price: 0 },
-    { name: 'Raikodic 4ch', price: 0 },
+    { name: 'Sennheiser EW-D 핸드마이크', price: 0 },
+    { name: 'Sennheiser EW-D 바디팩', price: 0 },
+    { name: 'Laycozic 4ch', price: 0 },
   ]},
   { label: '콘솔', items: [
     { name: 'Behringer WING Rack', price: 0 },

@@ -161,7 +161,8 @@ function RentalGear({ setPage }) {
             <div key={pkg.id} className={`pkg-card${selected === pkg.id ? ' selected' : ''}`}
               onClick={() => setSelected(selected === pkg.id ? null : pkg.id)}>
               {pkg.img ? (
-                <img className="pkg-img" src={pkg.img} alt={pkg.name} />
+                <img className="pkg-img" src={pkg.img} alt={pkg.name}
+                  style={{ objectFit: pkg.cat === 'DJ PACKAGE' ? 'contain' : 'cover', objectPosition: 'center top' }} />
               ) : (
                 <div className="pkg-img-placeholder">{CAT_ICON[pkg.cat] || CAT_ICON.default}</div>
               )}

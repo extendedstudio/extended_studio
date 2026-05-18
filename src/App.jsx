@@ -143,7 +143,7 @@ function Portfolio({ setPage }) {
 function GearCard({ item }) {
   return (
     <div className="gear-card">
-      {item.img && <img className="gear-img" src={item.img} alt={item.name} loading="lazy" style={{objectFit:'contain', background:'#0a0a0a'}} />}
+      {item.img && <img className="gear-img" src={item.img} alt={item.name} loading="lazy" style={{objectFit:'cover', background:'#111'}} />}
       <div className="gear-body">
         <div className="gear-cat">{item.cat}</div>
         <div className="gear-name">{item.name}</div>

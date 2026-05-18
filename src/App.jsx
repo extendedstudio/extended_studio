@@ -156,7 +156,7 @@ function GearCard({ item }) {
 }
 
 const PKG_CATS = ['전체', 'DJ PACKAGE', 'PA SYSTEM', 'LINE ARRAY']
-const RENTAL_TABS = ['패키지', '무선 마이크', '콘솔', 'DJ 장비']
+const RENTAL_TABS = ['패키지', '무선 마이크', '콘솔', 'DJ 장비', '앰프/프로세서', '스피커']
 
 function RentalGear({ setPage }) {
   const [catFilter, setCatFilter] = useState('전체')
@@ -239,6 +239,20 @@ function RentalGear({ setPage }) {
         {tab === 'DJ 장비' && (
           <div className="pkg-grid">
             {data.dj_gear.map(item => <GearCard key={item.id} item={item} />)}
+          </div>
+        )}
+
+        {/* 앰프/프로세서 탭 */}
+        {tab === '앰프/프로세서' && (
+          <div className="pkg-grid">
+            {data.amps.map(item => <GearCard key={item.id} item={item} />)}
+          </div>
+        )}
+
+        {/* 스피커 탭 */}
+        {tab === '스피커' && (
+          <div className="pkg-grid">
+            {data.speakers.map(item => <GearCard key={item.id} item={item} />)}
           </div>
         )}
 

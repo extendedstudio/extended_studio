@@ -139,11 +139,29 @@ function Portfolio({ setPage }) {
 }
 
 // ─── 패키지 페이지 ──────────────────────────────────────
+// ─── 장비 카드 컴포넌트 ────────────────────────────────────
+function GearCard({ item }) {
+  return (
+    <div className="gear-card">
+      {item.img && <img className="gear-img" src={item.img} alt={item.name} loading="lazy" />}
+      <div className="gear-body">
+        <div className="gear-cat">{item.cat}</div>
+        <div className="gear-name">{item.name}</div>
+        <div className="gear-sub">{item.sub}</div>
+        {item.spec && <div className="gear-spec">{item.spec}</div>}
+        {item.qty && <div className="gear-qty">보유: {item.qty}</div>}
+      </div>
+    </div>
+  )
+}
+
 const PKG_CATS = ['전체', 'DJ PACKAGE', 'PA SYSTEM', 'LINE ARRAY']
+const RENTAL_TABS = ['패키지', '무선 마이크', '콘솔', 'DJ 장비']
 
 function RentalGear({ setPage }) {
   const [catFilter, setCatFilter] = useState('전체')
   const [selected, setSelected] = useState(null)
+  const [tab, setTab] = useState('패키지')
 
   const filtered = catFilter === '전체' ? data.packages : data.packages.filter(p => p.cat === catFilter)
 
@@ -153,6 +171,16 @@ function RentalGear({ setPage }) {
         <div className="gold-bar" />
         <h1 className="section-title">RENTAL GEAR</h1>
         <p className="section-sub">행사 규모에 맞는 최적의 음향 패키지</p>
+
+        {/* 메인 탭 */}
+        <div className="section-tabs">
+          {RENTAL_TABS.map(t => (
+            <button key={t} className={`section-tab${tab === t ? ' active' : ''}`} onClick={() => setTab(t)}>{t}</button>
+          ))}
+        </div>
+
+        {/* 패키지 탭 */}
+        {tab === '패키지' && <>
         <div className="pf-tabs" style={{ marginBottom: 32 }}>
           {PKG_CATS.map(c => <button key={c} className={`tab-btn${catFilter === c ? ' on' : ''}`} onClick={() => setCatFilter(c)}>{c}</button>)}
         </div>
@@ -191,6 +219,29 @@ function RentalGear({ setPage }) {
             </div>
           ))}
         </div>
+        </>}
+
+        {/* 무선 마이크 탭 */}
+        {tab === '무선 마이크' && (
+          <div className="pkg-grid">
+            {data.mics.map(item => <GearCard key={item.id} item={item} />)}
+          </div>
+        )}
+
+        {/* 콘솔 탭 */}
+        {tab === '콘솔' && (
+          <div className="pkg-grid">
+            {data.consoles.map(item => <GearCard key={item.id} item={item} />)}
+          </div>
+        )}
+
+        {/* DJ 장비 탭 */}
+        {tab === 'DJ 장비' && (
+          <div className="pkg-grid">
+            {data.dj_gear.map(item => <GearCard key={item.id} item={item} />)}
+          </div>
+        )}
+
       </div>
     </div>
   )

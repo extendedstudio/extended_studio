@@ -276,3 +276,23 @@ body {
   .pkg-grid { grid-template-columns: 1fr; }
   .nav-link.admin { display: none; }
 }
+
+/* 장비 카드 (마이크/믹서/DJ) */
+.gear-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+  transition: border-color .25s, transform .2s;
+}
+.gear-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.gear-img { width: 100%; height: 180px; object-fit: cover; display: block; background: #0a0a0a; }
+.gear-body { padding: 16px; }
+.gear-cat { font-size: 9px; letter-spacing: .2em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
+.gear-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: .06em; margin-bottom: 4px; }
+.gear-sub { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.gear-spec { font-size: 11px; color: #555; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; line-height: 1.6; }
+.gear-qty { display: inline-block; background: #1a1a1a; border: 1px solid #333; border-radius: 20px; padding: 3px 10px; font-size: 10px; color: var(--gold); margin-top: 8px; }
+
+/* 섹션 탭 */
+.section-tabs { display: flex; gap: 0; margin-bottom: 40px; border-bottom: 1px solid var(--border); }
+.section-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); padding: 12px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: .1em; cursor: pointer; transition: all .2s; margin-bottom: -1px; }
+.section-tab.active { color: var(--gold); border-bottom-color: var(--gold); }

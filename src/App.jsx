@@ -197,12 +197,41 @@ function RentalGear({ setPage }) {
 
 // ─── 예약 폼 ────────────────────────────────────────────
 const GEAR_GROUPS = [
-  { label: 'DJ 패키지', items: ['Special Package', 'DJ FULL SET'] },
-  { label: 'PA 시스템', items: ['HK AUDIO POLAR 8', 'STUDIOMASTER DIRECT 121K', 'HK AUDIO POLAR 10', 'BIEMA X10', 'MONTARBO WIND 2200'] },
-  { label: '라인어레이', items: ['Logic Systems VA SMALL', 'Logic Systems VA MEDIUM', 'Logic Systems VA LARGE', 'Logic Systems VA MAX', 'X-Treme FULL SET', 'Martin Audio W8LC'] },
-  { label: '무선 마이크', items: ['Sennheiser EW-D 핸드', 'Sennheiser EW-D 헤드셋', 'Sennheiser EW-D 라발리에', 'Raikodic 4ch'] },
-  { label: '콘솔', items: ['Behringer WING Rack', 'Midas M32R', 'Allen & Heath QU-32', 'Yamaha'] },
+  { label: 'DJ 패키지', items: [
+    { name: 'Special Package', price: 400000 },
+    { name: 'DJ FULL SET', price: 1200000 },
+  ]},
+  { label: 'PA 시스템', items: [
+    { name: 'HK AUDIO POLAR 8', price: 560000 },
+    { name: 'STUDIOMASTER DIRECT 121K', price: 600000 },
+    { name: 'HK AUDIO POLAR 10', price: 800000 },
+    { name: 'BIEMA X10', price: 1200000 },
+    { name: 'MONTARBO WIND 2200', price: 1600000 },
+  ]},
+  { label: '라인어레이', items: [
+    { name: 'Logic Systems VA SMALL', price: 3600000 },
+    { name: 'X-Treme FULL SET', price: 3600000 },
+    { name: 'Logic Systems VA MEDIUM', price: 4400000 },
+    { name: 'Martin Audio W8LC', price: 7600000 },
+    { name: 'Logic Systems VA LARGE', price: 8400000 },
+    { name: 'Logic Systems VA MAX', price: 12000000 },
+  ]},
+  { label: '무선 마이크', items: [
+    { name: 'Sennheiser EW-D 핸드', price: 0 },
+    { name: 'Sennheiser EW-D 헤드셋', price: 0 },
+    { name: 'Sennheiser EW-D 라발리에', price: 0 },
+    { name: 'Raikodic 4ch', price: 0 },
+  ]},
+  { label: '콘솔', items: [
+    { name: 'Behringer WING Rack', price: 0 },
+    { name: 'Midas M32R', price: 0 },
+    { name: 'Allen & Heath QU-32', price: 0 },
+    { name: 'Yamaha', price: 0 },
+  ]},
 ]
+
+const won = n => n.toLocaleString('ko-KR') + '원'
+const getPrice = name => GEAR_GROUPS.flatMap(g => g.items).find(i => i.name === name)?.price || 0
 
 function Booking({ setPage }) {
   const [form, setForm] = useState({ name: '', phone: '', date: '', dur: '1일', type: '', gear: [], note: '' })
@@ -210,6 +239,7 @@ function Booking({ setPage }) {
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
   const toggleGear = g => setForm(f => ({ ...f, gear: f.gear.includes(g) ? f.gear.filter(x => x !== g) : [...f.gear, g] }))
+  const totalPrice = form.gear.reduce((sum, g) => sum + getPrice(g), 0)
 
   const submit = async () => {
     if (!form.name || !form.phone) return alert('이름과 연락처를 입력해주세요')
@@ -276,10 +306,14 @@ function Booking({ setPage }) {
                 <div key={group.label}>
                   <div style={{ fontSize: 10, letterSpacing: '.15em', color: $.gold, marginBottom: 8 }}>{group.label}</div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px,1fr))', gap: 6 }}>
-                    {group.items.map(item => (
-                      <div key={item} className={`gear-tag${form.gear.includes(item) ? ' on' : ''}`} onClick={() => toggleGear(item)}>
-                        <span style={{ fontSize: 9 }}>{form.gear.includes(item) ? '◉' : '○'}</span>
-                        {item}
+                    {group.items.map(({name, price}) => (
+                      <div key={name} className={`gear-tag${form.gear.includes(name) ? ' on' : ''}`} onClick={() => toggleGear(name)}
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span style={{ fontSize: 9 }}>{form.gear.includes(name) ? '◉' : '○'}</span>
+                          <span>{name}</span>
+                        </div>
+                        {price > 0 && <span style={{ fontSize: 10, color: form.gear.includes(name) ? '#000' : '#c8a96e', fontWeight: 700 }}>{won(price)}</span>}
                       </div>
                     ))}
                   </div>
@@ -295,6 +329,15 @@ function Booking({ setPage }) {
               value={form.note} onChange={e => set('note', e.target.value)} style={{ resize: 'vertical' }} />
           </div>
 
+          {totalPrice > 0 && (
+            <div style={{ background: '#111', border: '1px solid #c8a96e', borderRadius: 8, padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>선택 장비 예상 금액</div>
+                <div style={{ fontSize: 11, color: '#555' }}>* 실제 견적은 담당자 확인 후 안내</div>
+              </div>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, color: '#c8a96e', letterSpacing: '.04em' }}>{won(totalPrice)}</div>
+            </div>
+          )}
           <button className="btn-gold" style={{ width: '100%', padding: '14px', fontSize: 14, letterSpacing: '.1em' }} onClick={submit}>
             예약 문의 보내기
           </button>

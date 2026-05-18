@@ -143,11 +143,12 @@ function Portfolio({ setPage }) {
 function GearCard({ item }) {
   return (
     <div className="gear-card">
-      {item.img && <img className="gear-img" src={item.img} alt={item.name} loading="lazy" />}
+      {item.img && <img className="gear-img" src={item.img} alt={item.name} loading="lazy" style={{objectFit:'contain', background:'#0a0a0a'}} />}
       <div className="gear-body">
         <div className="gear-cat">{item.cat}</div>
         <div className="gear-name">{item.name}</div>
         <div className="gear-sub">{item.sub}</div>
+        {item.price > 0 && <div style={{color:'#c8a96e',fontWeight:700,fontSize:14,margin:'8px 0'}}>{item.price.toLocaleString('ko-KR')}원/일</div>}
         {item.spec && <div className="gear-spec">{item.spec}</div>}
         {item.qty && <div className="gear-qty">보유: {item.qty}</div>}
       </div>
@@ -156,7 +157,7 @@ function GearCard({ item }) {
 }
 
 const PKG_CATS = ['전체', 'DJ PACKAGE', 'PA SYSTEM', 'LINE ARRAY']
-const RENTAL_TABS = ['패키지', '무선 마이크', '콘솔', 'DJ 장비', '앰프/프로세서', '스피커']
+const RENTAL_TABS = ['패키지', 'DJ 장비', '스피커', '마이크', '콘솔', '액세서리']
 
 function RentalGear({ setPage }) {
   const [catFilter, setCatFilter] = useState('전체')
@@ -221,20 +222,6 @@ function RentalGear({ setPage }) {
         </div>
         </>}
 
-        {/* 무선 마이크 탭 */}
-        {tab === '무선 마이크' && (
-          <div className="pkg-grid">
-            {data.mics.map(item => <GearCard key={item.id} item={item} />)}
-          </div>
-        )}
-
-        {/* 콘솔 탭 */}
-        {tab === '콘솔' && (
-          <div className="pkg-grid">
-            {data.consoles.map(item => <GearCard key={item.id} item={item} />)}
-          </div>
-        )}
-
         {/* DJ 장비 탭 */}
         {tab === 'DJ 장비' && (
           <div className="pkg-grid">
@@ -242,17 +229,58 @@ function RentalGear({ setPage }) {
           </div>
         )}
 
-        {/* 앰프/프로세서 탭 */}
-        {tab === '앰프/프로세서' && (
-          <div className="pkg-grid">
-            {data.amps.map(item => <GearCard key={item.id} item={item} />)}
-          </div>
-        )}
-
         {/* 스피커 탭 */}
         {tab === '스피커' && (
+          <>
+            {['라인어레이','라인어레이 서브','액티브 PA','액티브 PA 서브','모니터'].map(cat => {
+              const items = data.speakers.filter(s => s.cat === cat)
+              if(!items.length) return null
+              return (
+                <div key={cat} style={{marginBottom: 40}}>
+                  <div style={{fontSize:10,letterSpacing:'.2em',color:'#c8a96e',marginBottom:16}}>{cat.toUpperCase()}</div>
+                  <div className="pkg-grid">{items.map(item => <GearCard key={item.id} item={item} />)}</div>
+                </div>
+              )
+            })}
+          </>
+        )}
+
+        {/* 마이크 탭 */}
+        {tab === '마이크' && (
+          <>
+            {['디지털 무선','아날로그 무선','유선 마이크','인이어 모니터'].map(cat => {
+              const items = data.mics.filter(m => m.cat === cat)
+              if(!items.length) return null
+              return (
+                <div key={cat} style={{marginBottom: 40}}>
+                  <div style={{fontSize:10,letterSpacing:'.2em',color:'#c8a96e',marginBottom:16}}>{cat.toUpperCase()}</div>
+                  <div className="pkg-grid">{items.map(item => <GearCard key={item.id} item={item} />)}</div>
+                </div>
+              )
+            })}
+          </>
+        )}
+
+        {/* 콘솔 탭 */}
+        {tab === '콘솔' && (
+          <>
+            {['아날로그 콘솔','디지털 콘솔','스테이지박스'].map(cat => {
+              const items = data.consoles.filter(c => c.cat === cat)
+              if(!items.length) return null
+              return (
+                <div key={cat} style={{marginBottom: 40}}>
+                  <div style={{fontSize:10,letterSpacing:'.2em',color:'#c8a96e',marginBottom:16}}>{cat.toUpperCase()}</div>
+                  <div className="pkg-grid">{items.map(item => <GearCard key={item.id} item={item} />)}</div>
+                </div>
+              )
+            })}
+          </>
+        )}
+
+        {/* 액세서리 탭 */}
+        {tab === '액세서리' && (
           <div className="pkg-grid">
-            {data.speakers.map(item => <GearCard key={item.id} item={item} />)}
+            {data.accessories.map(item => <GearCard key={item.id} item={item} />)}
           </div>
         )}
 

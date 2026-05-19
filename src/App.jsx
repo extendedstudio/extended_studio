@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import data from './data.json'
+import { db } from './firebase'
+import { collection, onSnapshot, doc, updateDoc } from 'firebase/firestore'
 import './index.css'
 
 const $ = {
@@ -150,7 +152,7 @@ function GearCard({ item }) {
         <div className="gear-sub">{item.sub}</div>
         {item.price > 0 && <div style={{color:'#c8a96e',fontWeight:700,fontSize:14,margin:'8px 0'}}>{item.price.toLocaleString('ko-KR')}원/일</div>}
         {item.spec && <div className="gear-spec">{item.spec}</div>}
-        {item.qty && <div className="gear-qty">보유: {item.qty}</div>}
+
       </div>
     </div>
   )
@@ -466,11 +468,80 @@ function Landing({ setPage }) {
 
 // ─── 어드민 ─────────────────────────────────────────────
 function Admin() {
+  const [requests, setRequests] = useState([])
+  const [selected, setSelected] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const STATUS = ['신청', '확인중', '확정', '취소']
+  const STATUS_COLOR = { '신청': '#f59e0b', '확인중': '#3b82f6', '확정': '#22c55e', '취소': '#ef4444' }
+
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, 'requests'), snap => {
+      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      setRequests(list)
+      setLoading(false)
+    })
+    return () => unsub()
+  }, [])
+
+  const updateStatus = async (id, status) => {
+    await updateDoc(doc(db, 'requests', id), { status })
+  }
+
   return (
-    <div style={{ background: $.bg, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ textAlign: 'center', color: $.muted }}>
-        <div style={{ fontSize: 40, marginBottom: 16 }}>🔒</div>
-        <p>어드민 페이지 준비중</p>
+    <div style={{ background: $.bg, minHeight: '100vh', padding: 'clamp(16px,4vw,40px)', fontFamily: "'Noto Sans KR', sans-serif" }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ width: 40, height: 2, background: $.gold, marginBottom: 16 }} />
+          <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 44, letterSpacing: '.08em', marginBottom: 4 }}>ADMIN</h1>
+          <p style={{ color: $.muted, fontSize: 13 }}>예약 신청 관리 · 총 {requests.length}건</p>
+        </div>
+
+        {loading ? (
+          <div style={{ color: $.muted, textAlign: 'center', padding: 60 }}>불러오는 중...</div>
+        ) : requests.length === 0 ? (
+          <div style={{ color: $.muted, textAlign: 'center', padding: 60 }}>신청 내역이 없습니다</div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {requests.map(r => (
+              <div key={r.id} onClick={() => setSelected(selected?.id === r.id ? null : r)}
+                style={{ background: '#111', border: `1px solid ${selected?.id === r.id ? $.gold : '#1e1e1e'}`, borderRadius: 12, padding: '16px 20px', cursor: 'pointer', transition: 'border-color .2s' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: selected?.id === r.id ? 16 : 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{ background: STATUS_COLOR[r.status] || '#666', borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 700, color: '#000' }}>{r.status || '신청'}</div>
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: 15 }}>{r.name}</div>
+                      <div style={{ fontSize: 12, color: $.muted }}>{r.phone} · {r.date} · {r.dur}</div>
+                    </div>
+                  </div>
+                  <div style={{ fontSize: 12, color: $.muted }}>{r.createdAt?.slice(0,10)}</div>
+                </div>
+
+                {selected?.id === r.id && (
+                  <div>
+                    <div style={{ borderTop: '1px solid #1e1e1e', paddingTop: 16, marginBottom: 16 }}>
+                      {r.type && <div style={{ fontSize: 13, marginBottom: 8 }}>행사유형: <span style={{ color: $.gold }}>{r.type}</span></div>}
+                      {r.gear?.length > 0 && (
+                        <div style={{ fontSize: 13, marginBottom: 8 }}>
+                          관심 장비: <span style={{ color: '#aaa' }}>{r.gear.join(', ')}</span>
+                        </div>
+                      )}
+                      {r.note && <div style={{ fontSize: 13, color: '#aaa' }}>메모: {r.note}</div>}
+                    </div>
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                      {STATUS.map(st => (
+                        <button key={st} onClick={e => { e.stopPropagation(); updateStatus(r.id, st) }}
+                          style={{ border: `1px solid ${r.status === st ? STATUS_COLOR[st] : '#333'}`, borderRadius: 20, padding: '5px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer', background: r.status === st ? STATUS_COLOR[st] : 'transparent', color: r.status === st ? '#000' : '#aaa' }}>
+                          {st}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

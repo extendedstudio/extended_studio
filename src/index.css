@@ -274,7 +274,46 @@ body {
 @media (max-width: 600px) {
   .pf-grid { columns: 1; }
   .pkg-grid { grid-template-columns: 1fr; }
-  .nav-link.admin { display: none; }
+}
+
+/* 햄버거 메뉴 (모바일) */
+.hamburger {
+  background: transparent; border: none; color: var(--text);
+  font-size: 22px; cursor: pointer; padding: 4px 10px;
+  font-family: inherit;
+}
+.mobile-menu {
+  background: rgba(8,8,8,0.98);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  padding: 4px 0;
+  animation: slideDown .2s ease-out;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.mobile-menu-item {
+  display: block;
+  padding: 16px 24px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 15px; letter-spacing: .12em;
+  color: var(--text); cursor: pointer;
+  border-bottom: 1px solid #141414;
+  text-decoration: none;
+  transition: background .15s, color .15s;
+}
+.mobile-menu-item:last-child { border-bottom: none; }
+.mobile-menu-item:active { background: #141414; }
+.mobile-menu-item.active { color: var(--gold); background: #0e0e0e; }
+.mobile-menu-item.kakao { color: #FEE500; }
+.mobile-menu-item.admin { color: var(--muted); font-size: 11px; letter-spacing: .2em; opacity: .6; }
+
+.desktop-only { display: flex; }
+.mobile-only { display: none; }
+@media (max-width: 760px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block; }
 }
 
 /* 장비 카드 (마이크/믹서/DJ) */

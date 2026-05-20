@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import data from './data.json'
 import { db } from './firebase'
 import { collection, onSnapshot, doc, updateDoc } from 'firebase/firestore'
@@ -161,7 +161,7 @@ function GearCard({ item }) {
 const PKG_CATS = ['전체', 'DJ PACKAGE', 'PA SYSTEM', 'LINE ARRAY']
 const RENTAL_TABS = ['패키지', 'DJ 장비', '스피커', '마이크', '콘솔', '액세서리']
 
-function RentalGear({ setPage }) {
+function RentalGear({ setPage, setSelectedPackage }) {
   const [catFilter, setCatFilter] = useState('전체')
   const [selected, setSelected] = useState(null)
   const [tab, setTab] = useState('패키지')
@@ -215,7 +215,11 @@ function RentalGear({ setPage }) {
                 </div>
                 {pkg.note && <p className="pkg-note">{pkg.note}</p>}
                 <button className="btn-gold" style={{ width: '100%', marginTop: 16 }}
-                  onClick={e => { e.stopPropagation(); setPage('booking') }}>
+                  onClick={e => {
+                    e.stopPropagation()
+                    setSelectedPackage(pkg)
+                    setPage('booking')
+                  }}>
                   이 패키지로 예약하기
                 </button>
               </div>
@@ -328,9 +332,16 @@ const GEAR_GROUPS = [
 const won = n => n.toLocaleString('ko-KR') + '원'
 const getPrice = name => GEAR_GROUPS.flatMap(g => g.items).find(i => i.name === name)?.price || 0
 
-function Booking({ setPage }) {
+function Booking({ setPage, selectedPackage, clearPackage }) {
   const [form, setForm] = useState({ name: '', phone: '', date: '', dur: '1일', type: '', gear: [], note: '' })
   const [done, setDone] = useState(false)
+
+  // 패키지에서 넘어왔을 때 자동으로 form.gear에 추가
+  useEffect(() => {
+    if (selectedPackage?.name) {
+      setForm(f => f.gear.includes(selectedPackage.name) ? f : ({ ...f, gear: [...f.gear, selectedPackage.name] }))
+    }
+  }, [selectedPackage])
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
   const toggleGear = g => setForm(f => ({ ...f, gear: f.gear.includes(g) ? f.gear.filter(x => x !== g) : [...f.gear, g] }))
@@ -363,6 +374,27 @@ function Booking({ setPage }) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+          {/* 선택한 패키지 표시 */}
+          {selectedPackage && (
+            <div style={{
+              background: '#1a1a1a', border: `1px solid ${$.gold}`,
+              borderRadius: 10, padding: '16px 18px',
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
+            }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 10, letterSpacing: '.2em', color: $.gold, marginBottom: 4 }}>선택한 패키지</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, letterSpacing: '.06em', marginBottom: 2 }}>{selectedPackage.name}</div>
+                {selectedPackage.sub && <div style={{ fontSize: 12, color: '#888' }}>{selectedPackage.sub}</div>}
+              </div>
+              <button onClick={() => {
+                setForm(f => ({ ...f, gear: f.gear.filter(g => g !== selectedPackage.name) }))
+                clearPackage && clearPackage()
+              }} style={{ background: 'transparent', border: '1px solid #333', color: '#aaa', padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 12, flexShrink: 0 }}>
+                해제
+              </button>
+            </div>
+          )}
+
           {/* 이름/연락처 */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px,100%),1fr))', gap: 14 }}>
             {[['name','이름 *','홍길동','text'],['phone','연락처 *','010-0000-0000','tel']].map(([k,l,p,t]) => (
@@ -549,20 +581,41 @@ function Admin() {
 
 // ─── 네비게이션 ─────────────────────────────────────────
 function Nav({ page, setPage }) {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const go = p => { setPage(p); setMenuOpen(false) }
+
   return (
     <nav className="nav">
       <div className="nav-inner">
-        <div className="logo" onClick={() => setPage('landing')}>
+        <div className="logo" onClick={() => go('landing')}>
           <span>EXTENDED <span>STUDIO</span></span>
         </div>
-        <div className="nav-links">
+
+        {/* 데스크탑 메뉴 */}
+        <div className="nav-links desktop-only">
           <span className={`nav-link${page === 'rental' ? ' active' : ''}`} onClick={() => setPage('rental')}>RENTAL GEAR</span>
           <span className={`nav-link${page === 'portfolio' ? ' active' : ''}`} onClick={() => setPage('portfolio')}>PORTFOLIO</span>
           <button className="btn-booking" onClick={() => setPage('booking')}>장비 예약</button>
           <a className="btn-kakao" href="http://pf.kakao.com/_mANXG/chat" target="_blank" rel="noreferrer">카카오톡</a>
           <span className="nav-link admin" style={{ fontSize: 10, opacity: .4 }} onClick={() => setPage('admin')}>ADMIN</span>
         </div>
+
+        {/* 모바일 햄버거 버튼 */}
+        <button className="hamburger mobile-only" onClick={() => setMenuOpen(!menuOpen)} aria-label="menu">
+          {menuOpen ? '✕' : '☰'}
+        </button>
       </div>
+
+      {/* 모바일 드롭다운 메뉴 */}
+      {menuOpen && (
+        <div className="mobile-menu mobile-only">
+          <div className={`mobile-menu-item${page === 'rental' ? ' active' : ''}`} onClick={() => go('rental')}>RENTAL GEAR</div>
+          <div className={`mobile-menu-item${page === 'portfolio' ? ' active' : ''}`} onClick={() => go('portfolio')}>PORTFOLIO</div>
+          <div className={`mobile-menu-item${page === 'booking' ? ' active' : ''}`} onClick={() => go('booking')}>장비 예약</div>
+          <a className="mobile-menu-item kakao" href="http://pf.kakao.com/_mANXG/chat" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)}>카카오톡 문의</a>
+          <div className="mobile-menu-item admin" onClick={() => go('admin')}>ADMIN</div>
+        </div>
+      )}
     </nav>
   )
 }
@@ -570,6 +623,7 @@ function Nav({ page, setPage }) {
 // ─── 앱 루트 ────────────────────────────────────────────
 export default function App() {
   const [page, setPage] = useState('landing')
+  const [selectedPackage, setSelectedPackage] = useState(null)
 
   // 스와이프 뒤로가기
   const handleTouchStart = e => { window._swipeX = e.touches[0].clientX }
@@ -584,9 +638,9 @@ export default function App() {
     <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <Nav page={page} setPage={setPage} />
       {page === 'landing' && <Landing setPage={setPage} />}
-      {page === 'rental' && <RentalGear setPage={setPage} />}
+      {page === 'rental' && <RentalGear setPage={setPage} setSelectedPackage={setSelectedPackage} />}
       {page === 'portfolio' && <Portfolio setPage={setPage} />}
-      {page === 'booking' && <Booking setPage={setPage} />}
+      {page === 'booking' && <Booking setPage={setPage} selectedPackage={selectedPackage} clearPackage={() => setSelectedPackage(null)} />}
       {page === 'admin' && <Admin />}
       <AiChat />
     </div>

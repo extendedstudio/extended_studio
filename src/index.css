@@ -81,14 +81,15 @@ body {
 
 /* 랜딩 */
 .hero {
-  min-height: 91vh; display: flex; align-items: center; justify-content: center;
+  min-height: clamp(560px, 78vh, 760px);
+  display: flex; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
   background: radial-gradient(ellipse 70% 55% at 50% 80%, #c8a96e09 0%, transparent 70%);
 }
 .hero-grid {
   position: absolute; inset: 0;
   background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 60px 60px; opacity: .4;
+  background-size: 60px 60px; opacity: .22;
 }
 .hero-content { text-align: center; position: relative; z-index: 1; padding: 0 24px; max-width: 800px; }
 .hero-eyebrow { font-size: 11px; letter-spacing: .4em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
@@ -323,7 +324,7 @@ body {
   transition: border-color .25s, transform .2s;
 }
 .gear-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-.gear-img { width: 100%; height: 180px; object-fit: cover; display: block; background: #0a0a0a; }
+.gear-img { width: 100%; height: 260px; object-fit: contain; display: block; background: #0a0a0a; }
 .gear-body { padding: 16px; }
 .gear-cat { font-size: 9px; letter-spacing: .2em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
 .gear-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: .06em; margin-bottom: 4px; }
@@ -332,6 +333,25 @@ body {
 .gear-qty { display: inline-block; background: #1a1a1a; border: 1px solid #333; border-radius: 20px; padding: 3px 10px; font-size: 10px; color: var(--gold); margin-top: 8px; }
 
 /* 섹션 탭 */
-.section-tabs { display: flex; gap: 0; margin-bottom: 40px; border-bottom: 1px solid var(--border); }
-.section-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); padding: 12px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: .1em; cursor: pointer; transition: all .2s; margin-bottom: -1px; }
+.section-tabs {
+  display: flex; gap: 0;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.section-tabs::-webkit-scrollbar { display: none; }
+.section-tab {
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  padding: 12px 20px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px; letter-spacing: .1em;
+  cursor: pointer; transition: all .2s;
+  margin-bottom: -1px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 .section-tab.active { color: var(--gold); border-bottom-color: var(--gold); }

@@ -145,7 +145,7 @@ function Portfolio({ setPage }) {
 function GearCard({ item }) {
   return (
     <div className="gear-card">
-      {item.img && <img className="gear-img" src={item.img} alt={item.name} loading="lazy" style={{objectFit:'contain', objectPosition:'center', background:'#111', padding:'8px'}} />}
+      {item.img && <img className="gear-img" src={item.img} alt={item.name} loading="lazy" style={{objectFit:'contain', objectPosition:'center', background:'transparent'}} />}
       <div className="gear-body">
         <div className="gear-cat">{item.cat}</div>
         <div className="gear-name">{item.name}</div>
@@ -499,38 +499,127 @@ function Landing({ setPage }) {
 }
 
 // ─── 어드민 ─────────────────────────────────────────────
+const ADMIN_PIN = '0903'
+
 function Admin() {
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem('admin_authed') === '1')
+  const [pinInput, setPinInput] = useState('')
+  const [pinError, setPinError] = useState(false)
   const [requests, setRequests] = useState([])
   const [selected, setSelected] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const STATUS = ['신청', '확인중', '확정', '취소']
   const STATUS_COLOR = { '신청': '#f59e0b', '확인중': '#3b82f6', '확정': '#22c55e', '취소': '#ef4444' }
 
+  const submitPin = e => {
+    e?.preventDefault?.()
+    if (pinInput === ADMIN_PIN) {
+      sessionStorage.setItem('admin_authed', '1')
+      setAuthed(true)
+      setPinError(false)
+    } else {
+      setPinError(true)
+      setPinInput('')
+    }
+  }
+
+  const logout = () => {
+    sessionStorage.removeItem('admin_authed')
+    setAuthed(false)
+    setPinInput('')
+  }
+
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, 'requests'), snap => {
-      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      setRequests(list)
-      setLoading(false)
-    })
+    if (!authed) return
+    const unsub = onSnapshot(
+      collection(db, 'requests'),
+      snap => {
+        const list = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        setRequests(list)
+        setLoading(false)
+        setError(null)
+      },
+      err => {
+        console.error('Firestore onSnapshot error:', err)
+        setError(err?.message || '데이터를 불러올 수 없습니다 (Firestore 권한/네트워크 확인 필요)')
+        setLoading(false)
+      }
+    )
     return () => unsub()
-  }, [])
+  }, [authed])
 
   const updateStatus = async (id, status) => {
-    await updateDoc(doc(db, 'requests', id), { status })
+    try {
+      await updateDoc(doc(db, 'requests', id), { status })
+    } catch (e) {
+      console.error('updateStatus error:', e)
+      alert('상태 업데이트 실패: ' + (e?.message || ''))
+    }
+  }
+
+  // PIN 입력 화면
+  if (!authed) {
+    return (
+      <section style={{ maxWidth: 420, margin: '0 auto', padding: '120px 24px 80px', minHeight: '70vh' }}>
+        <div style={{ textAlign: 'center', marginBottom: 36 }}>
+          <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
+          <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 36, letterSpacing: '.1em', marginBottom: 8 }}>ADMIN</h2>
+          <p style={{ color: $.muted, fontSize: 13 }}>비밀번호를 입력하세요</p>
+        </div>
+        <form onSubmit={submitPin}>
+          <input
+            type="password"
+            inputMode="numeric"
+            autoFocus
+            value={pinInput}
+            onChange={e => { setPinInput(e.target.value); setPinError(false) }}
+            placeholder="••••"
+            style={{
+              width: '100%', background: '#0f0f0f', border: `1px solid ${pinError ? '#ef4444' : '#2a2a2a'}`,
+              borderRadius: 10, padding: '18px 20px', color: '#fff', fontSize: 24, letterSpacing: '.4em',
+              textAlign: 'center', outline: 'none', marginBottom: 16, fontFamily: 'inherit'
+            }}
+          />
+          {pinError && <div style={{ color: '#ef4444', fontSize: 13, marginBottom: 16, textAlign: 'center' }}>비밀번호가 일치하지 않습니다</div>}
+          <button type="submit" className="btn-gold" style={{ width: '100%', padding: '14px' }}>
+            확인
+          </button>
+        </form>
+      </section>
+    )
   }
 
   return (
     <div style={{ background: $.bg, minHeight: '100vh', padding: 'clamp(16px,4vw,40px)', fontFamily: "'Noto Sans KR', sans-serif" }}>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ width: 40, height: 2, background: $.gold, marginBottom: 16 }} />
-          <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 44, letterSpacing: '.08em', marginBottom: 4 }}>ADMIN</h1>
-          <p style={{ color: $.muted, fontSize: 13 }}>예약 신청 관리 · 총 {requests.length}건</p>
+        <div style={{ marginBottom: 32, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
+          <div>
+            <div style={{ width: 40, height: 2, background: $.gold, marginBottom: 16 }} />
+            <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 44, letterSpacing: '.08em', marginBottom: 4 }}>ADMIN</h1>
+            <p style={{ color: $.muted, fontSize: 13 }}>예약 신청 관리 · 총 {requests.length}건</p>
+          </div>
+          <button onClick={logout} style={{
+            background: 'transparent', border: '1px solid #333', color: '#aaa',
+            padding: '8px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12,
+            fontFamily: 'inherit', whiteSpace: 'nowrap'
+          }}>
+            로그아웃
+          </button>
         </div>
 
         {loading ? (
           <div style={{ color: $.muted, textAlign: 'center', padding: 60 }}>불러오는 중...</div>
+        ) : error ? (
+          <div style={{ background: '#1a0e0e', border: '1px solid #ef4444', borderRadius: 8, padding: 24, color: '#fca5a5' }}>
+            <div style={{ fontWeight: 700, marginBottom: 8 }}>⚠ 데이터를 불러올 수 없습니다</div>
+            <div style={{ fontSize: 13, color: '#aaa', wordBreak: 'break-word' }}>{error}</div>
+            <div style={{ fontSize: 12, color: '#666', marginTop: 12, lineHeight: 1.6 }}>
+              해결: Firebase Console → Firestore Database → 규칙(Rules) 탭에서<br />
+              <code style={{ background: '#000', padding: '2px 6px', borderRadius: 4, color: '#c8a96e' }}>allow read, write: if true;</code> 로 설정 (테스트용)
+            </div>
+          </div>
         ) : requests.length === 0 ? (
           <div style={{ color: $.muted, textAlign: 'center', padding: 60 }}>신청 내역이 없습니다</div>
         ) : (

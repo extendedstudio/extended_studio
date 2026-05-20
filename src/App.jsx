@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import data from './data.json'
 import { db } from './firebase'
-import { collection, onSnapshot, doc, updateDoc } from 'firebase/firestore'
+import { collection, onSnapshot, doc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore'
 import './index.css'
 
 const $ = {
@@ -142,7 +142,7 @@ function Portfolio({ setPage }) {
 
 // ─── 패키지 페이지 ──────────────────────────────────────
 // ─── 장비 카드 컴포넌트 ────────────────────────────────────
-function GearCard({ item }) {
+function GearCard({ item, onBook, inCart }) {
   return (
     <div className="gear-card">
       {item.img && <img className="gear-img" src={item.img} alt={item.name} loading="lazy" style={{objectFit:'contain', objectPosition:'center', background:'transparent'}} />}
@@ -152,7 +152,16 @@ function GearCard({ item }) {
         <div className="gear-sub">{item.sub}</div>
         {item.price > 0 && <div style={{color:'#c8a96e',fontWeight:700,fontSize:14,margin:'8px 0'}}>{item.price.toLocaleString('ko-KR')}원/일</div>}
         {item.spec && <div className="gear-spec">{item.spec}</div>}
-
+        {onBook && (
+          <button
+            className={inCart ? "btn-gold-outline" : "btn-gold"}
+            style={{ width: '100%', marginTop: 14, padding: '10px', fontSize: 12, letterSpacing: '.1em' }}
+            onClick={e => { e.stopPropagation(); onBook(item) }}
+            disabled={inCart}
+          >
+            {inCart ? '✓ 장바구니 담김' : '+ 예약하기'}
+          </button>
+        )}
       </div>
     </div>
   )
@@ -161,10 +170,14 @@ function GearCard({ item }) {
 const PKG_CATS = ['전체', 'DJ PACKAGE', 'PA SYSTEM', 'LINE ARRAY']
 const RENTAL_TABS = ['패키지', 'DJ 장비', '스피커', '마이크', '콘솔', '액세서리']
 
-function RentalGear({ setPage, setSelectedPackage }) {
+function RentalGear({ setPage, addToCart, cartItems }) {
   const [catFilter, setCatFilter] = useState('전체')
   const [selected, setSelected] = useState(null)
   const [tab, setTab] = useState('패키지')
+  const inCart = (name) => cartItems?.some(c => c.name === name)
+  const handleBook = (item) => {
+    addToCart(item)
+  }
 
   const filtered = catFilter === '전체' ? data.packages : data.packages.filter(p => p.cat === catFilter)
 
@@ -214,13 +227,16 @@ function RentalGear({ setPage, setSelectedPackage }) {
                   ))}
                 </div>
                 {pkg.note && <p className="pkg-note">{pkg.note}</p>}
-                <button className="btn-gold" style={{ width: '100%', marginTop: 16 }}
+                <button
+                  className={inCart(pkg.name) ? "btn-gold-outline" : "btn-gold"}
+                  style={{ width: '100%', marginTop: 16 }}
                   onClick={e => {
                     e.stopPropagation()
-                    setSelectedPackage(pkg)
-                    setPage('booking')
-                  }}>
-                  이 패키지로 예약하기
+                    handleBook(pkg)
+                  }}
+                  disabled={inCart(pkg.name)}
+                >
+                  {inCart(pkg.name) ? '✓ 장바구니 담김' : '이 패키지로 예약하기'}
                 </button>
               </div>
             </div>
@@ -231,7 +247,7 @@ function RentalGear({ setPage, setSelectedPackage }) {
         {/* DJ 장비 탭 */}
         {tab === 'DJ 장비' && (
           <div className="pkg-grid">
-            {data.dj_gear.map(item => <GearCard key={item.id} item={item} />)}
+            {data.dj_gear.map(item => <GearCard key={item.id} item={item} onBook={handleBook} inCart={inCart(item.name)} />)}
           </div>
         )}
 
@@ -244,7 +260,7 @@ function RentalGear({ setPage, setSelectedPackage }) {
               return (
                 <div key={cat} style={{marginBottom: 40}}>
                   <div style={{fontSize:10,letterSpacing:'.2em',color:'#c8a96e',marginBottom:16}}>{cat.toUpperCase()}</div>
-                  <div className="pkg-grid">{items.map(item => <GearCard key={item.id} item={item} />)}</div>
+                  <div className="pkg-grid">{items.map(item => <GearCard key={item.id} item={item} onBook={handleBook} inCart={inCart(item.name)} />)}</div>
                 </div>
               )
             })}
@@ -260,7 +276,7 @@ function RentalGear({ setPage, setSelectedPackage }) {
               return (
                 <div key={cat} style={{marginBottom: 40}}>
                   <div style={{fontSize:10,letterSpacing:'.2em',color:'#c8a96e',marginBottom:16}}>{cat.toUpperCase()}</div>
-                  <div className="pkg-grid">{items.map(item => <GearCard key={item.id} item={item} />)}</div>
+                  <div className="pkg-grid">{items.map(item => <GearCard key={item.id} item={item} onBook={handleBook} inCart={inCart(item.name)} />)}</div>
                 </div>
               )
             })}
@@ -276,7 +292,7 @@ function RentalGear({ setPage, setSelectedPackage }) {
               return (
                 <div key={cat} style={{marginBottom: 40}}>
                   <div style={{fontSize:10,letterSpacing:'.2em',color:'#c8a96e',marginBottom:16}}>{cat.toUpperCase()}</div>
-                  <div className="pkg-grid">{items.map(item => <GearCard key={item.id} item={item} />)}</div>
+                  <div className="pkg-grid">{items.map(item => <GearCard key={item.id} item={item} onBook={handleBook} inCart={inCart(item.name)} />)}</div>
                 </div>
               )
             })}
@@ -286,7 +302,7 @@ function RentalGear({ setPage, setSelectedPackage }) {
         {/* 액세서리 탭 */}
         {tab === '액세서리' && (
           <div className="pkg-grid">
-            {data.accessories.map(item => <GearCard key={item.id} item={item} />)}
+            {data.accessories.map(item => <GearCard key={item.id} item={item} onBook={handleBook} inCart={inCart(item.name)} />)}
           </div>
         )}
 
@@ -296,61 +312,89 @@ function RentalGear({ setPage, setSelectedPackage }) {
 }
 
 // ─── 예약 폼 ────────────────────────────────────────────
-const GEAR_GROUPS = [
-  { label: 'DJ 패키지', items: [
-    { name: 'Special Package', price: 400000 },
-    { name: 'DJ FULL SET', price: 1200000 },
-  ]},
-  { label: 'PA 시스템', items: [
-    { name: 'HK AUDIO POLAR 8', price: 560000 },
-    { name: 'STUDIOMASTER DIRECT 121K', price: 600000 },
-    { name: 'HK AUDIO POLAR 10', price: 800000 },
-    { name: 'BIEMA X10', price: 1200000 },
-    { name: 'MONTARBO WIND 2200', price: 1600000 },
-  ]},
-  { label: '라인어레이', items: [
-    { name: 'Logic Systems VA SMALL', price: 3600000 },
-    { name: 'X-Treme FULL SET', price: 3600000 },
-    { name: 'Logic Systems VA MEDIUM', price: 4400000 },
-    { name: 'Martin Audio W8LC', price: 7600000 },
-    { name: 'Logic Systems VA LARGE', price: 8400000 },
-    { name: 'Logic Systems VA MAX', price: 12000000 },
-  ]},
-  { label: '무선 마이크', items: [
-    { name: 'Sennheiser EW-D 핸드마이크', price: 0 },
-    { name: 'Sennheiser EW-D 바디팩', price: 0 },
-    { name: 'Laycozic 4ch', price: 0 },
-  ]},
-  { label: '콘솔', items: [
-    { name: 'Behringer WING Rack', price: 0 },
-    { name: 'Midas M32R', price: 0 },
-    { name: 'Allen & Heath QU-32', price: 0 },
-    { name: 'Yamaha', price: 0 },
-  ]},
-]
+// data.json 기반으로 GEAR_GROUPS 자동 생성 (RentalGear와 자동 동기화)
+function parsePricingPrice(pricingArr) {
+  if (!Array.isArray(pricingArr) || !pricingArr.length) return 0
+  const str = pricingArr[0]?.p || ''
+  const digits = String(str).replace(/[^\d]/g, '')
+  return digits ? parseInt(digits, 10) : 0
+}
+
+function buildGearGroups(d) {
+  const groups = []
+
+  // 1) 패키지 (cat별로 그룹화: DJ PACKAGE / PA SYSTEM / LINE ARRAY 등)
+  const PKG_LABEL = { 'DJ PACKAGE': 'DJ 패키지', 'PA SYSTEM': 'PA 시스템', 'LINE ARRAY': '라인어레이' }
+  const pkgGroupMap = {}
+  ;(d.packages || []).forEach(p => {
+    const label = PKG_LABEL[p.cat] || p.cat || '패키지'
+    if (!pkgGroupMap[label]) pkgGroupMap[label] = []
+    pkgGroupMap[label].push({ name: p.name, price: parsePricingPrice(p.pricing) })
+  })
+  Object.entries(pkgGroupMap).forEach(([label, items]) => groups.push({ label, items }))
+
+  // 2) 일반 장비 카테고리들
+  const SECTIONS = [
+    { key: 'dj_gear',     label: 'DJ 장비' },
+    { key: 'speakers',    label: '스피커' },
+    { key: 'mics',        label: '마이크' },
+    { key: 'consoles',    label: '콘솔' },
+    { key: 'amps',        label: '앰프 / DSP' },
+    { key: 'accessories', label: '액세서리' },
+  ]
+  SECTIONS.forEach(({ key, label }) => {
+    const items = (d[key] || []).map(g => ({ name: g.name, price: g.price || 0 }))
+    if (items.length) groups.push({ label, items })
+  })
+
+  return groups
+}
+
+const GEAR_GROUPS = buildGearGroups(data)
 
 const won = n => n.toLocaleString('ko-KR') + '원'
 const getPrice = name => GEAR_GROUPS.flatMap(g => g.items).find(i => i.name === name)?.price || 0
 
-function Booking({ setPage, selectedPackage, clearPackage }) {
+function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
   const [form, setForm] = useState({ name: '', phone: '', date: '', dur: '1일', type: '', gear: [], note: '' })
   const [done, setDone] = useState(false)
 
-  // 패키지에서 넘어왔을 때 자동으로 form.gear에 추가
+  // 장바구니 → form.gear 동기화
   useEffect(() => {
-    if (selectedPackage?.name) {
-      setForm(f => f.gear.includes(selectedPackage.name) ? f : ({ ...f, gear: [...f.gear, selectedPackage.name] }))
-    }
-  }, [selectedPackage])
+    if (!cartItems?.length) return
+    setForm(f => {
+      const names = cartItems.map(c => c.name)
+      const missing = names.filter(n => !f.gear.includes(n))
+      return missing.length ? { ...f, gear: [...f.gear, ...missing] } : f
+    })
+  }, [cartItems])
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
   const toggleGear = g => setForm(f => ({ ...f, gear: f.gear.includes(g) ? f.gear.filter(x => x !== g) : [...f.gear, g] }))
   const totalPrice = form.gear.reduce((sum, g) => sum + getPrice(g), 0)
+    + cartItems.filter(c => c.price > 0 && !GEAR_GROUPS.some(gg => gg.items.some(i => i.name === c.name)))
+        .reduce((sum, c) => sum + (c.price || 0), 0)
+
+  const removeCartItem = (name) => {
+    removeFromCart(name)
+    setForm(f => ({ ...f, gear: f.gear.filter(g => g !== name) }))
+  }
 
   const submit = async () => {
     if (!form.name || !form.phone) return alert('이름과 연락처를 입력해주세요')
-    // Firebase 저장 (추후 연결)
-    setDone(true)
+    try {
+      await addDoc(collection(db, 'requests'), {
+        ...form,
+        status: '신청',
+        createdAt: new Date().toISOString(),
+        serverTime: serverTimestamp(),
+      })
+      clearCart && clearCart()
+      setDone(true)
+    } catch (e) {
+      console.error('예약 저장 실패:', e)
+      alert('예약 신청 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.\n\n' + (e?.message || ''))
+    }
   }
 
   if (done) return (
@@ -374,24 +418,37 @@ function Booking({ setPage, selectedPackage, clearPackage }) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-          {/* 선택한 패키지 표시 */}
-          {selectedPackage && (
+          {/* 장바구니 (선택한 장비 리스트) */}
+          {cartItems && cartItems.length > 0 && (
             <div style={{
               background: '#1a1a1a', border: `1px solid ${$.gold}`,
-              borderRadius: 10, padding: '16px 18px',
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
+              borderRadius: 10, padding: '16px 18px'
             }}>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: 10, letterSpacing: '.2em', color: $.gold, marginBottom: 4 }}>선택한 패키지</div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, letterSpacing: '.06em', marginBottom: 2 }}>{selectedPackage.name}</div>
-                {selectedPackage.sub && <div style={{ fontSize: 12, color: '#888' }}>{selectedPackage.sub}</div>}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <div style={{ fontSize: 10, letterSpacing: '.2em', color: $.gold }}>🛒 선택한 장비 · {cartItems.length}개</div>
+                <button onClick={() => { clearCart(); setForm(f => ({...f, gear: f.gear.filter(g => !cartItems.some(c => c.name === g))})) }}
+                  style={{ background: 'transparent', border: 'none', color: '#666', fontSize: 11, cursor: 'pointer' }}>
+                  전체 비우기
+                </button>
               </div>
-              <button onClick={() => {
-                setForm(f => ({ ...f, gear: f.gear.filter(g => g !== selectedPackage.name) }))
-                clearPackage && clearPackage()
-              }} style={{ background: 'transparent', border: '1px solid #333', color: '#aaa', padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 12, flexShrink: 0 }}>
-                해제
-              </button>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {cartItems.map(item => (
+                  <div key={item.name} style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12,
+                    background: '#0e0e0e', borderRadius: 8, padding: '10px 14px'
+                  }}>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, letterSpacing: '.04em', marginBottom: 2 }}>{item.name}</div>
+                      {item.sub && <div style={{ fontSize: 11, color: '#666' }}>{item.sub}</div>}
+                    </div>
+                    <button onClick={() => removeCartItem(item.name)} style={{
+                      background: 'transparent', border: '1px solid #333', color: '#aaa',
+                      width: 28, height: 28, borderRadius: '50%', cursor: 'pointer', fontSize: 14, flexShrink: 0,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0
+                    }}>×</button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
@@ -712,7 +769,13 @@ function Nav({ page, setPage }) {
 // ─── 앱 루트 ────────────────────────────────────────────
 export default function App() {
   const [page, setPage] = useState('landing')
-  const [selectedPackage, setSelectedPackage] = useState(null)
+  const [cartItems, setCartItems] = useState([])
+
+  const addToCart = (item) => setCartItems(prev =>
+    prev.some(p => p.name === item.name) ? prev : [...prev, item]
+  )
+  const removeFromCart = (name) => setCartItems(prev => prev.filter(p => p.name !== name))
+  const clearCart = () => setCartItems([])
 
   // 스와이프 뒤로가기
   const handleTouchStart = e => { window._swipeX = e.touches[0].clientX }
@@ -727,10 +790,16 @@ export default function App() {
     <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <Nav page={page} setPage={setPage} />
       {page === 'landing' && <Landing setPage={setPage} />}
-      {page === 'rental' && <RentalGear setPage={setPage} setSelectedPackage={setSelectedPackage} />}
+      {page === 'rental' && <RentalGear setPage={setPage} addToCart={addToCart} cartItems={cartItems} />}
       {page === 'portfolio' && <Portfolio setPage={setPage} />}
-      {page === 'booking' && <Booking setPage={setPage} selectedPackage={selectedPackage} clearPackage={() => setSelectedPackage(null)} />}
+      {page === 'booking' && <Booking setPage={setPage} cartItems={cartItems} removeFromCart={removeFromCart} clearCart={clearCart} />}
       {page === 'admin' && <Admin />}
+      {/* Floating cart button (rental 페이지에서만 보임, 1개 이상일 때) */}
+      {page === 'rental' && cartItems.length > 0 && (
+        <button onClick={() => setPage('booking')} className="floating-cart">
+          🛒 장바구니 <span className="cart-badge">{cartItems.length}</span>
+        </button>
+      )}
       <AiChat />
     </div>
   )

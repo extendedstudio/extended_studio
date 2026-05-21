@@ -339,7 +339,6 @@ function buildGearGroups(d) {
     { key: 'speakers',    label: '스피커' },
     { key: 'mics',        label: '마이크' },
     { key: 'consoles',    label: '콘솔' },
-    { key: 'amps',        label: '앰프 / DSP' },
     { key: 'accessories', label: '액세서리' },
   ]
   SECTIONS.forEach(({ key, label }) => {
@@ -533,8 +532,21 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
 
 // ─── 랜딩 ───────────────────────────────────────────────
 function Landing({ setPage }) {
+  // 포트폴리오 미리보기 3개 (data.json에서)
+  const portfolioPreview = (data.portfolio || []).slice(0, 6)
+  // 카테고리 카드
+  const categories = [
+    { label: 'DJ 장비', desc: 'CDJ-3000, DJM-A9, XDJ-XZ', count: data.dj_gear?.length || 0 },
+    { label: '라인어레이', desc: 'Martin Audio, Logic Systems', count: 5 },
+    { label: 'PA 시스템', desc: 'HK Audio, Studiomaster', count: 8 },
+    { label: '마이크', desc: 'Sennheiser, Shure, Kanals', count: data.mics?.length || 0 },
+    { label: '믹싱 콘솔', desc: 'Behringer WING, Midas M32', count: data.consoles?.length || 0 },
+    { label: '액세서리', desc: 'DJ테이블, 스탠드, 보면대', count: data.accessories?.length || 0 },
+  ]
+
   return (
     <div style={{ background: $.bg }}>
+      {/* Hero */}
       <section className="hero">
         <div className="hero-grid" />
         <div className="hero-content">
@@ -551,6 +563,99 @@ function Landing({ setPage }) {
           </div>
         </div>
       </section>
+
+      {/* About 한 줄 */}
+      <section className="about-strip">
+        <div className="about-inner">
+          <div className="about-item">
+            <div className="about-num">10+</div>
+            <div className="about-label">YEARS<br />EXPERIENCE</div>
+          </div>
+          <div className="about-divider" />
+          <div className="about-item">
+            <div className="about-num">500+</div>
+            <div className="about-label">EVENTS<br />COMPLETED</div>
+          </div>
+          <div className="about-divider" />
+          <div className="about-item">
+            <div className="about-num">100+</div>
+            <div className="about-label">PROFESSIONAL<br />EQUIPMENT</div>
+          </div>
+        </div>
+      </section>
+
+      {/* 장비 카테고리 */}
+      <section className="section-block">
+        <div className="section-head">
+          <div className="section-bar" />
+          <h2 className="section-title">EQUIPMENT</h2>
+          <p className="section-sub">최고급 장비로 완벽한 사운드를 제공합니다</p>
+        </div>
+        <div className="cat-grid">
+          {categories.map(c => (
+            <div className="cat-card" key={c.label} onClick={() => setPage('rental')}>
+              <div className="cat-count">{String(c.count).padStart(2, '0')}</div>
+              <div className="cat-label">{c.label}</div>
+              <div className="cat-desc">{c.desc}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 포트폴리오 프리뷰 */}
+      {portfolioPreview.length > 0 && (
+        <section className="section-block">
+          <div className="section-head">
+            <div className="section-bar" />
+            <h2 className="section-title">PORTFOLIO</h2>
+            <p className="section-sub">Extended Studio가 함께한 현장</p>
+          </div>
+          <div className="pf-preview-grid">
+            {portfolioPreview.map((p, i) => (
+              <div className="pf-preview-card" key={i} onClick={() => setPage('portfolio')}>
+                {p.img && <img src={p.img} alt={p.title || ''} loading="lazy" />}
+                <div className="pf-preview-overlay">
+                  <div className="pf-preview-title">{p.title || p.name || 'Event'}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: 32 }}>
+            <button className="btn-ghost" onClick={() => setPage('portfolio')} style={{ fontSize: 13, padding: '12px 32px' }}>
+              전체 포트폴리오 보기 →
+            </button>
+          </div>
+        </section>
+      )}
+
+      {/* CTA */}
+      <section className="cta-section">
+        <div className="cta-grid" />
+        <div className="cta-content">
+          <p className="cta-eyebrow">READY FOR YOUR EVENT?</p>
+          <h2 className="cta-title">최고의 사운드,<br />지금 예약하세요</h2>
+          <p className="cta-sub">행사 규모와 컨셉에 맞춘 맞춤형 견적을 제공합니다</p>
+          <div className="cta-btns">
+            <button className="btn-gold" style={{ fontSize: 14, padding: '15px 44px' }} onClick={() => setPage('booking')}>장비 예약 문의</button>
+            <a className="btn-ghost" style={{ fontSize: 14, padding: '15px 44px', textDecoration: 'none', display: 'inline-block' }}
+              href="http://pf.kakao.com/_mANXG/chat" target="_blank" rel="noreferrer">
+              카카오톡 상담
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="footer-inner">
+          <div className="footer-brand">EXTENDED STUDIO</div>
+          <div className="footer-info">
+            <div>경기도 고양시 · 서울 용산구</div>
+            <div>예약제 운영 / 카카오톡 문의</div>
+          </div>
+          <div className="footer-copy">© 2026 Extended Studio. All rights reserved.</div>
+        </div>
+      </footer>
     </div>
   )
 }

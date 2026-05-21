@@ -394,3 +394,222 @@ body {
   flex-shrink: 0;
 }
 .section-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* ─── Landing 추가 섹션들 ───────────────────────────── */
+
+/* About strip (지표 3개) */
+.about-strip {
+  background: linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
+  padding: 50px 24px;
+  border-top: 1px solid #141414;
+  border-bottom: 1px solid #141414;
+}
+.about-inner {
+  max-width: 980px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  gap: 60px;
+}
+.about-item { text-align: center; }
+.about-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px; line-height: 1;
+  color: var(--gold); letter-spacing: .04em;
+  margin-bottom: 8px;
+}
+.about-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px; letter-spacing: .2em;
+  color: var(--muted); line-height: 1.5;
+}
+.about-divider {
+  width: 1px; height: 80px;
+  background: linear-gradient(180deg, transparent 0%, #2a2a2a 50%, transparent 100%);
+}
+
+/* Section block 공통 */
+.section-block {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 24px;
+}
+.section-head { text-align: center; margin-bottom: 50px; }
+.section-bar {
+  width: 40px; height: 2px;
+  background: var(--gold);
+  margin: 0 auto 18px;
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 44px; letter-spacing: .08em;
+  margin-bottom: 10px;
+}
+.section-sub {
+  font-size: 14px; color: var(--muted);
+}
+
+/* 카테고리 그리드 */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: #1a1a1a;
+  border: 1px solid #1a1a1a;
+}
+.cat-card {
+  background: #0a0a0a;
+  padding: 40px 28px;
+  cursor: pointer;
+  transition: background .25s, transform .25s;
+  position: relative;
+  overflow: hidden;
+}
+.cat-card:hover {
+  background: #111111;
+}
+.cat-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .35s;
+}
+.cat-card:hover::after { transform: scaleX(1); }
+.cat-count {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px; color: var(--gold);
+  letter-spacing: .1em;
+  margin-bottom: 16px;
+}
+.cat-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: .04em;
+  margin-bottom: 8px;
+}
+.cat-desc { color: var(--muted); font-size: 12px; }
+
+/* 포트폴리오 미리보기 */
+.pf-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.pf-preview-card {
+  position: relative; cursor: pointer;
+  aspect-ratio: 4 / 3;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #0e0e0e;
+}
+.pf-preview-card img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease, opacity .3s;
+  opacity: .82;
+}
+.pf-preview-card:hover img {
+  transform: scale(1.05);
+  opacity: 1;
+}
+.pf-preview-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 16px 18px;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.85) 100%);
+}
+.pf-preview-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px; letter-spacing: .08em;
+}
+
+/* CTA 섹션 */
+.cta-section {
+  position: relative;
+  padding: 100px 24px;
+  background: linear-gradient(180deg, #060606 0%, #0a0a0a 50%, #060606 100%);
+  border-top: 1px solid #141414;
+  overflow: hidden;
+}
+.cta-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(200,169,110,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,169,110,0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+.cta-content {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+.cta-eyebrow {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px; letter-spacing: .3em;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.cta-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px; letter-spacing: .04em;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.cta-sub {
+  color: var(--muted); font-size: 15px;
+  margin-bottom: 36px;
+}
+.cta-btns {
+  display: flex; gap: 14px;
+  justify-content: center; flex-wrap: wrap;
+}
+
+/* Footer */
+.footer {
+  background: #050505;
+  border-top: 1px solid #141414;
+  padding: 50px 24px 40px;
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  text-align: center;
+}
+.footer-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: .2em;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+.footer-info {
+  color: var(--text); font-size: 13px;
+  line-height: 1.9;
+  margin-bottom: 24px;
+}
+.footer-copy {
+  color: #444; font-size: 11px;
+  letter-spacing: .05em;
+}
+
+/* 반응형 */
+@media (max-width: 760px) {
+  .about-inner { gap: 30px; }
+  .about-num { font-size: 40px; }
+  .about-divider { height: 60px; }
+  .section-block { padding: 70px 20px; }
+  .section-title { font-size: 32px; }
+  .cat-grid { grid-template-columns: repeat(2, 1fr); }
+  .cat-card { padding: 28px 20px; }
+  .cat-label { font-size: 18px; }
+  .pf-preview-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .cta-section { padding: 70px 20px; }
+  .cta-title { font-size: 32px; }
+}
+@media (max-width: 480px) {
+  .about-inner { flex-direction: column; gap: 24px; }
+  .about-divider { width: 60%; height: 1px; }
+  .cat-grid { grid-template-columns: 1fr; }
+  .pf-preview-grid { grid-template-columns: 1fr; }
+}

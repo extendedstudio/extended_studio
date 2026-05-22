@@ -142,10 +142,39 @@ function Portfolio({ setPage }) {
 
 // ─── 패키지 페이지 ──────────────────────────────────────
 // ─── 장비 카드 컴포넌트 ────────────────────────────────────
+function Lightbox({ src, alt, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+  return (
+    <div className="lightbox" onClick={onClose}>
+      <button className="lightbox-close" onClick={onClose} aria-label="닫기">×</button>
+      <img src={src} alt={alt} onClick={e => e.stopPropagation()} />
+    </div>
+  )
+}
+
 function GearCard({ item, onBook, inCart }) {
+  const [zoom, setZoom] = useState(false)
   return (
     <div className="gear-card">
-      {item.img && <img className="gear-img" src={item.img} alt={item.name} loading="lazy" style={{objectFit:'contain', objectPosition:'center', background:'transparent'}} />}
+      {item.img && (
+        <img
+          className="gear-img"
+          src={item.img}
+          alt={item.name}
+          loading="lazy"
+          style={{ objectFit: 'contain', objectPosition: 'center', background: 'transparent', cursor: 'zoom-in' }}
+          onClick={() => setZoom(true)}
+        />
+      )}
+      {zoom && <Lightbox src={item.img} alt={item.name} onClose={() => setZoom(false)} />}
       <div className="gear-body">
         <div className="gear-cat">{item.cat}</div>
         <div className="gear-name">{item.name}</div>
@@ -568,18 +597,18 @@ function Landing({ setPage }) {
       <section className="about-strip">
         <div className="about-inner">
           <div className="about-item">
-            <div className="about-num">10+</div>
-            <div className="about-label">YEARS<br />EXPERIENCE</div>
-          </div>
-          <div className="about-divider" />
-          <div className="about-item">
-            <div className="about-num">500+</div>
-            <div className="about-label">EVENTS<br />COMPLETED</div>
-          </div>
-          <div className="about-divider" />
-          <div className="about-item">
-            <div className="about-num">100+</div>
+            <div className="about-num">45+</div>
             <div className="about-label">PROFESSIONAL<br />EQUIPMENT</div>
+          </div>
+          <div className="about-divider" />
+          <div className="about-item">
+            <div className="about-num">100%</div>
+            <div className="about-label">CUSTOM<br />QUOTE</div>
+          </div>
+          <div className="about-divider" />
+          <div className="about-item">
+            <div className="about-num">BY</div>
+            <div className="about-label">APPOINTMENT<br />BASED</div>
           </div>
         </div>
       </section>

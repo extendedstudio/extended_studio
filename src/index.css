@@ -88,9 +88,9 @@ body {
   cursor: default;
 }
 
-/* Floating cart button */
+/* Floating cart button - 좌하단으로 이동 (AI 상담과 겹치지 않게) */
 .floating-cart {
-  position: fixed; bottom: 90px; right: 20px;
+  position: fixed; bottom: 36px; left: 36px;
   background: var(--gold); color: #000;
   border: none; border-radius: 28px;
   padding: 14px 22px;
@@ -115,7 +115,7 @@ body {
   100% { transform: scale(1); opacity: 1; }
 }
 @media (max-width: 600px) {
-  .floating-cart { bottom: 80px; right: 16px; padding: 12px 18px; font-size: 13px; }
+  .floating-cart { bottom: 24px; left: 16px; padding: 12px 18px; font-size: 13px; }
 }
 
 /* 랜딩 */
@@ -363,7 +363,7 @@ body {
   transition: border-color .25s, transform .2s;
 }
 .gear-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-.gear-img { width: 100%; height: 260px; object-fit: contain; display: block; background: #0a0a0a; }
+.gear-img { width: 100%; height: 320px; object-fit: contain; display: block; background: #0a0a0a; }
 .gear-body { padding: 16px; }
 .gear-cat { font-size: 9px; letter-spacing: .2em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
 .gear-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: .06em; margin-bottom: 4px; }
@@ -612,4 +612,36 @@ body {
   .about-divider { width: 60%; height: 1px; }
   .cat-grid { grid-template-columns: 1fr; }
   .pf-preview-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── Lightbox ─── */
+.lightbox {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 20px;
+  cursor: zoom-out;
+  animation: lbFade .15s ease-out;
+}
+.lightbox img {
+  max-width: min(1100px, 92vw);
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  cursor: default;
+}
+.lightbox-close {
+  position: fixed; top: 24px; right: 28px;
+  width: 44px; height: 44px;
+  border: none; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  color: #fff; font-size: 26px; line-height: 1;
+  cursor: pointer; z-index: 10000;
+  transition: background .15s;
+}
+.lightbox-close:hover { background: rgba(255,255,255,0.2); }
+@keyframes lbFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

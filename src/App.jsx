@@ -203,6 +203,7 @@ function RentalGear({ setPage, addToCart, cartItems }) {
   const [catFilter, setCatFilter] = useState('전체')
   const [selected, setSelected] = useState(null)
   const [tab, setTab] = useState('패키지')
+  const [zoomImg, setZoomImg] = useState(null)
   const inCart = (name) => cartItems?.some(c => c.name === name)
   const handleBook = (item) => {
     addToCart(item)
@@ -235,7 +236,8 @@ function RentalGear({ setPage, addToCart, cartItems }) {
               onClick={() => setSelected(selected === pkg.id ? null : pkg.id)}>
               {pkg.img ? (
                 <img className="pkg-img" src={pkg.img} alt={pkg.name}
-                  style={{ objectFit: pkg.cat === 'DJ PACKAGE' ? 'contain' : 'cover', objectPosition: 'center top' }} />
+                  style={{ objectFit: pkg.cat === 'DJ PACKAGE' ? 'contain' : 'cover', objectPosition: 'center top', cursor: 'zoom-in' }}
+                  onClick={e => { e.stopPropagation(); setZoomImg({ src: pkg.img, alt: pkg.name }); }} />
               ) : (
                 <div className="pkg-img-placeholder">{CAT_ICON[pkg.cat] || CAT_ICON.default}</div>
               )}
@@ -315,7 +317,7 @@ function RentalGear({ setPage, addToCart, cartItems }) {
         {/* 콘솔 탭 */}
         {tab === '콘솔' && (
           <>
-            {['아날로그 콘솔','디지털 콘솔','스테이지박스'].map(cat => {
+            {['디지털 콘솔','아날로그 콘솔','스테이지박스'].map(cat => {
               const items = data.consoles.filter(c => c.cat === cat)
               if(!items.length) return null
               return (
@@ -911,18 +913,39 @@ export default function App() {
   const removeFromCart = (name) => setCartItems(prev => prev.filter(p => p.name !== name))
   const clearCart = () => setCartItems([])
 
-  // 스와이프 뒤로가기
+  // 뒤로가기 로직
+  const goBack = () => {
+    if (page === 'booking') setPage('rental')
+    else if (page !== 'landing') setPage('landing')
+  }
+
+  // 스와이프 뒤로가기 (모바일)
   const handleTouchStart = e => { window._swipeX = e.touches[0].clientX }
   const handleTouchEnd = e => {
-    if (e.changedTouches[0].clientX - window._swipeX > 80) {
-      if (page === 'booking') setPage('rental')
-      else if (page !== 'landing') setPage('landing')
-    }
+    if (e.changedTouches[0].clientX - window._swipeX > 80) goBack()
   }
+
+  // 키보드 단축키: ESC 또는 Backspace (input 안에 있을 때는 제외)
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape' && page !== 'landing') {
+        const tag = (e.target.tagName || '').toLowerCase()
+        if (tag !== 'input' && tag !== 'textarea') goBack()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [page])
 
   return (
     <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <Nav page={page} setPage={setPage} />
+      {/* 데스크탑 뒤로가기 버튼 (landing 제외) */}
+      {page !== 'landing' && (
+        <button className="back-btn" onClick={goBack} aria-label="뒤로가기" title="뒤로가기 (ESC)">
+          ←
+        </button>
+      )}
       {page === 'landing' && <Landing setPage={setPage} />}
       {page === 'rental' && <RentalGear setPage={setPage} addToCart={addToCart} cartItems={cartItems} />}
       {page === 'portfolio' && <Portfolio setPage={setPage} />}

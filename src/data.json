@@ -655,7 +655,8 @@
       "sub": "48ch 랙형 디지털 콘솔",
       "spec": "1세트 | \n48채널 | S16 스테이지박스 포함",
       "qty": "1세트",
-      "price": 0
+      "price": 100000,
+      "img": "/images/wingrack.png"
     },
     {
       "id": "c5",

@@ -617,31 +617,68 @@ body {
 /* ─── Lightbox ─── */
 .lightbox {
   position: fixed; inset: 0; z-index: 9999;
-  background: rgba(0, 0, 0, 0.92);
+  background: rgba(0, 0, 0, 0.94);
   display: flex; align-items: center; justify-content: center;
-  padding: 40px 20px;
+  padding: 20px 12px;
   cursor: zoom-out;
   animation: lbFade .15s ease-out;
 }
 .lightbox img {
-  max-width: min(1100px, 92vw);
-  max-height: 88vh;
+  width: auto; height: auto;
+  max-width: 96vw;
+  max-height: 92vh;
   object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
   cursor: default;
 }
 .lightbox-close {
-  position: fixed; top: 24px; right: 28px;
-  width: 44px; height: 44px;
+  position: fixed; top: 20px; right: 20px;
+  width: 48px; height: 48px;
   border: none; border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  color: #fff; font-size: 26px; line-height: 1;
+  background: rgba(255,255,255,0.12);
+  color: #fff; font-size: 30px; line-height: 1;
   cursor: pointer; z-index: 10000;
   transition: background .15s;
 }
-.lightbox-close:hover { background: rgba(255,255,255,0.2); }
+.lightbox-close:hover { background: rgba(255,255,255,0.25); }
 @keyframes lbFade {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* ─── 데스크탑 뒤로가기 버튼 ─── */
+.back-btn {
+  position: fixed;
+  top: 90px;
+  left: 28px;
+  z-index: 100;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(200, 169, 110, 0.3);
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(10px);
+  color: #c8a96e;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.back-btn:hover {
+  background: rgba(200, 169, 110, 0.15);
+  border-color: rgba(200, 169, 110, 0.6);
+  transform: translateX(-2px);
+}
+@media (max-width: 768px) {
+  .back-btn {
+    top: 76px;
+    left: 16px;
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
 }

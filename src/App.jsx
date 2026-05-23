@@ -199,10 +199,10 @@ function GearCard({ item, onBook, inCart }) {
 const PKG_CATS = ['전체', 'DJ PACKAGE', 'PA SYSTEM', 'LINE ARRAY']
 const RENTAL_TABS = ['패키지', 'DJ 장비', '스피커', '마이크', '콘솔', '액세서리']
 
-function RentalGear({ setPage, addToCart, cartItems }) {
+function RentalGear({ setPage, addToCart, cartItems, initialTab }) {
   const [catFilter, setCatFilter] = useState('전체')
   const [selected, setSelected] = useState(null)
-  const [tab, setTab] = useState('패키지')
+  const [tab, setTab] = useState(initialTab || '패키지')
   const [zoomImg, setZoomImg] = useState(null)
   const inCart = (name) => cartItems?.some(c => c.name === name)
   const handleBook = (item) => {
@@ -562,17 +562,17 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
 }
 
 // ─── 랜딩 ───────────────────────────────────────────────
-function Landing({ setPage }) {
+function Landing({ setPage, goToRental }) {
   // 포트폴리오 미리보기 3개 (data.json에서)
   const portfolioPreview = (data.portfolio || []).slice(0, 6)
-  // 카테고리 카드
+  // 카테고리 카드 (tab: 클릭 시 이동할 RentalGear 탭)
   const categories = [
-    { label: 'DJ 장비', desc: 'CDJ-3000, DJM-A9, XDJ-XZ', count: data.dj_gear?.length || 0 },
-    { label: '라인어레이', desc: 'Martin Audio, Logic Systems', count: 5 },
-    { label: 'PA 시스템', desc: 'HK Audio, Studiomaster', count: 8 },
-    { label: '마이크', desc: 'Sennheiser, Shure, Kanals', count: data.mics?.length || 0 },
-    { label: '믹싱 콘솔', desc: 'Behringer WING, Midas M32', count: data.consoles?.length || 0 },
-    { label: '액세서리', desc: 'DJ테이블, 스탠드, 보면대', count: data.accessories?.length || 0 },
+    { label: 'DJ 장비', desc: 'CDJ-3000, DJM-A9, XDJ-XZ', count: data.dj_gear?.length || 0, tab: 'DJ 장비' },
+    { label: '라인어레이', desc: 'Martin Audio, Logic Systems', count: 5, tab: '스피커' },
+    { label: 'PA 시스템', desc: 'HK Audio, Studiomaster', count: 8, tab: '스피커' },
+    { label: '마이크', desc: 'Sennheiser, Shure, Kanals', count: data.mics?.length || 0, tab: '마이크' },
+    { label: '믹싱 콘솔', desc: 'Behringer WING, Midas M32', count: data.consoles?.length || 0, tab: '콘솔' },
+    { label: '액세서리', desc: 'DJ테이블, 스탠드, 보면대', count: data.accessories?.length || 0, tab: '액세서리' },
   ]
 
   return (
@@ -624,7 +624,7 @@ function Landing({ setPage }) {
         </div>
         <div className="cat-grid">
           {categories.map(c => (
-            <div className="cat-card" key={c.label} onClick={() => setPage('rental')}>
+            <div className="cat-card" key={c.label} onClick={() => goToRental(c.tab)}>
               <div className="cat-count">{String(c.count).padStart(2, '0')}</div>
               <div className="cat-label">{c.label}</div>
               <div className="cat-desc">{c.desc}</div>
@@ -905,7 +905,14 @@ function Nav({ page, setPage }) {
 // ─── 앱 루트 ────────────────────────────────────────────
 export default function App() {
   const [page, setPage] = useState('landing')
+  const [rentalTab, setRentalTab] = useState('패키지')
   const [cartItems, setCartItems] = useState([])
+
+  // 카테고리 카드 → rental 페이지로 이동 + 탭 선택
+  const goToRental = (tab) => {
+    if (tab) setRentalTab(tab)
+    setPage('rental')
+  }
 
   const addToCart = (item) => setCartItems(prev =>
     prev.some(p => p.name === item.name) ? prev : [...prev, item]
@@ -946,8 +953,8 @@ export default function App() {
           ←
         </button>
       )}
-      {page === 'landing' && <Landing setPage={setPage} />}
-      {page === 'rental' && <RentalGear setPage={setPage} addToCart={addToCart} cartItems={cartItems} />}
+      {page === 'landing' && <Landing setPage={setPage} goToRental={goToRental} />}
+      {page === 'rental' && <RentalGear setPage={setPage} addToCart={addToCart} cartItems={cartItems} initialTab={rentalTab} />}
       {page === 'portfolio' && <Portfolio setPage={setPage} />}
       {page === 'booking' && <Booking setPage={setPage} cartItems={cartItems} removeFromCart={removeFromCart} clearCart={clearCart} />}
       {page === 'admin' && <Admin />}

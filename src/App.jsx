@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import data from './data.json'
 import { db } from './firebase'
-import { collection, onSnapshot, doc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore'
+import { collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
 import './index.css'
 
 const $ = {
@@ -439,6 +439,8 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab }) {
         )}
 
       </div>
+      {/* 패키지 이미지 확대 */}
+      {zoomImg && <Lightbox src={zoomImg.src} alt={zoomImg.alt} onClose={() => setZoomImg(null)} />}
     </div>
   )
 }
@@ -853,6 +855,17 @@ function Admin() {
     }
   }
 
+  const deleteRequest = async (id, name) => {
+    if (!confirm(`"${name}" 님의 예약을 정말 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`)) return
+    try {
+      await deleteDoc(doc(db, 'requests', id))
+      if (selected?.id === id) setSelected(null)
+    } catch (e) {
+      console.error('deleteRequest error:', e)
+      alert('삭제 실패: ' + (e?.message || ''))
+    }
+  }
+
   // PIN 입력 화면
   if (!authed) {
     return (
@@ -943,13 +956,19 @@ function Admin() {
                       )}
                       {r.note && <div style={{ fontSize: 13, color: '#aaa' }}>메모: {r.note}</div>}
                     </div>
-                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
                       {STATUS.map(st => (
                         <button key={st} onClick={e => { e.stopPropagation(); updateStatus(r.id, st) }}
                           style={{ border: `1px solid ${r.status === st ? STATUS_COLOR[st] : '#333'}`, borderRadius: 20, padding: '5px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer', background: r.status === st ? STATUS_COLOR[st] : 'transparent', color: r.status === st ? '#000' : '#aaa' }}>
                           {st}
                         </button>
                       ))}
+                      <div style={{ flex: 1 }} />
+                      <button onClick={e => { e.stopPropagation(); deleteRequest(r.id, r.name) }}
+                        style={{ border: '1px solid #ef4444', borderRadius: 20, padding: '5px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer', background: 'transparent', color: '#ef4444', display: 'flex', alignItems: 'center', gap: 4 }}
+                        title="예약 삭제">
+                        🗑 삭제
+                      </button>
                     </div>
                   </div>
                 )}

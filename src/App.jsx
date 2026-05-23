@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import data from './data.json'
-import { db } from './firebase'
-import { collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
+import { db, getFcmMessaging, getToken, onMessage, VAPID_KEY } from './firebase'
+import { collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc, setDoc, serverTimestamp } from 'firebase/firestore'
 import './index.css'
 
 const $ = {
@@ -522,6 +522,22 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
         createdAt: new Date().toISOString(),
         serverTime: serverTimestamp(),
       })
+      // 어드민에게 푸시 알림 발송 (실패해도 예약은 정상 처리)
+      try {
+        fetch('/api/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: form.name,
+            phone: form.phone,
+            date: form.date,
+            dur: form.dur,
+            type: form.type,
+            gear: form.gear,
+            note: form.note,
+          }),
+        }).catch(err => console.warn('알림 발송 실패 (무시됨):', err))
+      } catch (_) {}
       clearCart && clearCart()
       setDone(true)
     } catch (e) {
@@ -805,8 +821,85 @@ function Admin() {
   const [selected, setSelected] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  // 알림 상태: 'unsupported' | 'denied' | 'granted-active' | 'granted-inactive' | 'default'
+  const [notifStatus, setNotifStatus] = useState('default')
+  const [notifMsg, setNotifMsg] = useState('')
   const STATUS = ['신청', '확인중', '확정', '취소']
   const STATUS_COLOR = { '신청': '#f59e0b', '확인중': '#3b82f6', '확정': '#22c55e', '취소': '#ef4444' }
+
+  // 알림 권한 상태 체크
+  useEffect(() => {
+    if (!authed) return
+    if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+      setNotifStatus('unsupported')
+      return
+    }
+    if (Notification.permission === 'denied') {
+      setNotifStatus('denied')
+      return
+    }
+    if (Notification.permission === 'granted') {
+      // 토큰이 Firestore에 저장되어 있는지 확인할 수도 있지만, 일단 활성으로 표시
+      setNotifStatus('granted-active')
+    } else {
+      setNotifStatus('default')
+    }
+  }, [authed])
+
+  // 알림 활성화 + 토큰 발급 + Firestore 저장
+  const enableNotifications = async () => {
+    try {
+      setNotifMsg('권한 요청 중...')
+      const permission = await Notification.requestPermission()
+      if (permission !== 'granted') {
+        setNotifStatus('denied')
+        setNotifMsg('알림이 차단되었습니다. 브라우저 설정에서 허용해주세요.')
+        return
+      }
+
+      // Service Worker 등록
+      setNotifMsg('Service Worker 등록 중...')
+      const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js')
+
+      // FCM 토큰 받기
+      setNotifMsg('FCM 토큰 발급 중...')
+      const messaging = await getFcmMessaging()
+      if (!messaging) {
+        setNotifStatus('unsupported')
+        setNotifMsg('이 브라우저는 푸시 알림을 지원하지 않습니다.')
+        return
+      }
+      const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg })
+      if (!token) {
+        setNotifMsg('토큰 발급 실패. 다시 시도해주세요.')
+        return
+      }
+
+      // Firestore에 토큰 저장 (admin_tokens 컬렉션, 토큰 자체를 ID로 사용해 중복 방지)
+      setNotifMsg('토큰 등록 중...')
+      await setDoc(doc(db, 'admin_tokens', token), {
+        token,
+        userAgent: navigator.userAgent,
+        createdAt: new Date().toISOString(),
+      })
+
+      // 포그라운드 메시지 핸들러 (탭이 열려있을 때)
+      onMessage(messaging, (payload) => {
+        console.log('[FG] Message:', payload)
+        new Notification(payload.notification?.title || '새 예약', {
+          body: payload.notification?.body || '',
+          icon: '/pwa-192.png',
+        })
+      })
+
+      setNotifStatus('granted-active')
+      setNotifMsg('알림이 활성화되었습니다 ✓')
+      setTimeout(() => setNotifMsg(''), 3000)
+    } catch (e) {
+      console.error('enableNotifications error:', e)
+      setNotifMsg('오류: ' + (e?.message || e))
+    }
+  }
 
   const submitPin = e => {
     e?.preventDefault?.()
@@ -901,20 +994,43 @@ function Admin() {
   return (
     <div style={{ background: $.bg, minHeight: '100vh', padding: 'clamp(16px,4vw,40px)', fontFamily: "'Noto Sans KR', sans-serif" }}>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
-        <div style={{ marginBottom: 32, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
+        <div style={{ marginBottom: 32, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16, flexWrap: 'wrap' }}>
           <div>
             <div style={{ width: 40, height: 2, background: $.gold, marginBottom: 16 }} />
             <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 44, letterSpacing: '.08em', marginBottom: 4 }}>ADMIN</h1>
             <p style={{ color: $.muted, fontSize: 13 }}>예약 신청 관리 · 총 {requests.length}건</p>
           </div>
-          <button onClick={logout} style={{
-            background: 'transparent', border: '1px solid #333', color: '#aaa',
-            padding: '8px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12,
-            fontFamily: 'inherit', whiteSpace: 'nowrap'
-          }}>
-            로그아웃
-          </button>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+            {/* 알림 활성화 버튼 */}
+            {notifStatus === 'unsupported' ? (
+              <span style={{ fontSize: 11, color: '#666' }}>📵 알림 미지원</span>
+            ) : notifStatus === 'granted-active' ? (
+              <span style={{ fontSize: 11, color: '#22c55e', padding: '6px 12px', border: '1px solid #22c55e33', borderRadius: 6 }}>🔔 알림 ON</span>
+            ) : notifStatus === 'denied' ? (
+              <span style={{ fontSize: 11, color: '#ef4444', padding: '6px 12px', border: '1px solid #ef444433', borderRadius: 6 }}>🔕 알림 차단됨</span>
+            ) : (
+              <button onClick={enableNotifications} style={{
+                background: 'transparent', border: '1px solid #c8a96e', color: '#c8a96e',
+                padding: '8px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12,
+                fontFamily: 'inherit', whiteSpace: 'nowrap'
+              }}>
+                🔔 알림 활성화
+              </button>
+            )}
+            <button onClick={logout} style={{
+              background: 'transparent', border: '1px solid #333', color: '#aaa',
+              padding: '8px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12,
+              fontFamily: 'inherit', whiteSpace: 'nowrap'
+            }}>
+              로그아웃
+            </button>
+          </div>
         </div>
+        {notifMsg && (
+          <div style={{ marginBottom: 16, padding: '10px 14px', background: '#1a1a1a', border: '1px solid #333', borderRadius: 6, fontSize: 12, color: '#aaa' }}>
+            {notifMsg}
+          </div>
+        )}
 
         {loading ? (
           <div style={{ color: $.muted, textAlign: 'center', padding: 60 }}>불러오는 중...</div>

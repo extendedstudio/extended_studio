@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import data from './data.json'
 import { db } from './firebase'
 import { collection, onSnapshot, doc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore'
@@ -143,6 +143,13 @@ function Portfolio({ setPage }) {
 // ─── 패키지 페이지 ──────────────────────────────────────
 // ─── 장비 카드 컴포넌트 ────────────────────────────────────
 function Lightbox({ src, alt, onClose }) {
+  const [scale, setScale] = useState(1)
+  const [tx, setTx] = useState(0)
+  const [ty, setTy] = useState(0)
+  const stageRef = useRef(null)
+  const dragRef = useRef({ dragging: false, x: 0, y: 0, tx: 0, ty: 0 })
+  const pinchRef = useRef({ pinching: false, dist: 0, scale: 1 })
+
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
@@ -152,10 +159,104 @@ function Lightbox({ src, alt, onClose }) {
       document.body.style.overflow = ''
     }
   }, [onClose])
+
+  // wheel은 passive 기본값이라 native로 등록
+  useEffect(() => {
+    const el = stageRef.current
+    if (!el) return
+    const onWheel = (e) => {
+      e.preventDefault()
+      const delta = -e.deltaY * 0.0025
+      setScale(prev => {
+        const next = Math.min(6, Math.max(1, prev * (1 + delta * 4)))
+        if (next <= 1.01) { setTx(0); setTy(0) }
+        return next
+      })
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [])
+
+  const reset = () => { setScale(1); setTx(0); setTy(0) }
+
+  const handleMouseDown = (e) => {
+    if (scale <= 1) return
+    e.preventDefault()
+    dragRef.current = { dragging: true, x: e.clientX, y: e.clientY, tx, ty }
+  }
+  const handleMouseMove = (e) => {
+    if (!dragRef.current.dragging) return
+    setTx(dragRef.current.tx + (e.clientX - dragRef.current.x))
+    setTy(dragRef.current.ty + (e.clientY - dragRef.current.y))
+  }
+  const handleMouseUp = () => { dragRef.current.dragging = false }
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX
+      const dy = e.touches[0].clientY - e.touches[1].clientY
+      pinchRef.current = { pinching: true, dist: Math.hypot(dx, dy), scale }
+    } else if (e.touches.length === 1 && scale > 1) {
+      dragRef.current = { dragging: true, x: e.touches[0].clientX, y: e.touches[0].clientY, tx, ty }
+    }
+  }
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 2 && pinchRef.current.pinching) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX
+      const dy = e.touches[0].clientY - e.touches[1].clientY
+      const dist = Math.hypot(dx, dy)
+      const next = Math.min(6, Math.max(1, pinchRef.current.scale * (dist / pinchRef.current.dist)))
+      setScale(next)
+      if (next <= 1.01) { setTx(0); setTy(0) }
+    } else if (e.touches.length === 1 && dragRef.current.dragging) {
+      setTx(dragRef.current.tx + (e.touches[0].clientX - dragRef.current.x))
+      setTy(dragRef.current.ty + (e.touches[0].clientY - dragRef.current.y))
+    }
+  }
+  const handleTouchEnd = (e) => {
+    if (e.touches.length < 2) pinchRef.current.pinching = false
+    if (e.touches.length === 0) dragRef.current.dragging = false
+  }
+
+  const handleDoubleClick = (e) => {
+    e.stopPropagation()
+    if (scale > 1) reset()
+    else setScale(2.5)
+  }
+
   return (
-    <div className="lightbox" onClick={onClose}>
+    <div className="lightbox" onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
       <button className="lightbox-close" onClick={onClose} aria-label="닫기">×</button>
-      <img src={src} alt={alt} onClick={e => e.stopPropagation()} />
+      {scale > 1.05 && (
+        <button className="lightbox-reset" onClick={reset} aria-label="원래대로" title="원래 크기로">⟲</button>
+      )}
+      <div
+        ref={stageRef}
+        className="lightbox-stage"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onDoubleClick={handleDoubleClick}
+      >
+        <img
+          src={src}
+          alt={alt}
+          draggable={false}
+          onClick={e => e.stopPropagation()}
+          style={{
+            transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
+            transition: (dragRef.current.dragging || pinchRef.current.pinching) ? 'none' : 'transform .15s ease-out',
+            cursor: scale > 1 ? (dragRef.current.dragging ? 'grabbing' : 'grab') : 'zoom-in'
+          }}
+        />
+      </div>
+      <div className="lightbox-hint">
+        휠/핀치 줌 · 드래그 이동 · 더블클릭 토글
+      </div>
     </div>
   )
 }

@@ -588,6 +588,16 @@ body {
   line-height: 1.9;
   margin-bottom: 24px;
 }
+.footer-ig {
+  display: inline-flex;
+  align-items: center;
+  color: var(--gold);
+  text-decoration: none;
+  transition: opacity .2s;
+  font-size: 13px;
+  letter-spacing: .02em;
+}
+.footer-ig:hover { opacity: 0.7; }
 .footer-copy {
   color: #444; font-size: 11px;
   letter-spacing: .05em;
@@ -644,8 +654,9 @@ body {
 }
 .lightbox-stage img {
   width: auto; height: auto;
-  max-width: 96vw;
+  max-width: 100%;
   max-height: 92vh;
+  display: block;
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.7);
@@ -653,22 +664,37 @@ body {
   will-change: transform;
   -webkit-user-drag: none;
 }
+.lightbox-img-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 96vw;
+  max-height: 92vh;
+  line-height: 0;
+}
 .lightbox-close, .lightbox-reset {
-  position: fixed; top: 20px;
-  width: 48px; height: 48px;
+  position: absolute;
+  top: 12px;
+  width: 40px;
+  height: 40px;
   border: none; border-radius: 50%;
-  background: rgba(255,255,255,0.12);
-  color: #fff; font-size: 26px; line-height: 1;
+  background: rgba(0, 0, 0, 0.65);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #fff; line-height: 1;
   cursor: pointer; z-index: 10000;
-  transition: background .15s;
+  transition: background .15s, transform .15s;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
-.lightbox-close { right: 20px; font-size: 30px; }
-.lightbox-reset { right: 80px; font-size: 22px; }
-.lightbox-close:hover, .lightbox-reset:hover { background: rgba(255,255,255,0.25); }
+.lightbox-close { right: 12px; font-size: 24px; }
+.lightbox-reset { right: 60px; font-size: 18px; }
+.lightbox-close:hover, .lightbox-reset:hover {
+  background: rgba(0, 0, 0, 0.85);
+  transform: scale(1.1);
+}
 .lightbox-hint {
   position: fixed;
   bottom: 20px;
@@ -683,9 +709,9 @@ body {
 }
 @media (max-width: 480px) {
   .lightbox-hint { font-size: 9px; bottom: 14px; }
-  .lightbox-close, .lightbox-reset { width: 40px; height: 40px; top: 14px; }
-  .lightbox-close { right: 14px; font-size: 24px; }
-  .lightbox-reset { right: 62px; font-size: 18px; }
+  .lightbox-close, .lightbox-reset { width: 36px; height: 36px; top: 8px; }
+  .lightbox-close { right: 8px; font-size: 22px; }
+  .lightbox-reset { right: 52px; font-size: 16px; }
 }
 @keyframes lbFade {
   from { opacity: 0; }

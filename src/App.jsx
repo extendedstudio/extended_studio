@@ -31,15 +31,22 @@ function AiChat() {
     setInput('')
     setLoading(true)
     try {
-      const r = await fetch('/.netlify/functions/chat', {
+      const r = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: newMsgs.map(m => ({ role: m.role, content: m.content })) })
       })
       const d = await r.json()
-      setMsgs(prev => [...prev, { role: 'assistant', content: d?.content?.[0]?.text || '카카오톡으로 문의해 주세요 🙏' }])
-    } catch {
-      setMsgs(prev => [...prev, { role: 'assistant', content: '카카오톡으로 문의해 주세요 🙏' }])
+      const reply = d?.content?.[0]?.text
+      if (reply) {
+        setMsgs(prev => [...prev, { role: 'assistant', content: reply }])
+      } else {
+        console.warn('AI chat unexpected response:', d)
+        setMsgs(prev => [...prev, { role: 'assistant', content: '죄송해요, 지금 응답이 어려워요. 카카오톡으로 문의해 주세요 🙏' }])
+      }
+    } catch (err) {
+      console.error('AI chat error:', err)
+      setMsgs(prev => [...prev, { role: 'assistant', content: '죄송해요, 지금 응답이 어려워요. 카카오톡으로 문의해 주세요 🙏' }])
     }
     setLoading(false)
   }
@@ -226,10 +233,6 @@ function Lightbox({ src, alt, onClose }) {
 
   return (
     <div className="lightbox" onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
-      <button className="lightbox-close" onClick={onClose} aria-label="닫기">×</button>
-      {scale > 1.05 && (
-        <button className="lightbox-reset" onClick={reset} aria-label="원래대로" title="원래 크기로">⟲</button>
-      )}
       <div
         ref={stageRef}
         className="lightbox-stage"
@@ -242,17 +245,23 @@ function Lightbox({ src, alt, onClose }) {
         onTouchEnd={handleTouchEnd}
         onDoubleClick={handleDoubleClick}
       >
-        <img
-          src={src}
-          alt={alt}
-          draggable={false}
-          onClick={e => e.stopPropagation()}
-          style={{
-            transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
-            transition: (dragRef.current.dragging || pinchRef.current.pinching) ? 'none' : 'transform .15s ease-out',
-            cursor: scale > 1 ? (dragRef.current.dragging ? 'grabbing' : 'grab') : 'zoom-in'
-          }}
-        />
+        <div className="lightbox-img-wrap">
+          <img
+            src={src}
+            alt={alt}
+            draggable={false}
+            onClick={e => e.stopPropagation()}
+            style={{
+              transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
+              transition: (dragRef.current.dragging || pinchRef.current.pinching) ? 'none' : 'transform .15s ease-out',
+              cursor: scale > 1 ? (dragRef.current.dragging ? 'grabbing' : 'grab') : 'zoom-in'
+            }}
+          />
+          <button className="lightbox-close" onClick={(e) => { e.stopPropagation(); onClose() }} aria-label="닫기">×</button>
+          {scale > 1.05 && (
+            <button className="lightbox-reset" onClick={(e) => { e.stopPropagation(); reset() }} aria-label="원래대로" title="원래 크기로">⟲</button>
+          )}
+        </div>
       </div>
       <div className="lightbox-hint">
         휠/핀치 줌 · 드래그 이동 · 더블클릭 토글
@@ -463,7 +472,7 @@ function buildGearGroups(d) {
   ;(d.packages || []).forEach(p => {
     const label = PKG_LABEL[p.cat] || p.cat || '패키지'
     if (!pkgGroupMap[label]) pkgGroupMap[label] = []
-    pkgGroupMap[label].push({ name: p.name, price: parsePricingPrice(p.pricing) })
+    pkgGroupMap[label].push({ name: p.name, price: parsePricingPrice(p.pricing), img: p.img })
   })
   Object.entries(pkgGroupMap).forEach(([label, items]) => groups.push({ label, items }))
 
@@ -476,7 +485,7 @@ function buildGearGroups(d) {
     { key: 'accessories', label: '액세서리' },
   ]
   SECTIONS.forEach(({ key, label }) => {
-    const items = (d[key] || []).map(g => ({ name: g.name, price: g.price || 0 }))
+    const items = (d[key] || []).map(g => ({ name: g.name, price: g.price || 0, img: g.img }))
     if (items.length) groups.push({ label, items })
   })
 
@@ -638,17 +647,28 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
               {GEAR_GROUPS.map(group => (
                 <div key={group.label}>
                   <div style={{ fontSize: 10, letterSpacing: '.15em', color: $.gold, marginBottom: 8 }}>{group.label}</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px,1fr))', gap: 6 }}>
-                    {group.items.map(({name, price}) => (
-                      <div key={name} className={`gear-tag${form.gear.includes(name) ? ' on' : ''}`} onClick={() => toggleGear(name)}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'space-between' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                          <span style={{ fontSize: 9 }}>{form.gear.includes(name) ? '◉' : '○'}</span>
-                          <span>{name}</span>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px,1fr))', gap: 6 }}>
+                    {group.items.map(({name, price, img}) => {
+                      const on = form.gear.includes(name)
+                      return (
+                        <div key={name} className={`gear-tag${on ? ' on' : ''}`} onClick={() => toggleGear(name)}
+                          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px' }}>
+                          {img ? (
+                            <img src={img} alt={name} loading="lazy"
+                              style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: 4, flexShrink: 0, background: '#1a1a1a' }} />
+                          ) : (
+                            <div style={{ width: 36, height: 36, borderRadius: 4, background: '#1a1a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 14, color: '#555' }}>♪</div>
+                          )}
+                          <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                              <span style={{ fontSize: 9 }}>{on ? '◉' : '○'}</span>
+                              <span style={{ fontSize: 11, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</span>
+                            </div>
+                            {price > 0 && <span style={{ fontSize: 10, color: on ? '#000' : '#c8a96e', fontWeight: 700 }}>{won(price)}</span>}
+                          </div>
                         </div>
-                        {price > 0 && <span style={{ fontSize: 10, color: form.gear.includes(name) ? '#000' : '#c8a96e', fontWeight: 700 }}>{won(price)}</span>}
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 </div>
               ))}
@@ -800,8 +820,15 @@ function Landing({ setPage, goToRental }) {
         <div className="footer-inner">
           <div className="footer-brand">EXTENDED STUDIO</div>
           <div className="footer-info">
-            <div>경기도 고양시 · 서울 용산구</div>
-            <div>예약제 운영 / 카카오톡 문의</div>
+            <div>서울 이태원</div>
+            <a href="https://instagram.com/extended_studio" target="_blank" rel="noopener noreferrer" className="footer-ig">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle', marginRight: 6 }}>
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+              @extended_studio
+            </a>
           </div>
           <div className="footer-copy">© 2026 Extended Studio. All rights reserved.</div>
         </div>

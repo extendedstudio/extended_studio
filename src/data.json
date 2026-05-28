@@ -837,6 +837,86 @@
   ],
   "speakers": [
     {
+      "id": "s11",
+      "cat": "액티브 PA",
+      "name": "HK Audio POLAR 8",
+      "sub": "컬럼 PA (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 160000,
+      "img": "/images/hk_polar8.png"
+    },
+    {
+      "id": "s12",
+      "cat": "액티브 PA",
+      "name": "HK Audio POLAR 10",
+      "sub": "컬럼 PA (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 250000,
+      "img": "/images/hk_polar10.png"
+    },
+    {
+      "id": "s10",
+      "cat": "액티브 PA",
+      "name": "Studiomaster 121K",
+      "sub": "컬럼 PA (1/4)",
+      "spec": "",
+      "qty": "보유",
+      "price": 220000,
+      "img": "/images/studiomaster.png"
+    },
+    {
+      "id": "s13",
+      "cat": "액티브 PA",
+      "name": "JBL PRX635",
+      "sub": "15인치 액티브 (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 220000,
+      "img": "/images/jbl_prx635.png"
+    },
+    {
+      "id": "s15",
+      "cat": "액티브 PA 서브",
+      "name": "EV ELX200-18SP",
+      "sub": "18인치 서브우퍼 (1/2)",
+      "spec": "",
+      "qty": "2ea",
+      "price": 150000,
+      "img": "/images/ev_elx200.png"
+    },
+    {
+      "id": "s7",
+      "cat": "액티브 PA",
+      "name": "Montarbo WIND 2200",
+      "sub": "Mid/High (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 300000,
+      "img": "/images/montarbo_wind.png"
+    },
+    {
+      "id": "s8",
+      "cat": "액티브 PA 서브",
+      "name": "Montarbo BXB18A",
+      "sub": "서브우퍼 (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 500000,
+      "img": "/images/montarbo_bxb.png"
+    },
+    {
+      "id": "s9",
+      "cat": "액티브 PA",
+      "name": "BIEMA X10",
+      "sub": "컬럼 PA (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 600000,
+      "img": "/images/biema.png"
+    },
+    {
       "id": "s1",
       "cat": "라인어레이",
       "name": "Martin Audio W8LC",
@@ -897,96 +977,6 @@
       "img": "/images/xtreme_sub.png"
     },
     {
-      "id": "s7",
-      "cat": "액티브 PA",
-      "name": "Montarbo WIND 2200",
-      "sub": "Mid/High (1/2)",
-      "spec": "",
-      "qty": "보유",
-      "price": 300000,
-      "img": "/images/montarbo_wind.png"
-    },
-    {
-      "id": "s8",
-      "cat": "액티브 PA 서브",
-      "name": "Montarbo BXB18A",
-      "sub": "서브우퍼 (1/2)",
-      "spec": "",
-      "qty": "보유",
-      "price": 500000,
-      "img": "/images/montarbo_bxb.png"
-    },
-    {
-      "id": "s9",
-      "cat": "액티브 PA",
-      "name": "BIEMA X10",
-      "sub": "컬럼 PA (1/2)",
-      "spec": "",
-      "qty": "보유",
-      "price": 600000,
-      "img": "/images/biema.png"
-    },
-    {
-      "id": "s10",
-      "cat": "액티브 PA",
-      "name": "Studiomaster 121K",
-      "sub": "컬럼 PA (1/4)",
-      "spec": "",
-      "qty": "보유",
-      "price": 220000,
-      "img": "/images/studiomaster.png"
-    },
-    {
-      "id": "s11",
-      "cat": "액티브 PA",
-      "name": "HK Audio POLAR 8",
-      "sub": "컬럼 PA (1/2)",
-      "spec": "",
-      "qty": "보유",
-      "price": 160000,
-      "img": "/images/hk_polar8.png"
-    },
-    {
-      "id": "s12",
-      "cat": "액티브 PA",
-      "name": "HK Audio POLAR 10",
-      "sub": "컬럼 PA (1/2)",
-      "spec": "",
-      "qty": "보유",
-      "price": 250000,
-      "img": "/images/hk_polar10.png"
-    },
-    {
-      "id": "s13",
-      "cat": "액티브 PA",
-      "name": "JBL PRX635",
-      "sub": "15인치 액티브 (1/2)",
-      "spec": "",
-      "qty": "보유",
-      "price": 220000,
-      "img": "/images/jbl_prx635.png"
-    },
-    {
-      "id": "s14",
-      "cat": "액티브 PA",
-      "name": "JBL EON ONE Compact",
-      "sub": "올인원 PA (1/2)",
-      "spec": "",
-      "qty": "보유",
-      "price": 100000,
-      "img": "/images/jbl_eoncompact.png"
-    },
-    {
-      "id": "s15",
-      "cat": "액티브 PA 서브",
-      "name": "EV ELX200-18SP",
-      "sub": "18인치 서브우퍼 (1/2)",
-      "spec": "",
-      "qty": "2ea",
-      "price": 150000,
-      "img": "/images/ev_elx200.png"
-    },
-    {
       "id": "s16",
       "cat": "모니터",
       "name": "Montarbo Fire12A MK2",
@@ -1015,6 +1005,16 @@
       "qty": "보유",
       "price": 100000,
       "img": "/images/mon_xtreme.png"
+    },
+    {
+      "id": "s14",
+      "cat": "액티브 PA",
+      "name": "JBL EON ONE Compact",
+      "sub": "올인원 PA (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 100000,
+      "img": "/images/jbl_eoncompact.png"
     }
   ],
   "accessories": [

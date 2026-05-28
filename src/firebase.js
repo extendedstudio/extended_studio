@@ -3,7 +3,7 @@ import { getFirestore } from "firebase/firestore";
 import { getMessaging, getToken, onMessage, isSupported } from "firebase/messaging";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBjLF36OWYOZ-xefFMujXryn7XeG9C5lYO",
+  apiKey: "AIzaSyBjlF360WY0Z-xefFMujXryn7XeG9C5lY0",
   authDomain: "extended-studio.firebaseapp.com",
   projectId: "extended-studio",
   storageBucket: "extended-studio.firebasestorage.app",

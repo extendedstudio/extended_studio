@@ -496,9 +496,37 @@ const GEAR_GROUPS = buildGearGroups(data)
 
 const won = n => n.toLocaleString('ko-KR') + '원'
 const getPrice = name => GEAR_GROUPS.flatMap(g => g.items).find(i => i.name === name)?.price || 0
+const getGearMeta = name => GEAR_GROUPS.flatMap(g => g.items).find(i => i.name === name) || null
+
+// 시작일~종료일 → 총 일수 (당일 = 1일, 1박2일 = 2일)
+function calcDays(startStr, endStr) {
+  if (!startStr || !endStr) return 1
+  const s = new Date(startStr)
+  const e = new Date(endStr)
+  if (isNaN(s) || isNaN(e)) return 1
+  const diff = Math.round((e - s) / 86400000) + 1
+  return diff > 0 ? diff : 1
+}
+
+// 일수 → 할인율 (장기 렌탈 할인표)
+function calcDiscount(days) {
+  if (days >= 60) return { rate: 0.80, label: '2개월 이상 80% 할인' }
+  if (days >= 30) return { rate: 0.70, label: '1개월 이상 70% 할인' }
+  if (days >= 21) return { rate: 0.60, label: '20박 21일 이상 60% 할인' }
+  if (days >= 11) return { rate: 0.50, label: '10박 11일 이상 50% 할인' }
+  if (days >= 7)  return { rate: 0.30, label: '6박 7일 이상 30% 할인' }
+  if (days >= 4)  return { rate: 0.20, label: '3박 4일 이상 20% 할인' }
+  return { rate: 0, label: '' }
+}
+
+// 일수 → 표기 문자열 (e.g. "3박 4일", "1일")
+function formatDuration(days) {
+  if (days <= 1) return '1일'
+  return `${days - 1}박 ${days}일`
+}
 
 function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
-  const [form, setForm] = useState({ name: '', phone: '', date: '', dur: '1일', type: '', gear: [], note: '' })
+  const [form, setForm] = useState({ name: '', phone: '', startDate: '', endDate: '', type: '', gear: [], note: '' })
   const [done, setDone] = useState(false)
 
   // 장바구니 → form.gear 동기화
@@ -513,9 +541,32 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
   const toggleGear = g => setForm(f => ({ ...f, gear: f.gear.includes(g) ? f.gear.filter(x => x !== g) : [...f.gear, g] }))
-  const totalPrice = form.gear.reduce((sum, g) => sum + getPrice(g), 0)
-    + cartItems.filter(c => c.price > 0 && !GEAR_GROUPS.some(gg => gg.items.some(i => i.name === c.name)))
-        .reduce((sum, c) => sum + (c.price || 0), 0)
+
+  // 선택한 장비 명세 (form.gear + 카트의 커스텀 아이템)
+  const selectedItems = (() => {
+    const items = []
+    form.gear.forEach(name => {
+      const meta = getGearMeta(name)
+      if (meta) items.push({ name, price: meta.price || 0, img: meta.img })
+      else {
+        const c = cartItems.find(c => c.name === name)
+        if (c) items.push({ name, price: c.price || 0, img: c.img })
+      }
+    })
+    cartItems.forEach(c => {
+      if (!items.some(i => i.name === c.name)) {
+        items.push({ name: c.name, price: c.price || 0, img: c.img })
+      }
+    })
+    return items
+  })()
+
+  const subtotal = selectedItems.reduce((s, i) => s + (i.price || 0), 0)
+  const days = calcDays(form.startDate, form.endDate)
+  const discount = calcDiscount(days)
+  const grossTotal = subtotal * days
+  const discountAmount = Math.round(grossTotal * discount.rate)
+  const finalPrice = grossTotal - discountAmount
 
   const removeCartItem = (name) => {
     removeFromCart(name)
@@ -524,9 +575,25 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
 
   const submit = async () => {
     if (!form.name || !form.phone) return alert('이름과 연락처를 입력해주세요')
+    if (!form.startDate) return alert('대여 시작일을 선택해주세요')
+    if (!form.endDate) return alert('반납일을 선택해주세요')
     try {
       await addDoc(collection(db, 'requests'), {
-        ...form,
+        name: form.name,
+        phone: form.phone,
+        date: form.startDate,       // 호환성 (기존 admin 표시)
+        startDate: form.startDate,
+        endDate: form.endDate,
+        dur: formatDuration(days),  // 호환성
+        days,
+        type: form.type,
+        gear: form.gear,
+        note: form.note,
+        subtotal,
+        discountRate: discount.rate,
+        discountLabel: discount.label,
+        discountAmount,
+        finalPrice,
         status: '신청',
         createdAt: new Date().toISOString(),
         serverTime: serverTimestamp(),
@@ -539,11 +606,12 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
           body: JSON.stringify({
             name: form.name,
             phone: form.phone,
-            date: form.date,
-            dur: form.dur,
+            date: form.startDate,
+            dur: formatDuration(days),
             type: form.type,
             gear: form.gear,
             note: form.note,
+            finalPrice,
           }),
         }).catch(err => console.warn('알림 발송 실패 (무시됨):', err))
       } catch (_) {}
@@ -620,17 +688,26 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
             ))}
           </div>
 
-          {/* 날짜/기간/행사유형 */}
+          {/* 날짜 (시작일 ~ 반납일) / 행사유형 */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px,1fr))', gap: 14 }}>
             <div>
-              <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 7 }}>행사 날짜 *</label>
-              <input type="date" className="field" value={form.date} onChange={e => set('date', e.target.value)} />
+              <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 7 }}>대여 시작일 *</label>
+              <input type="date" className="field" value={form.startDate}
+                onChange={e => {
+                  const v = e.target.value
+                  setForm(f => ({
+                    ...f,
+                    startDate: v,
+                    // 종료일이 없거나 시작일보다 빠르면 시작일로 자동 보정
+                    endDate: (!f.endDate || f.endDate < v) ? v : f.endDate
+                  }))
+                }} />
             </div>
             <div>
-              <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 7 }}>대여 기간</label>
-              <select className="field" value={form.dur} onChange={e => set('dur', e.target.value)}>
-                {['당일','1일','2일','3일','1주일','1개월 이상'].map(d => <option key={d}>{d}</option>)}
-              </select>
+              <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 7 }}>반납일 *</label>
+              <input type="date" className="field" value={form.endDate}
+                min={form.startDate || undefined}
+                onChange={e => set('endDate', e.target.value)} />
             </div>
             <div>
               <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 7 }}>행사 유형</label>
@@ -639,6 +716,107 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
               </select>
             </div>
           </div>
+
+          {/* 기간 자동 표시 */}
+          {form.startDate && form.endDate && (
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '10px 14px', background: '#0e0e0e', border: '1px solid #222',
+              borderRadius: 8, marginTop: -8
+            }}>
+              <span style={{ fontSize: 11, color: '#888' }}>대여 기간</span>
+              <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, letterSpacing: '.04em', color: '#fff' }}>
+                {formatDuration(days)}
+              </span>
+              {discount.rate > 0 && (
+                <span style={{
+                  marginLeft: 'auto', fontSize: 10, letterSpacing: '.15em',
+                  padding: '4px 10px', borderRadius: 4,
+                  background: $.gold, color: '#000', fontWeight: 700
+                }}>
+                  {Math.round(discount.rate * 100)}% OFF
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* ─── 견적 요약 (sticky) ─── */}
+          {selectedItems.length > 0 && (
+            <div style={{
+              position: 'sticky', top: 16, zIndex: 20,
+              background: 'linear-gradient(180deg, #1c1c1c 0%, #0e0e0e 100%)',
+              border: `1px solid ${$.gold}`, borderRadius: 12, padding: '18px 20px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.7)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
+                <div style={{ fontSize: 10, letterSpacing: '.2em', color: $.gold, fontWeight: 700 }}>
+                  견적 요약 · {selectedItems.length}개 장비
+                </div>
+                {form.startDate && form.endDate && (
+                  <div style={{ fontSize: 11, color: '#888' }}>
+                    {formatDuration(days)}
+                  </div>
+                )}
+              </div>
+
+              {/* 장비 명세 */}
+              <div style={{
+                display: 'flex', flexDirection: 'column', gap: 6,
+                marginBottom: 14, maxHeight: 180, overflowY: 'auto',
+                paddingRight: 4
+              }}>
+                {selectedItems.map(item => (
+                  <div key={item.name} style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12,
+                    fontSize: 12, color: '#ccc'
+                  }}>
+                    <span style={{
+                      flex: 1, minWidth: 0,
+                      whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+                    }}>{item.name}</span>
+                    <span style={{ color: '#888', flexShrink: 0 }}>
+                      {item.price > 0 ? won(item.price) : '견적'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* 계산 라인 */}
+              {subtotal > 0 && (
+                <div style={{ borderTop: '1px solid #2a2a2a', paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888' }}>
+                    <span>1일 단가 합계</span>
+                    <span>{won(subtotal)}</span>
+                  </div>
+                  {days > 1 && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888' }}>
+                      <span>× {days}일</span>
+                      <span>{won(grossTotal)}</span>
+                    </div>
+                  )}
+                  {discount.rate > 0 && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: $.gold }}>
+                      <span>{discount.label}</span>
+                      <span>− {won(discountAmount)}</span>
+                    </div>
+                  )}
+                  <div style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    marginTop: 8, paddingTop: 12, borderTop: '1px solid #2a2a2a'
+                  }}>
+                    <span style={{ fontSize: 12, color: '#aaa', letterSpacing: '.1em' }}>합계 (VAT 별도)</span>
+                    <span style={{
+                      fontFamily: "'Bebas Neue', sans-serif", fontSize: 28,
+                      color: $.gold, letterSpacing: '.04em'
+                    }}>{won(finalPrice)}</span>
+                  </div>
+                  <div style={{ fontSize: 10, color: '#555', textAlign: 'right', marginTop: 2 }}>
+                    * 실제 견적은 담당자 확인 후 안내드립니다
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* 장비 선택 */}
           <div>
@@ -682,15 +860,6 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
               value={form.note} onChange={e => set('note', e.target.value)} style={{ resize: 'vertical' }} />
           </div>
 
-          {totalPrice > 0 && (
-            <div style={{ background: '#111', border: '1px solid #c8a96e', borderRadius: 8, padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>선택 장비 예상 금액</div>
-                <div style={{ fontSize: 11, color: '#555' }}>* 실제 견적은 담당자 확인 후 안내</div>
-              </div>
-              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, color: '#c8a96e', letterSpacing: '.04em' }}>{won(totalPrice)}</div>
-            </div>
-          )}
           <button className="btn-gold" style={{ width: '100%', padding: '14px', fontSize: 14, letterSpacing: '.1em' }} onClick={submit}>
             예약 문의 보내기
           </button>
@@ -1082,10 +1251,21 @@ function Admin() {
                     <div style={{ background: STATUS_COLOR[r.status] || '#666', borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 700, color: '#000' }}>{r.status || '신청'}</div>
                     <div>
                       <div style={{ fontWeight: 700, fontSize: 15 }}>{r.name}</div>
-                      <div style={{ fontSize: 12, color: $.muted }}>{r.phone} · {r.date} · {r.dur}</div>
+                      <div style={{ fontSize: 12, color: $.muted }}>
+                        {r.phone} · {r.startDate || r.date}
+                        {r.endDate && r.endDate !== r.startDate && ` ~ ${r.endDate}`}
+                        {' · '}{r.dur || (r.days ? `${r.days}일` : '')}
+                      </div>
                     </div>
                   </div>
-                  <div style={{ fontSize: 12, color: $.muted }}>{r.createdAt?.slice(0,10)}</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
+                    {r.finalPrice > 0 && (
+                      <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, color: $.gold, letterSpacing: '.04em' }}>
+                        {won(r.finalPrice)}
+                      </div>
+                    )}
+                    <div style={{ fontSize: 11, color: $.muted }}>{r.createdAt?.slice(0,10)}</div>
+                  </div>
                 </div>
 
                 {selected?.id === r.id && (
@@ -1095,6 +1275,15 @@ function Admin() {
                       {r.gear?.length > 0 && (
                         <div style={{ fontSize: 13, marginBottom: 8 }}>
                           관심 장비: <span style={{ color: '#aaa' }}>{r.gear.join(', ')}</span>
+                        </div>
+                      )}
+                      {r.subtotal > 0 && (
+                        <div style={{ fontSize: 13, marginBottom: 8, color: '#aaa' }}>
+                          1일 단가 합계: <span style={{ color: '#ddd' }}>{won(r.subtotal)}</span>
+                          {r.days > 1 && <> · × {r.days}일 = <span style={{ color: '#ddd' }}>{won(r.subtotal * r.days)}</span></>}
+                          {r.discountRate > 0 && (
+                            <> · <span style={{ color: $.gold }}>{r.discountLabel}</span> (−{won(r.discountAmount)})</>
+                          )}
                         </div>
                       )}
                       {r.note && <div style={{ fontSize: 13, color: '#aaa' }}>메모: {r.note}</div>}

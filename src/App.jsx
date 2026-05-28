@@ -395,7 +395,7 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab }) {
         {/* 스피커 탭 */}
         {tab === '스피커' && (
           <>
-            {['라인어레이','라인어레이 서브','액티브 PA','액티브 PA 서브','모니터'].map(cat => {
+            {['액티브 PA','액티브 PA 서브','라인어레이','라인어레이 서브','모니터'].map(cat => {
               const items = data.speakers.filter(s => s.cat === cat)
               if(!items.length) return null
               return (

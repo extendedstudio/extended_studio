@@ -289,7 +289,7 @@ function GearCard({ item, onBook, inCart }) {
         <div className="gear-cat">{item.cat}</div>
         <div className="gear-name">{item.name}</div>
         <div className="gear-sub">{item.sub}</div>
-        {item.price > 0 && <div style={{color:'#c8a96e',fontWeight:700,fontSize:14,margin:'8px 0'}}>{item.price.toLocaleString('ko-KR')}원/일</div>}
+        {item.price > 0 && <div style={{color:'#c8a96e',fontWeight:700,fontSize:17,margin:'10px 0'}}>{item.price.toLocaleString('ko-KR')}원/일</div>}
         {item.spec && <div className="gear-spec">{item.spec}</div>}
         {onBook && (
           <button

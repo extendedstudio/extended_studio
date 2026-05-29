@@ -55,7 +55,7 @@
       "cc": "#6e9ec8",
       "name": "HK AUDIO POLAR 8",
       "sub": "소형 이벤트 / 실내 공연",
-      "coverage": "최대 150인",
+      "coverage": "최대 50인",
       "items": [
         "HK AUDIO POLAR 8 1Pair",
         "아날로그 믹싱콘솔 1EA"
@@ -67,7 +67,7 @@
         }
       ],
       "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
-      "img": "https://static.wixstatic.com/media/2eff20_a798f67b20a44f59968eb29052b2505f~mv2.jpg/v1/fill/w_979,h_555,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/HK8.jpg"
+      "img": "/images/pkg_hk_polar8.jpg"
     },
     {
       "id": 4,
@@ -75,7 +75,7 @@
       "cc": "#6e9ec8",
       "name": "STUDIOMASTER DIRECT 121K",
       "sub": "소형 이벤트 / 실내 공연",
-      "coverage": "최대 150인",
+      "coverage": "최대 100인",
       "items": [
         "STUDIO MASTER 1Pair",
         "아날로그 믹싱콘솔 1EA"
@@ -83,11 +83,11 @@
       "pricing": [
         {
           "l": "직접 수령 / 반납",
-          "p": "600,000원"
+          "p": "500,000원"
         }
       ],
       "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
-      "img": "https://static.wixstatic.com/media/2eff20_3cf424e84cb6485a85ca2de9085d821f~mv2.jpg/v1/fill/w_979,h_555,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/STUDIOMASTER.jpg"
+      "img": "/images/pkg_studiomaster.jpg"
     },
     {
       "id": 5,
@@ -95,9 +95,29 @@
       "cc": "#6e9ec8",
       "name": "HK AUDIO POLAR 10",
       "sub": "중형 이벤트 / 야외 행사",
-      "coverage": "최대 200인",
+      "coverage": "최대 100인",
       "items": [
         "HK AUDIO POLAR 10 1Pair",
+        "아날로그 믹싱콘솔 1EA"
+      ],
+      "pricing": [
+        {
+          "l": "직접 수령 / 반납",
+          "p": "700,000원"
+        }
+      ],
+      "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
+      "img": "/images/pkg_hk_polar10.jpg"
+    },
+    {
+      "id": 14,
+      "cat": "PA SYSTEM",
+      "name": "JBL PRX635 + EV ELX200 SET",
+      "sub": "중형 이벤트 / 야외 행사",
+      "coverage": "최대 200인",
+      "items": [
+        "JBL PRX635 1Pair",
+        "ELX200-18SP 1Pair",
         "아날로그 믹싱콘솔 1EA"
       ],
       "pricing": [
@@ -106,8 +126,8 @@
           "p": "800,000원"
         }
       ],
-      "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
-      "img": "https://static.wixstatic.com/media/2eff20_192cb672e802448596c6ce6e1309a89f~mv2.jpg/v1/fill/w_979,h_555,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/HK10.jpg"
+      "img": "/images/pkg_jbl_ev.jpg",
+      "note": "오퍼레이터 포함시 상황에 따라 디지털 믹서로 변환 가능합니다"
     },
     {
       "id": 6,
@@ -115,7 +135,7 @@
       "cc": "#6e9ec8",
       "name": "BIEMA X10",
       "sub": "중대형 페스티벌 / 야외",
-      "coverage": "최대 300인 (야외) ~ 500인 (실내)",
+      "coverage": "최대 200인 (야외) ~ 300인 (실내)",
       "items": [
         "BIEMA X10 1Pair",
         "아날로그 믹싱콘솔 1EA"
@@ -127,7 +147,7 @@
         }
       ],
       "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
-      "img": "https://static.wixstatic.com/media/2eff20_59835f1d9cb84b199203a9037ec35a3c~mv2.jpg/v1/fill/w_979,h_555,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/BIEMA.jpg"
+      "img": "/images/pkg_biema.jpg"
     },
     {
       "id": 7,
@@ -135,7 +155,7 @@
       "cc": "#6e9ec8",
       "name": "MONTARBO WIND 2200 / BXB18A",
       "sub": "중대형 페스티벌 / 야외",
-      "coverage": "최대 300인 (야외) ~ 500인 (실내)",
+      "coverage": "최대 200인 (야외) ~ 300인 (실내)",
       "items": [
         "MONTARBO WIND 2200 / BXB18A 1Pair",
         "아날로그 믹싱콘솔 1EA"
@@ -147,7 +167,7 @@
         }
       ],
       "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
-      "img": "https://static.wixstatic.com/media/2eff20_573b8d13ae8147adbbffe6ab2d6ffb8e~mv2.jpg/v1/fill/w_979,h_555,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/MONTARBO.jpg"
+      "img": "/images/pkg_montarbo.jpg"
     },
     {
       "id": 8,
@@ -853,7 +873,7 @@
       "sub": "컬럼 PA (1/2)",
       "spec": "",
       "qty": "보유",
-      "price": 400000,
+      "price": 350000,
       "img": "/images/hk_polar10.png"
     },
     {
@@ -863,7 +883,7 @@
       "sub": "컬럼 PA (1/4)",
       "spec": "",
       "qty": "보유",
-      "price": 300000,
+      "price": 250000,
       "img": "/images/studiomaster.png"
     },
     {
@@ -873,7 +893,7 @@
       "sub": "15인치 액티브 (1/2)",
       "spec": "",
       "qty": "보유",
-      "price": 220000,
+      "price": 250000,
       "img": "/images/jbl_prx635.png"
     },
     {

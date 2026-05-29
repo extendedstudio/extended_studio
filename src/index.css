@@ -235,7 +235,7 @@ body {
 }
 
 /* 예약 폼 */
-.booking-wrap { max-width: 780px; margin: 0 auto; padding: 64px clamp(16px,4vw,40px); }
+.booking-wrap { max-width: 1200px; margin: 0 auto; padding: 64px clamp(16px,4vw,40px); }
 .field {
   width: 100%; background: #111; border: 1px solid var(--border);
   color: var(--text); padding: 10px 14px; font-size: 14px;

@@ -468,20 +468,40 @@ function buildGearGroups(d) {
 
   // 1) 패키지 (cat별로 그룹화: DJ PACKAGE / PA SYSTEM / LINE ARRAY 등)
   const PKG_LABEL = { 'DJ PACKAGE': 'DJ 패키지', 'PA SYSTEM': 'PA 시스템', 'LINE ARRAY': '라인어레이' }
+  const PKG_ORDER = ['DJ 패키지', 'PA 시스템', '라인어레이']
   const pkgGroupMap = {}
   ;(d.packages || []).forEach(p => {
     const label = PKG_LABEL[p.cat] || p.cat || '패키지'
     if (!pkgGroupMap[label]) pkgGroupMap[label] = []
     pkgGroupMap[label].push({ name: p.name, price: parsePricingPrice(p.pricing), img: p.img })
   })
-  Object.entries(pkgGroupMap).forEach(([label, items]) => groups.push({ label, items }))
+  // 정해진 순서대로 패키지 그룹 추가 (정해진 것 먼저, 나머지는 뒤에)
+  PKG_ORDER.forEach(lab => { if (pkgGroupMap[lab]) groups.push({ label: lab, items: pkgGroupMap[lab] }) })
+  Object.entries(pkgGroupMap).forEach(([lab, items]) => { if (!PKG_ORDER.includes(lab)) groups.push({ label: lab, items }) })
 
-  // 2) 일반 장비 카테고리들
+  // 2) DJ 장비
+  const djItems = (d.dj_gear || []).map(g => ({ name: g.name, price: g.price || 0, img: g.img }))
+  if (djItems.length) groups.push({ label: 'DJ 장비', items: djItems })
+
+  // 3) 스피커 — 소제목별로 분리 (액티브 PA 먼저)
+  const SP_ORDER = ['액티브 PA', '액티브 PA 서브', '라인어레이', '라인어레이 서브', '모니터']
+  const SP_LABEL = {
+    '액티브 PA': '스피커 · 액티브 PA',
+    '액티브 PA 서브': '스피커 · 액티브 PA 서브',
+    '라인어레이': '스피커 · 라인어레이',
+    '라인어레이 서브': '스피커 · 라인어레이 서브',
+    '모니터': '스피커 · 모니터',
+  }
+  SP_ORDER.forEach(sub => {
+    const items = (d.speakers || []).filter(s => s.cat === sub).map(g => ({ name: g.name, price: g.price || 0, img: g.img }))
+    if (items.length) groups.push({ label: SP_LABEL[sub] || `스피커 · ${sub}`, items })
+  })
+
+  // 4) 나머지 카테고리
   const SECTIONS = [
-    { key: 'dj_gear',     label: 'DJ 장비' },
-    { key: 'speakers',    label: '스피커' },
     { key: 'mics',        label: '마이크' },
     { key: 'consoles',    label: '콘솔' },
+    { key: 'amps',        label: '앰프/DSP' },
     { key: 'accessories', label: '액세서리' },
   ]
   SECTIONS.forEach(({ key, label }) => {
@@ -525,8 +545,25 @@ function formatDuration(days) {
   return `${days - 1}박 ${days}일`
 }
 
+// 오퍼레이터 필수 장비 판별 (무선 마이크 / 디지털·아날로그 콘솔 / 믹서)
+// 스테이지박스는 I/O 확장이라 제외
+function requiresOperator(item) {
+  if (!item) return false
+  const sub = (item.sub || '').toLowerCase()
+  const name = (item.name || '').toLowerCase()
+  if (sub.includes('스테이지박스')) return false
+  if (sub.includes('무선')) return true
+  if (sub.includes('콘솔') || sub.includes('믹서')) return true
+  // 이름으로 fallback (data.json sub가 비어있는 경우)
+  if (/(ew-?d|slx|blx|qlx|ulx|wireless)/i.test(name)) return true
+  return false
+}
+
+const OPERATOR_FEE_REQUIRED = 350000  // 무선/콘솔용 필수 오퍼레이터 일당
+const OPERATOR_FEE_OPTIONAL = 200000  // 일반 요청 오퍼레이터 일당
+
 function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
-  const [form, setForm] = useState({ name: '', phone: '', startDate: '', endDate: '', type: '', gear: [], note: '' })
+  const [form, setForm] = useState({ name: '', phone: '', startDate: '', endDate: '', type: '', gear: [], qty: {}, operator: 'no', note: '' })
   const [done, setDone] = useState(false)
 
   // 장바구니 → form.gear 동기화
@@ -535,38 +572,61 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
     setForm(f => {
       const names = cartItems.map(c => c.name)
       const missing = names.filter(n => !f.gear.includes(n))
-      return missing.length ? { ...f, gear: [...f.gear, ...missing] } : f
+      if (!missing.length) return f
+      const newQty = { ...f.qty }
+      missing.forEach(n => { if (!newQty[n]) newQty[n] = 1 })
+      return { ...f, gear: [...f.gear, ...missing], qty: newQty }
     })
   }, [cartItems])
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
-  const toggleGear = g => setForm(f => ({ ...f, gear: f.gear.includes(g) ? f.gear.filter(x => x !== g) : [...f.gear, g] }))
+  const toggleGear = g => setForm(f => {
+    const has = f.gear.includes(g)
+    if (has) {
+      const q = { ...f.qty }; delete q[g]
+      return { ...f, gear: f.gear.filter(x => x !== g), qty: q }
+    }
+    return { ...f, gear: [...f.gear, g], qty: { ...f.qty, [g]: 1 } }
+  })
+  const setQty = (name, n) => setForm(f => ({ ...f, qty: { ...f.qty, [name]: Math.max(1, Math.min(99, n)) } }))
 
-  // 선택한 장비 명세 (form.gear + 카트의 커스텀 아이템)
+  // 선택한 장비 명세 (form.gear + 카트의 커스텀 아이템 + 수량)
   const selectedItems = (() => {
     const items = []
     form.gear.forEach(name => {
       const meta = getGearMeta(name)
-      if (meta) items.push({ name, price: meta.price || 0, img: meta.img })
+      const qty = form.qty[name] || 1
+      if (meta) items.push({ name, price: meta.price || 0, img: meta.img, qty })
       else {
         const c = cartItems.find(c => c.name === name)
-        if (c) items.push({ name, price: c.price || 0, img: c.img })
+        if (c) items.push({ name, price: c.price || 0, img: c.img, qty })
       }
     })
     cartItems.forEach(c => {
       if (!items.some(i => i.name === c.name)) {
-        items.push({ name: c.name, price: c.price || 0, img: c.img })
+        items.push({ name: c.name, price: c.price || 0, img: c.img, qty: form.qty[c.name] || 1 })
       }
     })
     return items
   })()
 
-  const subtotal = selectedItems.reduce((s, i) => s + (i.price || 0), 0)
+  const subtotal = selectedItems.reduce((s, i) => s + (i.price || 0) * (i.qty || 1), 0)
   const days = calcDays(form.startDate, form.endDate)
   const discount = calcDiscount(days)
   const grossTotal = subtotal * days
   const discountAmount = Math.round(grossTotal * discount.rate)
-  const finalPrice = grossTotal - discountAmount
+
+  // 무선 마이크 / 콘솔 자동 감지 → 필수 오퍼레이터 (락됨)
+  const requiredOperatorItems = selectedItems.filter(it => {
+    const meta = getGearMeta(it.name)
+    return requiresOperator(meta)
+  })
+  const operatorRequired = requiredOperatorItems.length > 0
+  // 효과적 오퍼레이터 상태: 필수면 무조건 'yes', 아니면 사용자 선택
+  const effectiveOperator = operatorRequired ? 'yes' : form.operator
+  const operatorFeePerDay = operatorRequired ? OPERATOR_FEE_REQUIRED : OPERATOR_FEE_OPTIONAL
+  const operatorFee = effectiveOperator === 'yes' ? operatorFeePerDay * days : 0
+  const finalPrice = grossTotal - discountAmount + operatorFee
 
   const removeCartItem = (name) => {
     removeFromCart(name)
@@ -588,6 +648,10 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
         days,
         type: form.type,
         gear: form.gear,
+        qty: form.qty,
+        operator: effectiveOperator,
+        operatorRequired,
+        operatorFee,
         note: form.note,
         subtotal,
         discountRate: discount.rate,
@@ -610,6 +674,8 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
             dur: formatDuration(days),
             type: form.type,
             gear: form.gear,
+            qty: form.qty,
+            operator: form.operator,
             note: form.note,
             finalPrice,
           }),
@@ -762,7 +828,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
               {/* 장비 명세 */}
               <div style={{
                 display: 'flex', flexDirection: 'column', gap: 6,
-                marginBottom: 14, maxHeight: 180, overflowY: 'auto',
+                marginBottom: 14, maxHeight: 200, overflowY: 'auto',
                 paddingRight: 4
               }}>
                 {selectedItems.map(item => (
@@ -773,9 +839,12 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                     <span style={{
                       flex: 1, minWidth: 0,
                       whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
-                    }}>{item.name}</span>
+                    }}>
+                      {item.name}
+                      {item.qty > 1 && <span style={{ color: $.gold, marginLeft: 6, fontWeight: 700 }}>× {item.qty}</span>}
+                    </span>
                     <span style={{ color: '#888', flexShrink: 0 }}>
-                      {item.price > 0 ? won(item.price) : '견적'}
+                      {item.price > 0 ? won(item.price * (item.qty || 1)) : '견적'}
                     </span>
                   </div>
                 ))}
@@ -800,6 +869,12 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                       <span>− {won(discountAmount)}</span>
                     </div>
                   )}
+                  {operatorFee > 0 && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: operatorRequired ? $.gold : '#888' }}>
+                      <span>오퍼레이터 {operatorRequired ? '(무선/콘솔 필수)' : '(요청)'} × {days}일</span>
+                      <span>+ {won(operatorFee)}</span>
+                    </div>
+                  )}
                   <div style={{
                     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                     marginTop: 8, paddingTop: 12, borderTop: '1px solid #2a2a2a'
@@ -820,29 +895,116 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
 
           {/* 장비 선택 */}
           <div>
-            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 14 }}>관심 장비 선택</label>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 14 }}>관심 장비 선택 <span style={{ color: '#444', fontSize: 10 }}>· 클릭해서 추가, 수량 조절 가능</span></label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
               {GEAR_GROUPS.map(group => (
                 <div key={group.label}>
-                  <div style={{ fontSize: 10, letterSpacing: '.15em', color: $.gold, marginBottom: 8 }}>{group.label}</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px,1fr))', gap: 6 }}>
+                  <div style={{ fontSize: 11, letterSpacing: '.2em', color: $.gold, marginBottom: 12, fontWeight: 700 }}>{group.label}</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px,1fr))', gap: 12 }}>
                     {group.items.map(({name, price, img}) => {
                       const on = form.gear.includes(name)
+                      const qty = form.qty[name] || 1
+                      const meta = getGearMeta(name)
+                      const needsOp = requiresOperator(meta)
                       return (
-                        <div key={name} className={`gear-tag${on ? ' on' : ''}`} onClick={() => toggleGear(name)}
-                          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px' }}>
-                          {img ? (
-                            <img src={img} alt={name} loading="lazy"
-                              style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: 4, flexShrink: 0, background: '#1a1a1a' }} />
-                          ) : (
-                            <div style={{ width: 36, height: 36, borderRadius: 4, background: '#1a1a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 14, color: '#555' }}>♪</div>
-                          )}
-                          <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                              <span style={{ fontSize: 9 }}>{on ? '◉' : '○'}</span>
-                              <span style={{ fontSize: 11, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</span>
-                            </div>
-                            {price > 0 && <span style={{ fontSize: 10, color: on ? '#000' : '#c8a96e', fontWeight: 700 }}>{won(price)}</span>}
+                        <div key={name}
+                          style={{
+                            background: on ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                            border: `1px solid ${on ? $.gold : '#222'}`,
+                            borderRadius: 10,
+                            overflow: 'hidden',
+                            cursor: 'pointer',
+                            transition: 'all .15s ease',
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                          onClick={() => toggleGear(name)}
+                        >
+                          {/* 이미지 영역 */}
+                          <div style={{
+                            position: 'relative', width: '100%', aspectRatio: '1.3 / 1',
+                            background: '#080808',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            overflow: 'hidden'
+                          }}>
+                            {img ? (
+                              <img src={img} alt={name} loading="lazy"
+                                style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center' }} />
+                            ) : (
+                              <div style={{ fontSize: 32, color: '#333' }}>♪</div>
+                            )}
+                            {/* 오퍼레이터 필수 배지 */}
+                            {needsOp && (
+                              <div style={{
+                                position: 'absolute', top: 8, left: 8,
+                                background: 'rgba(200,169,110,0.95)', color: '#000',
+                                fontSize: 9, letterSpacing: '.1em', fontWeight: 700,
+                                padding: '3px 7px', borderRadius: 3
+                              }}>OPERATOR 필수</div>
+                            )}
+                            {/* 선택 뱃지 */}
+                            <div style={{
+                              position: 'absolute', top: 8, right: 8,
+                              width: 24, height: 24, borderRadius: '50%',
+                              background: on ? $.gold : 'rgba(0,0,0,0.6)',
+                              border: `2px solid ${on ? $.gold : '#444'}`,
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              fontSize: 13, color: on ? '#000' : '#666', fontWeight: 700,
+                            }}>{on ? '✓' : ''}</div>
+                          </div>
+
+                          {/* 본문 */}
+                          <div style={{ padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            <div style={{
+                              fontSize: 13, color: '#eee', fontWeight: 600,
+                              lineHeight: 1.3, minHeight: 34,
+                              display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden'
+                            }}>{name}</div>
+                            {price > 0 && (
+                              <div style={{ fontSize: 13, color: $.gold, fontWeight: 700 }}>{won(price)} <span style={{ fontSize: 10, color: '#666', fontWeight: 400 }}>/일</span></div>
+                            )}
+
+                            {/* 수량 컨트롤 (선택된 경우만) */}
+                            {on && (
+                              <div
+                                onClick={e => e.stopPropagation()}
+                                style={{
+                                  display: 'flex', alignItems: 'center', gap: 10,
+                                  marginTop: 6, padding: '6px 4px',
+                                  borderTop: '1px solid #2a2a2a'
+                                }}>
+                                <span style={{ fontSize: 10, color: '#666', letterSpacing: '.1em' }}>수량</span>
+                                <button type="button"
+                                  onClick={() => setQty(name, qty - 1)}
+                                  disabled={qty <= 1}
+                                  style={{
+                                    width: 28, height: 28, borderRadius: 4,
+                                    background: qty <= 1 ? '#1a1a1a' : '#222',
+                                    border: '1px solid #333', color: qty <= 1 ? '#444' : '#fff',
+                                    cursor: qty <= 1 ? 'not-allowed' : 'pointer',
+                                    fontSize: 16, lineHeight: 1, fontWeight: 700,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                  }}>−</button>
+                                <span style={{
+                                  fontFamily: "'Bebas Neue', sans-serif", fontSize: 20,
+                                  color: '#fff', minWidth: 28, textAlign: 'center'
+                                }}>{qty}</span>
+                                <button type="button"
+                                  onClick={() => setQty(name, qty + 1)}
+                                  style={{
+                                    width: 28, height: 28, borderRadius: 4,
+                                    background: '#222', border: '1px solid #333', color: '#fff',
+                                    cursor: 'pointer', fontSize: 16, lineHeight: 1, fontWeight: 700,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                  }}>+</button>
+                                {price > 0 && (
+                                  <span style={{ marginLeft: 'auto', fontSize: 11, color: $.gold, fontWeight: 700 }}>
+                                    = {won(price * qty)}
+                                  </span>
+                                )}
+                              </div>
+                            )}
                           </div>
                         </div>
                       )
@@ -851,6 +1013,68 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* 오퍼레이터 */}
+          <div>
+            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
+              오퍼레이터 / 엔지니어
+              {operatorRequired && (
+                <span style={{ marginLeft: 8, color: $.gold, fontSize: 10, letterSpacing: '.05em' }}>
+                  · 무선 마이크/콘솔 선택으로 자동 적용됨
+                </span>
+              )}
+            </label>
+            {operatorRequired ? (
+              <div style={{
+                background: 'rgba(200,169,110,0.08)',
+                border: `1px solid ${$.gold}`,
+                borderRadius: 8, padding: '14px 18px',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
+              }}>
+                <div>
+                  <div style={{ fontSize: 13, color: $.gold, fontWeight: 700, marginBottom: 4 }}>
+                    🎚 오퍼레이터 필수 적용
+                  </div>
+                  <div style={{ fontSize: 11, color: '#888' }}>
+                    선택하신 {requiredOperatorItems.map(it => it.name).slice(0, 2).join(', ')}
+                    {requiredOperatorItems.length > 2 && ` 외 ${requiredOperatorItems.length - 2}개`}
+                    {' '}운영을 위해 전문 엔지니어가 동행합니다
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, color: $.gold, letterSpacing: '.04em' }}>
+                    {won(OPERATOR_FEE_REQUIRED)}
+                  </div>
+                  <div style={{ fontSize: 10, color: '#666' }}>/ 일</div>
+                </div>
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px,1fr))', gap: 10 }}>
+                {[
+                  { v: 'no', label: '필요 없음', sub: '셀프 운영' },
+                  { v: 'yes', label: '필요함', sub: `+ 일당 ${won(OPERATOR_FEE_OPTIONAL)} (참고)` },
+                  { v: 'consult', label: '협의', sub: '카톡 상의' },
+                ].map(opt => {
+                  const on = form.operator === opt.v
+                  return (
+                    <div key={opt.v} onClick={() => set('operator', opt.v)}
+                      style={{
+                        background: on ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                        border: `1px solid ${on ? $.gold : '#222'}`,
+                        borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
+                        transition: 'all .15s ease'
+                      }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                        <span style={{ fontSize: 13, color: on ? $.gold : '#888' }}>{on ? '◉' : '○'}</span>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: '#eee' }}>{opt.label}</span>
+                      </div>
+                      <div style={{ fontSize: 10, color: '#666', marginLeft: 24 }}>{opt.sub}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
 
           {/* 요청사항 */}

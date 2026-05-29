@@ -501,7 +501,6 @@ function buildGearGroups(d) {
   const SECTIONS = [
     { key: 'mics',        label: '마이크' },
     { key: 'consoles',    label: '콘솔' },
-    { key: 'amps',        label: '앰프/DSP' },
     { key: 'accessories', label: '액세서리' },
   ]
   SECTIONS.forEach(({ key, label }) => {
@@ -888,6 +887,12 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                   <div style={{ fontSize: 10, color: '#555', textAlign: 'right', marginTop: 2 }}>
                     * 실제 견적은 담당자 확인 후 안내드립니다
                   </div>
+                  {/* 예약 문의 버튼 (견적 박스 안) */}
+                  <button className="btn-gold"
+                    style={{ width: '100%', padding: '14px', fontSize: 14, letterSpacing: '.1em', marginTop: 14 }}
+                    onClick={submit}>
+                    예약 문의 보내기
+                  </button>
                 </div>
               )}
             </div>
@@ -1084,9 +1089,12 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
               value={form.note} onChange={e => set('note', e.target.value)} style={{ resize: 'vertical' }} />
           </div>
 
-          <button className="btn-gold" style={{ width: '100%', padding: '14px', fontSize: 14, letterSpacing: '.1em' }} onClick={submit}>
-            예약 문의 보내기
-          </button>
+          {/* 견적 요약이 안 보일 때(장비 미선택)도 예약 보낼 수 있게 폴백 */}
+          {selectedItems.length === 0 && (
+            <button className="btn-gold" style={{ width: '100%', padding: '14px', fontSize: 14, letterSpacing: '.1em' }} onClick={submit}>
+              예약 문의 보내기
+            </button>
+          )}
         </div>
       </div>
     </div>

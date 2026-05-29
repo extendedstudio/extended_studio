@@ -5,15 +5,21 @@
       "cat": "DJ PACKAGE",
       "cc": "#c8a96e",
       "name": "Special Package",
-      "sub": "DJ 최대 100인 추천",
-      "coverage": "최대 100인",
+      "sub": "DJ 최대 150인 추천",
+      "coverage": "최대 150인",
       "items": [
         "STUDIOMASTER 121K 1Pair",
         "XDJ-XZ 1EA"
       ],
       "pricing": [
-        {"l": "Self Pick up / 반납", "p": "400,000원"},
-        {"l": "설치 및 철수", "p": "100,000원"}
+        {
+          "l": "Self Pick up / 반납",
+          "p": "400,000원"
+        },
+        {
+          "l": "설치 및 철수",
+          "p": "100,000원"
+        }
       ],
       "note": "",
       "img": "https://static.wixstatic.com/media/2eff20_0d47aefb76e8434397db53ffc2624ad6~mv2.png/v1/fill/w_1335,h_704,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/%EC%8A%A4%ED%8E%98%EC%85%9C%ED%8C%A8%ED%82%A4%EC%A7%80.png"
@@ -24,9 +30,22 @@
       "cc": "#c8a96e",
       "name": "DJ FULL SET",
       "sub": "DJ FULL SET 추천 패키지",
-      "coverage": "최대 100인",
-      "items": ["STUDIOMASTER 121K 1Pair","XDJ-XZ 1EA","DJ TABLE","LED Moving","Beam Moving","LED Par","LED Bar"],
-      "pricing": [{"l": "설치 및 철수", "p": "1,200,000원"}],
+      "coverage": "최대 150인",
+      "items": [
+        "STUDIOMASTER 121K 1Pair",
+        "XDJ-XZ 1EA",
+        "DJ TABLE",
+        "LED Moving",
+        "Beam Moving",
+        "LED Par",
+        "LED Bar"
+      ],
+      "pricing": [
+        {
+          "l": "설치 및 철수",
+          "p": "1,200,000원"
+        }
+      ],
       "note": "현장 상황에 따라 조명이 바뀔 수 있습니다",
       "img": "https://static.wixstatic.com/media/2eff20_2f2e31b176ba422c8c5efc554d294e03~mv2.png/v1/fill/w_979,h_551,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/DJfullset.png"
     },
@@ -37,8 +56,16 @@
       "name": "HK AUDIO POLAR 8",
       "sub": "소형 이벤트 / 실내 공연",
       "coverage": "최대 50인",
-      "items": ["HK AUDIO POLAR 8 1Pair","아날로그 믹싱콘솔 1EA"],
-      "pricing": [{"l": "직접 수령 / 반납", "p": "560,000원"}],
+      "items": [
+        "HK AUDIO POLAR 8 1Pair",
+        "아날로그 믹싱콘솔 1EA"
+      ],
+      "pricing": [
+        {
+          "l": "직접 수령 / 반납",
+          "p": "560,000원"
+        }
+      ],
       "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
       "img": "/images/pkg_hk_polar8.jpg"
     },
@@ -49,8 +76,16 @@
       "name": "STUDIOMASTER DIRECT 121K",
       "sub": "소형 이벤트 / 실내 공연",
       "coverage": "최대 100인",
-      "items": ["STUDIO MASTER 1Pair","아날로그 믹싱콘솔 1EA"],
-      "pricing": [{"l": "직접 수령 / 반납", "p": "500,000원"}],
+      "items": [
+        "STUDIO MASTER 1Pair",
+        "아날로그 믹싱콘솔 1EA"
+      ],
+      "pricing": [
+        {
+          "l": "직접 수령 / 반납",
+          "p": "500,000원"
+        }
+      ],
       "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
       "img": "/images/pkg_studiomaster.jpg"
     },
@@ -61,8 +96,16 @@
       "name": "HK AUDIO POLAR 10",
       "sub": "중형 이벤트 / 야외 행사",
       "coverage": "최대 100인",
-      "items": ["HK AUDIO POLAR 10 1Pair","아날로그 믹싱콘솔 1EA"],
-      "pricing": [{"l": "직접 수령 / 반납", "p": "700,000원"}],
+      "items": [
+        "HK AUDIO POLAR 10 1Pair",
+        "아날로그 믹싱콘솔 1EA"
+      ],
+      "pricing": [
+        {
+          "l": "직접 수령 / 반납",
+          "p": "700,000원"
+        }
+      ],
       "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
       "img": "/images/pkg_hk_polar10.jpg"
     },
@@ -72,8 +115,17 @@
       "name": "JBL PRX635 + EV ELX200 SET",
       "sub": "중형 이벤트 / 야외 행사",
       "coverage": "최대 200인",
-      "items": ["JBL PRX635 1Pair","ELX200-18SP 1Pair","아날로그 믹싱콘솔 1EA"],
-      "pricing": [{"l": "직접 수령 / 반납", "p": "800,000원"}],
+      "items": [
+        "JBL PRX635 1Pair",
+        "ELX200-18SP 1Pair",
+        "아날로그 믹싱콘솔 1EA"
+      ],
+      "pricing": [
+        {
+          "l": "직접 수령 / 반납",
+          "p": "800,000원"
+        }
+      ],
       "img": "/images/pkg_jbl_ev.jpg",
       "note": "오퍼레이터 포함시 상황에 따라 디지털 믹서로 변환 가능합니다"
     },
@@ -84,8 +136,16 @@
       "name": "BIEMA X10",
       "sub": "중대형 페스티벌 / 야외",
       "coverage": "최대 200인 (야외) ~ 300인 (실내)",
-      "items": ["BIEMA X10 1Pair","아날로그 믹싱콘솔 1EA"],
-      "pricing": [{"l": "직접 수령 / 반납", "p": "1,200,000원"}],
+      "items": [
+        "BIEMA X10 1Pair",
+        "아날로그 믹싱콘솔 1EA"
+      ],
+      "pricing": [
+        {
+          "l": "직접 수령 / 반납",
+          "p": "1,200,000원"
+        }
+      ],
       "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
       "img": "/images/pkg_biema.jpg"
     },
@@ -96,8 +156,16 @@
       "name": "MONTARBO WIND 2200 / BXB18A",
       "sub": "중대형 페스티벌 / 야외",
       "coverage": "최대 200인 (야외) ~ 300인 (실내)",
-      "items": ["MONTARBO WIND 2200 / BXB18A 1Pair","아날로그 믹싱콘솔 1EA"],
-      "pricing": [{"l": "직접 수령 / 반납", "p": "1,600,000원"}],
+      "items": [
+        "MONTARBO WIND 2200 / BXB18A 1Pair",
+        "아날로그 믹싱콘솔 1EA"
+      ],
+      "pricing": [
+        {
+          "l": "직접 수령 / 반납",
+          "p": "1,600,000원"
+        }
+      ],
       "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
       "img": "/images/pkg_montarbo.jpg"
     },
@@ -108,10 +176,18 @@
       "name": "Logic Systems VA SMALL",
       "sub": "대형 페스티벌 / 콘서트",
       "coverage": "최대 500인",
-      "items": ["Logic Systems VA × 8","SB2 × 4"],
-      "pricing": [{"l": "설치 및 철수", "p": "3,600,000원"}],
+      "items": [
+        "Logic Systems VA × 8",
+        "SB2 × 4"
+      ],
+      "pricing": [
+        {
+          "l": "설치 및 철수",
+          "p": "3,600,000원"
+        }
+      ],
       "note": "*오퍼레이터 포함시 추가 금액이 발생할 수 있습니다",
-      "img": "https://static.wixstatic.com/media/2eff20_64dcfc9c5ea04b3996e14b2f7a15b60f~mv2.jpg/v1/fill/w_979,h_555,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logicsmall.jpg"
+      "img": "/images/pkg_logic_va_small.jpg"
     },
     {
       "id": 9,
@@ -120,8 +196,16 @@
       "name": "X-Treme FULL SET",
       "sub": "대형 페스티벌 / 콘서트",
       "coverage": "최대 500인",
-      "items": ["XTMLA × 8","XTHPS33 (DOUBLE) × 2"],
-      "pricing": [{"l": "설치 및 철수", "p": "3,600,000원"}],
+      "items": [
+        "XTMLA × 8",
+        "XTHPS33 (DOUBLE) × 2"
+      ],
+      "pricing": [
+        {
+          "l": "설치 및 철수",
+          "p": "3,600,000원"
+        }
+      ],
       "note": "*오퍼레이터 포함시 추가 금액이 발생할 수 있습니다",
       "img": "https://static.wixstatic.com/media/2eff20_c58870bc5ead4e9a8613f026f6e16d12~mv2.jpg/v1/fill/w_979,h_555,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/X-Treme.jpg"
     },
@@ -132,8 +216,16 @@
       "name": "Logic Systems VA MEDIUM",
       "sub": "대형 콘서트 / 페스티벌",
       "coverage": "최대 800인",
-      "items": ["Logic Systems VA × 12","SB2 × 4"],
-      "pricing": [{"l": "설치 및 철수", "p": "4,400,000원"}],
+      "items": [
+        "Logic Systems VA × 12",
+        "SB2 × 4"
+      ],
+      "pricing": [
+        {
+          "l": "설치 및 철수",
+          "p": "4,400,000원"
+        }
+      ],
       "note": "*오퍼레이터 포함시 추가 금액이 발생할 수 있습니다",
       "img": "https://static.wixstatic.com/media/2eff20_38b16db38f7d44baa9648a9bab524618~mv2.jpg/v1/fill/w_979,h_555,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Logicmedium.jpg"
     },
@@ -144,8 +236,17 @@
       "name": "Martin Audio W8LC",
       "sub": "클럽/EDM/테크노 최적화",
       "coverage": "최대 800~1,000인",
-      "items": ["Martin Audio W8LC × 8","WLX Sub × 4","MA 4.8Q Amp × 2"],
-      "pricing": [{"l": "설치 및 철수", "p": "7,600,000원"}],
+      "items": [
+        "Martin Audio W8LC × 8",
+        "WLX Sub × 4",
+        "MA 4.8Q Amp × 2"
+      ],
+      "pricing": [
+        {
+          "l": "설치 및 철수",
+          "p": "7,600,000원"
+        }
+      ],
       "note": "*오퍼레이터 포함시 추가 금액이 발생할 수 있습니다",
       "img": "https://static.wixstatic.com/media/2eff20_57b8097e87994a7093266cb30b0b201a~mv2.jpg/v1/fill/w_979,h_555,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Matin.jpg"
     },
@@ -156,8 +257,16 @@
       "name": "Logic Systems VA LARGE",
       "sub": "초대형 페스티벌",
       "coverage": "최대 2,000인",
-      "items": ["Logic Systems VA × 16","SB2 × 6"],
-      "pricing": [{"l": "설치 및 철수", "p": "8,400,000원"}],
+      "items": [
+        "Logic Systems VA × 16",
+        "SB2 × 6"
+      ],
+      "pricing": [
+        {
+          "l": "설치 및 철수",
+          "p": "8,400,000원"
+        }
+      ],
       "note": "*오퍼레이터 포함시 추가 금액이 발생할 수 있습니다",
       "img": "https://static.wixstatic.com/media/2eff20_94f2284280fa4bebb6f7e1a835a587a0~mv2.jpg/v1/fill/w_979,h_555,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Logiclarge.jpg"
     },
@@ -168,121 +277,806 @@
       "name": "Logic Systems VA MAX",
       "sub": "초대형 내한공연 / 페스티벌",
       "coverage": "최대 5,000인",
-      "items": ["Logic Systems VA × 24","SB2 × 10"],
-      "pricing": [{"l": "설치 및 철수", "p": "12,000,000원"}],
+      "items": [
+        "Logic Systems VA × 24",
+        "SB2 × 10"
+      ],
+      "pricing": [
+        {
+          "l": "설치 및 철수",
+          "p": "12,000,000원"
+        }
+      ],
       "note": "*오퍼레이터 포함시 추가 금액이 발생할 수 있습니다",
       "img": "/images/pkg_logic_va_max.jpg"
     }
   ],
   "portfolio": [
-    {"img": "/images/portfolio/cookierun-5y-kintex.jpg", "title": "쿠키런 5주년", "venue": "KINTEX 7,8 Hall", "cat": "기업 행사"},
-    {"img": "/images/portfolio/nike-pie-factory.jpg", "title": "NIKE", "venue": "Pie Factory", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/disney-tron.jpg", "title": "Disney 'TRON'", "venue": "뚝섬", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/dalmore-strux.jpg", "title": "Dalmore", "venue": "스트럭스", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/soundbite-y173.jpg", "title": "SoundBite", "venue": "Y173", "cat": "페스티벌/콘서트"},
-    {"img": "/images/portfolio/julius-adecube.jpg", "title": "_julius", "venue": "도산 아데쿠베", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/atw-2024.jpg", "title": "A.T.W 2024", "venue": "페스티벌", "cat": "페스티벌/콘서트"},
-    {"img": "/images/portfolio/ahnlab-blockchain.jpg", "title": "AHN LAB Blockchain Company", "venue": "압구정 우향우", "cat": "기업 행사"},
-    {"img": "/images/portfolio/glendronach.jpg", "title": "Glendronach", "venue": "위스키 테이스팅", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/grand-hyatt-jeju.jpg", "title": "Grand Hyatt Jeju", "venue": "리조트 행사", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/jack-daniel-press.jpg", "title": "Jack Daniel's 기자간담회", "venue": "프레스 이벤트", "cat": "기업 행사"},
-    {"img": "/images/portfolio/jagermeister-ximximbar.jpg", "title": "Jägermeister", "venue": "ximximbar 성수", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/jagermeister-hyundai-dosan.jpg", "title": "Jägermeister Orange", "venue": "현대카드 도산", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/jagermeister.jpg", "title": "Jägermeister", "venue": "브랜드 이벤트", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/jim-beam.jpg", "title": "Jim Beam", "venue": "위스키 이벤트", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/korea-open-wilson.jpg", "title": "Korea Open × Wilson", "venue": "테니스 오픈", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/madeon-opening.jpg", "title": "Madeon Opening Party", "venue": "내한 공연 애프터", "cat": "페스티벌/콘서트"},
-    {"img": "/images/portfolio/moet-chandon-signiel.jpg", "title": "Moët & Chandon", "venue": "시그니엘 잠실", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/monster-energy-ss33.jpg", "title": "Monster Energy", "venue": "성수 SS33", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/pace-on-seongsu.jpg", "title": "Pace On", "venue": "성수", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/paulas-choice.jpg", "title": "Paula's Choice", "venue": "요가원 망리단", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/peachtree-l7.jpg", "title": "Peachtree", "venue": "L7 호텔", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/soundbite-bunjang-nodeul.jpg", "title": "SoundBite × 번개장터", "venue": "노들섬", "cat": "페스티벌/콘서트"},
-    {"img": "/images/portfolio/thr-moon-party-hyatt.jpg", "title": "THR Moon Party Seoul", "venue": "Grand Hyatt Seoul", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/talkshow-adecube.jpg", "title": "Talk Show", "venue": "도산 아데쿠베", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/wedding-party.jpg", "title": "Wedding Party", "venue": "프라이빗 웨딩", "cat": "웨딩/프라이빗"},
-    {"img": "/images/portfolio/bts-city-arirang.jpg", "title": "BTS 'The City Arirang' 애프터파티", "venue": "이들스", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/hypebeast-lotte.jpg", "title": "Hypebeast", "venue": "롯데갤러리 잠실", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/kolon-pro-am.jpg", "title": "Kolon Pro Am", "venue": "골프 이벤트", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/monster-uci-mtb.jpg", "title": "Monster UCI MTB World Champ.", "venue": "용평", "cat": "페스티벌/콘서트"},
-    {"img": "/images/portfolio/musinsa-taylormade.jpg", "title": "Musinsa × TaylorMade", "venue": "스포츠 콜라보", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/woodford-alice.jpg", "title": "Woodford Reserve", "venue": "청담 Alice Bar", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/woodford-bartender.jpg", "title": "Woodford Reserve 바텐더대회", "venue": "애프터파티 포함", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/nakwon-edls.jpg", "title": "낙원상가 EDLS", "venue": "음악인의 거리", "cat": "페스티벌/콘서트"},
-    {"img": "/images/portfolio/mukkkrop-popup.jpg", "title": "묵끄럽 팝업", "venue": "성수동 Space X", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/veuve-clicquot-kream.jpg", "title": "Veuve Clicquot × Zac Muis", "venue": "KREAM 도산 플래그쉽", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/sungsikyung-mondrian.jpg", "title": "성시경 '경' 막걸리", "venue": "몬드리안 호텔", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/dj-party-itaewon.jpg", "title": "프라이빗 DJ 파티", "venue": "이태원", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/alice-lechamber-woodford.jpg", "title": "Alice × Le Chamber × Woodford", "venue": "콜라보 이벤트", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/walkerhill-wedding.jpg", "title": "워커힐 야외 결혼식", "venue": "음향 + 애프터파티", "cat": "웨딩/프라이빗"},
-    {"img": "/images/portfolio/wedding-jacks-bar.jpg", "title": "웨딩 애프터파티", "venue": "잭스바", "cat": "웨딩/프라이빗"},
-    {"img": "/images/portfolio/uv-kanye-parody.jpg", "title": "유브이 방 Kanye 리스닝 콘서트", "venue": "패러디 영상 제작", "cat": "페스티벌/콘서트"},
-    {"img": "/images/portfolio/yongjuk-pumpkin-imok.jpg", "title": "유용욱 × 펌킨", "venue": "이목 스모크 다이닝", "cat": "브랜드 이벤트"},
-    {"img": "/images/portfolio/cookierun-deoksugung.jpg", "title": "쿠키런 - 사라진 국사유산을 찾아서", "venue": "덕수궁", "cat": "기업 행사"},
-    {"img": "/images/portfolio/cookierun-4y-suwon.jpg", "title": "쿠키런 4주년", "venue": "수원 컨벤션센터", "cat": "기업 행사"},
-    {"img": "/images/portfolio/cookierun-4y-suwon-2.jpg", "title": "쿠키런 4주년 (2)", "venue": "수원 컨벤션센터", "cat": "기업 행사"},
-    {"img": "/images/portfolio/tongyeong-fishermen.jpg", "title": "통영 어부장터", "venue": "지역 페스티벌", "cat": "브랜드 이벤트"}
+    {
+      "img": "/images/portfolio/cookierun-5y-kintex.jpg",
+      "title": "쿠키런 5주년",
+      "venue": "KINTEX 7,8 Hall",
+      "cat": "기업 행사"
+    },
+    {
+      "img": "/images/portfolio/nike-pie-factory.jpg",
+      "title": "NIKE",
+      "venue": "Pie Factory",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/disney-tron.jpg",
+      "title": "Disney 'TRON'",
+      "venue": "뚝섬",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/dalmore-strux.jpg",
+      "title": "Dalmore",
+      "venue": "스트럭스",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/soundbite-y173.jpg",
+      "title": "SoundBite",
+      "venue": "Y173",
+      "cat": "페스티벌/콘서트"
+    },
+    {
+      "img": "/images/portfolio/julius-adecube.jpg",
+      "title": "_julius",
+      "venue": "도산 아데쿠베",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/atw-2024.jpg",
+      "title": "A.T.W 2024",
+      "venue": "페스티벌",
+      "cat": "페스티벌/콘서트"
+    },
+    {
+      "img": "/images/portfolio/ahnlab-blockchain.jpg",
+      "title": "AHN LAB Blockchain Company",
+      "venue": "압구정 우향우",
+      "cat": "기업 행사"
+    },
+    {
+      "img": "/images/portfolio/glendronach.jpg",
+      "title": "Glendronach",
+      "venue": "위스키 테이스팅",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/grand-hyatt-jeju.jpg",
+      "title": "Grand Hyatt Jeju",
+      "venue": "리조트 행사",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/jack-daniel-press.jpg",
+      "title": "Jack Daniel's 기자간담회",
+      "venue": "프레스 이벤트",
+      "cat": "기업 행사"
+    },
+    {
+      "img": "/images/portfolio/jagermeister-ximximbar.jpg",
+      "title": "Jägermeister",
+      "venue": "ximximbar 성수",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/jagermeister-hyundai-dosan.jpg",
+      "title": "Jägermeister Orange",
+      "venue": "현대카드 도산",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/jagermeister.jpg",
+      "title": "Jägermeister",
+      "venue": "브랜드 이벤트",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/jim-beam.jpg",
+      "title": "Jim Beam",
+      "venue": "위스키 이벤트",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/korea-open-wilson.jpg",
+      "title": "Korea Open × Wilson",
+      "venue": "테니스 오픈",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/madeon-opening.jpg",
+      "title": "Madeon Opening Party",
+      "venue": "내한 공연 애프터",
+      "cat": "페스티벌/콘서트"
+    },
+    {
+      "img": "/images/portfolio/moet-chandon-signiel.jpg",
+      "title": "Moët & Chandon",
+      "venue": "시그니엘 잠실",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/monster-energy-ss33.jpg",
+      "title": "Monster Energy",
+      "venue": "성수 SS33",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/pace-on-seongsu.jpg",
+      "title": "Pace On",
+      "venue": "성수",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/paulas-choice.jpg",
+      "title": "Paula's Choice",
+      "venue": "요가원 망리단",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/peachtree-l7.jpg",
+      "title": "Peachtree",
+      "venue": "L7 호텔",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/soundbite-bunjang-nodeul.jpg",
+      "title": "SoundBite × 번개장터",
+      "venue": "노들섬",
+      "cat": "페스티벌/콘서트"
+    },
+    {
+      "img": "/images/portfolio/thr-moon-party-hyatt.jpg",
+      "title": "THR Moon Party Seoul",
+      "venue": "Grand Hyatt Seoul",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/talkshow-adecube.jpg",
+      "title": "Talk Show",
+      "venue": "도산 아데쿠베",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/wedding-party.jpg",
+      "title": "Wedding Party",
+      "venue": "프라이빗 웨딩",
+      "cat": "웨딩/프라이빗"
+    },
+    {
+      "img": "/images/portfolio/bts-city-arirang.jpg",
+      "title": "BTS 'The City Arirang' 애프터파티",
+      "venue": "이들스",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/hypebeast-lotte.jpg",
+      "title": "Hypebeast",
+      "venue": "롯데갤러리 잠실",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/kolon-pro-am.jpg",
+      "title": "Kolon Pro Am",
+      "venue": "골프 이벤트",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/monster-uci-mtb.jpg",
+      "title": "Monster UCI MTB World Champ.",
+      "venue": "용평",
+      "cat": "페스티벌/콘서트"
+    },
+    {
+      "img": "/images/portfolio/musinsa-taylormade.jpg",
+      "title": "Musinsa × TaylorMade",
+      "venue": "스포츠 콜라보",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/woodford-alice.jpg",
+      "title": "Woodford Reserve",
+      "venue": "청담 Alice Bar",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/woodford-bartender.jpg",
+      "title": "Woodford Reserve 바텐더대회",
+      "venue": "애프터파티 포함",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/nakwon-edls.jpg",
+      "title": "낙원상가 EDLS",
+      "venue": "음악인의 거리",
+      "cat": "페스티벌/콘서트"
+    },
+    {
+      "img": "/images/portfolio/mukkkrop-popup.jpg",
+      "title": "묵끄럽 팝업",
+      "venue": "성수동 Space X",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/veuve-clicquot-kream.jpg",
+      "title": "Veuve Clicquot × Zac Muis",
+      "venue": "KREAM 도산 플래그쉽",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/sungsikyung-mondrian.jpg",
+      "title": "성시경 '경' 막걸리",
+      "venue": "몬드리안 호텔",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/dj-party-itaewon.jpg",
+      "title": "프라이빗 DJ 파티",
+      "venue": "이태원",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/alice-lechamber-woodford.jpg",
+      "title": "Alice × Le Chamber × Woodford",
+      "venue": "콜라보 이벤트",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/walkerhill-wedding.jpg",
+      "title": "워커힐 야외 결혼식",
+      "venue": "음향 + 애프터파티",
+      "cat": "웨딩/프라이빗"
+    },
+    {
+      "img": "/images/portfolio/wedding-jacks-bar.jpg",
+      "title": "웨딩 애프터파티",
+      "venue": "잭스바",
+      "cat": "웨딩/프라이빗"
+    },
+    {
+      "img": "/images/portfolio/uv-kanye-parody.jpg",
+      "title": "유브이 방 Kanye 리스닝 콘서트",
+      "venue": "패러디 영상 제작",
+      "cat": "페스티벌/콘서트"
+    },
+    {
+      "img": "/images/portfolio/yongjuk-pumpkin-imok.jpg",
+      "title": "유용욱 × 펌킨",
+      "venue": "이목 스모크 다이닝",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/cookierun-deoksugung.jpg",
+      "title": "쿠키런 - 사라진 국사유산을 찾아서",
+      "venue": "덕수궁",
+      "cat": "기업 행사"
+    },
+    {
+      "img": "/images/portfolio/cookierun-4y-suwon.jpg",
+      "title": "쿠키런 4주년",
+      "venue": "수원 컨벤션센터",
+      "cat": "기업 행사"
+    },
+    {
+      "img": "/images/portfolio/cookierun-4y-suwon-2.jpg",
+      "title": "쿠키런 4주년 (2)",
+      "venue": "수원 컨벤션센터",
+      "cat": "기업 행사"
+    },
+    {
+      "img": "/images/portfolio/tongyeong-fishermen.jpg",
+      "title": "통영 어부장터",
+      "venue": "지역 페스티벌",
+      "cat": "브랜드 이벤트"
+    }
   ],
   "mics": [
-    {"id": "m1", "cat": "디지털 무선", "name": "Sennheiser EW-D 835", "sub": "디지털 무선 핸드마이크 (1/8)", "spec": "", "qty": "최대 8세트", "price": 100000, "img": "/images/ew835.png"},
-    {"id": "m2", "cat": "디지털 무선", "name": "Sennheiser EW-D 845", "sub": "디지털 무선 핸드마이크 (1/4)", "spec": "", "qty": "최대 4세트", "price": 100000, "img": "/images/ew845.png"},
-    {"id": "m3", "cat": "아날로그 무선", "name": "Kanals BK-3002", "sub": "2채널 아날로그 무선 (1/2)", "spec": "핸드+바디팩 포함", "qty": "보유", "price": 100000, "img": "/images/kanals.png"},
-    {"id": "m4", "cat": "유선 마이크", "name": "Sennheiser E908 B-EW", "sub": "악기용 콘덴서 마이크", "spec": "", "qty": "2ea", "price": 50000, "img": "/images/e908.png"},
-    {"id": "m5", "cat": "유선 마이크", "name": "Shure Drum Kit5", "sub": "드럼 마이크 세트", "spec": "", "qty": "1세트", "price": 50000, "img": "/images/shure_drumkit.png"},
-    {"id": "m6", "cat": "유선 마이크", "name": "Shure SM57", "sub": "악기용 다이나믹", "spec": "", "qty": "보유", "price": 10000, "img": "/images/sm57.png"},
-    {"id": "m7", "cat": "유선 마이크", "name": "Shure SM58", "sub": "보컬용 다이나믹", "spec": "", "qty": "보유", "price": 10000, "img": "/images/sm58.png"},
-    {"id": "m8", "cat": "인이어 모니터", "name": "Sennheiser 인이어", "sub": "무선 인이어 모니터", "spec": "", "qty": "보유", "price": 100000, "img": "/images/sennheiser_inear.png"},
-    {"id": "m9", "cat": "인이어 모니터", "name": "Kanals 인이어", "sub": "무선 인이어 모니터", "spec": "", "qty": "보유", "price": 50000, "img": "/images/kanals_inear.png"}
+    {
+      "id": "m1",
+      "cat": "디지털 무선",
+      "name": "Sennheiser EW-D 835",
+      "sub": "디지털 무선 핸드마이크 (1/8)",
+      "spec": "",
+      "qty": "최대 8세트",
+      "price": 100000,
+      "img": "/images/ew835.png"
+    },
+    {
+      "id": "m2",
+      "cat": "디지털 무선",
+      "name": "Sennheiser EW-D 845",
+      "sub": "디지털 무선 핸드마이크 (1/4)",
+      "spec": "",
+      "qty": "최대 4세트",
+      "price": 100000,
+      "img": "/images/ew845.png"
+    },
+    {
+      "id": "m3",
+      "cat": "아날로그 무선",
+      "name": "Kanals BK-3002",
+      "sub": "2채널 아날로그 무선 (1/2)",
+      "spec": "핸드+바디팩 포함",
+      "qty": "보유",
+      "price": 100000,
+      "img": "/images/kanals.png"
+    },
+    {
+      "id": "m4",
+      "cat": "유선 마이크",
+      "name": "Sennheiser E908 B-EW",
+      "sub": "악기용 콘덴서 마이크",
+      "spec": "",
+      "qty": "2ea",
+      "price": 50000,
+      "img": "/images/e908.png"
+    },
+    {
+      "id": "m5",
+      "cat": "유선 마이크",
+      "name": "Shure Drum Kit5",
+      "sub": "드럼 마이크 세트",
+      "spec": "",
+      "qty": "1세트",
+      "price": 50000,
+      "img": "/images/shure_drumkit.png"
+    },
+    {
+      "id": "m6",
+      "cat": "유선 마이크",
+      "name": "Shure SM57",
+      "sub": "악기용 다이나믹",
+      "spec": "",
+      "qty": "보유",
+      "price": 10000,
+      "img": "/images/sm57.png"
+    },
+    {
+      "id": "m7",
+      "cat": "유선 마이크",
+      "name": "Shure SM58",
+      "sub": "보컬용 다이나믹",
+      "spec": "",
+      "qty": "보유",
+      "price": 10000,
+      "img": "/images/sm58.png"
+    },
+    {
+      "id": "m8",
+      "cat": "인이어 모니터",
+      "name": "Sennheiser 인이어",
+      "sub": "무선 인이어 모니터",
+      "spec": "",
+      "qty": "보유",
+      "price": 100000,
+      "img": "/images/sennheiser_inear.png"
+    },
+    {
+      "id": "m9",
+      "cat": "인이어 모니터",
+      "name": "Kanals 인이어",
+      "sub": "무선 인이어 모니터",
+      "spec": "",
+      "qty": "보유",
+      "price": 50000,
+      "img": "/images/kanals_inear.png"
+    }
   ],
   "consoles": [
-    {"id": "c1", "cat": "아날로그 콘솔", "name": "Yamaha MG16XU", "sub": "16채널 아날로그 믹서", "spec": "16채널 | USB 오디오", "qty": "1ea", "price": 50000, "img": "/images/yamaha_mg16xu.png"},
-    {"id": "c2", "cat": "디지털 콘솔", "name": "Midas M32R", "sub": "40채널 디지털 콘솔", "spec": "40채널 | M32-Mix 앱 지원", "qty": "1ea", "price": 100000, "img": "/images/midas_m32r.png"},
-    {"id": "c3", "cat": "디지털 콘솔", "name": "Allen & Heath QU-32", "sub": "32채널 디지털 콘솔", "spec": "32채널 | USB 레코딩", "qty": "1ea", "price": 130000, "img": "/images/ah_qu32.png"},
-    {"id": "c4", "cat": "디지털 콘솔", "name": "Behringer WING Rack", "sub": "48ch 랙형 디지털 콘솔", "spec": "1세트 | \n48채널 | S16 스테이지박스 포함", "qty": "1세트", "price": 100000, "img": "/images/wingrack.png"},
-    {"id": "c5", "cat": "스테이지박스", "name": "Allen & Heath AR2412", "sub": "24in/12out 스테이지박스", "spec": "", "qty": "1ea", "price": 150000, "img": "/images/ah_ar2412.png"},
-    {"id": "c6", "cat": "스테이지박스", "name": "Behringer S16", "sub": "16in/8out 스테이지박스", "spec": "", "qty": "1ea", "price": 100000, "img": "/images/behringer_s16.png"}
+    {
+      "id": "c1",
+      "cat": "아날로그 콘솔",
+      "name": "Yamaha MG16XU",
+      "sub": "16채널 아날로그 믹서",
+      "spec": "16채널 | USB 오디오",
+      "qty": "1ea",
+      "price": 50000,
+      "img": "/images/yamaha_mg16xu.png"
+    },
+    {
+      "id": "c2",
+      "cat": "디지털 콘솔",
+      "name": "Midas M32R",
+      "sub": "40채널 디지털 콘솔",
+      "spec": "40채널 | M32-Mix 앱 지원",
+      "qty": "1ea",
+      "price": 100000,
+      "img": "/images/midas_m32r.png"
+    },
+    {
+      "id": "c3",
+      "cat": "디지털 콘솔",
+      "name": "Allen & Heath QU-32",
+      "sub": "32채널 디지털 콘솔",
+      "spec": "32채널 | USB 레코딩",
+      "qty": "1ea",
+      "price": 130000,
+      "img": "/images/ah_qu32.png"
+    },
+    {
+      "id": "c4",
+      "cat": "디지털 콘솔",
+      "name": "Behringer WING Rack",
+      "sub": "48ch 랙형 디지털 콘솔",
+      "spec": "1세트 | \n48채널 | S16 스테이지박스 포함",
+      "qty": "1세트",
+      "price": 100000,
+      "img": "/images/wingrack.png"
+    },
+    {
+      "id": "c5",
+      "cat": "스테이지박스",
+      "name": "Allen & Heath AR2412",
+      "sub": "24in/12out 스테이지박스",
+      "spec": "",
+      "qty": "1ea",
+      "price": 150000,
+      "img": "/images/ah_ar2412.png"
+    },
+    {
+      "id": "c6",
+      "cat": "스테이지박스",
+      "name": "Behringer S16",
+      "sub": "16in/8out 스테이지박스",
+      "spec": "",
+      "qty": "1ea",
+      "price": 100000,
+      "img": "/images/behringer_s16.png"
+    }
   ],
   "dj_gear": [
-    {"id": "d1", "cat": "DJ 플레이어", "name": "Pioneer CDJ-3000", "sub": "프로 멀티플레이어", "spec": "", "qty": "1ea", "price": 150000, "img": "/images/cdj3000.png"},
-    {"id": "d2", "cat": "DJ 플레이어", "name": "Pioneer CDJ-2000NXS2", "sub": "프로 멀티플레이어", "spec": "", "qty": "1ea", "price": 120000, "img": "/images/cdj2000.png"},
-    {"id": "d3", "cat": "DJ 올인원", "name": "Pioneer XDJ-XZ", "sub": "4채널 올인원 DJ 시스템", "spec": "", "qty": "1ea", "price": 200000, "img": "/images/xdjxz.png"},
-    {"id": "d4", "cat": "턴테이블", "name": "Technics SL-1200MK7", "sub": "프로 턴테이블", "spec": "", "qty": "1ea", "price": 150000, "img": "/images/sl1200.png"},
-    {"id": "d5", "cat": "턴테이블", "name": "Pioneer PLX-1000", "sub": "프로 턴테이블", "spec": "", "qty": "1ea", "price": 120000, "img": "/images/plx1000.png"},
-    {"id": "d6", "cat": "DJ 믹서", "name": "Pioneer DJM-A9", "sub": "4채널 플래그십 DJ 믹서", "spec": "", "qty": "1ea", "price": 150000, "img": "/images/djma9.png"},
-    {"id": "d7", "cat": "DJ 믹서", "name": "Pioneer DJM-900NXS2", "sub": "4채널 프로 DJ 믹서", "spec": "", "qty": "1ea", "price": 120000, "img": "/images/djm900.png"},
-    {"id": "d8", "cat": "DJ 믹서", "name": "Pioneer DJM-S11", "sub": "2채널 스크래치 DJ 믹서", "spec": "", "qty": "1ea", "price": 120000, "img": "/images/djms11.png"},
-    {"id": "d9", "cat": "DJ 믹서", "name": "Pioneer DJM-2000", "sub": "4채널 플래그십 DJ 믹서", "spec": "", "qty": "1ea", "price": 100000, "img": "/images/djm2000.png"}
+    {
+      "id": "d1",
+      "cat": "DJ 플레이어",
+      "name": "Pioneer CDJ-3000",
+      "sub": "프로 멀티플레이어",
+      "spec": "",
+      "qty": "1ea",
+      "price": 150000,
+      "img": "/images/cdj3000.png"
+    },
+    {
+      "id": "d2",
+      "cat": "DJ 플레이어",
+      "name": "Pioneer CDJ-2000NXS2",
+      "sub": "프로 멀티플레이어",
+      "spec": "",
+      "qty": "1ea",
+      "price": 120000,
+      "img": "/images/cdj2000.png"
+    },
+    {
+      "id": "d3",
+      "cat": "DJ 올인원",
+      "name": "Pioneer XDJ-XZ",
+      "sub": "4채널 올인원 DJ 시스템",
+      "spec": "",
+      "qty": "1ea",
+      "price": 200000,
+      "img": "/images/xdjxz.png"
+    },
+    {
+      "id": "d4",
+      "cat": "턴테이블",
+      "name": "Technics SL-1200MK7",
+      "sub": "프로 턴테이블",
+      "spec": "",
+      "qty": "1ea",
+      "price": 150000,
+      "img": "/images/sl1200.png"
+    },
+    {
+      "id": "d5",
+      "cat": "턴테이블",
+      "name": "Pioneer PLX-1000",
+      "sub": "프로 턴테이블",
+      "spec": "",
+      "qty": "1ea",
+      "price": 120000,
+      "img": "/images/plx1000.png"
+    },
+    {
+      "id": "d6",
+      "cat": "DJ 믹서",
+      "name": "Pioneer DJM-A9",
+      "sub": "4채널 플래그십 DJ 믹서",
+      "spec": "",
+      "qty": "1ea",
+      "price": 150000,
+      "img": "/images/djma9.png"
+    },
+    {
+      "id": "d7",
+      "cat": "DJ 믹서",
+      "name": "Pioneer DJM-900NXS2",
+      "sub": "4채널 프로 DJ 믹서",
+      "spec": "",
+      "qty": "1ea",
+      "price": 120000,
+      "img": "/images/djm900.png"
+    },
+    {
+      "id": "d8",
+      "cat": "DJ 믹서",
+      "name": "Pioneer DJM-S11",
+      "sub": "2채널 스크래치 DJ 믹서",
+      "spec": "",
+      "qty": "1ea",
+      "price": 120000,
+      "img": "/images/djms11.png"
+    },
+    {
+      "id": "d9",
+      "cat": "DJ 믹서",
+      "name": "Pioneer DJM-2000",
+      "sub": "4채널 플래그십 DJ 믹서",
+      "spec": "",
+      "qty": "1ea",
+      "price": 100000,
+      "img": "/images/djm2000.png"
+    }
   ],
   "amps": [
-    {"id": "a1", "cat": "파워 앰프", "name": "Martin Audio MA4.8Q", "sub": "4채널 클래스D 파워 앰프", "spec": "4×1200W @ 4Ω | DSP 내장\nDante 네트워크 오디오 옵션", "qty": "보유"},
-    {"id": "a2", "cat": "파워 앰프", "name": "Martin Audio MA2.8s", "sub": "2채널 클래스D 파워 앰프", "spec": "2×1400W @ 4Ω | DSP 내장", "qty": "보유"},
-    {"id": "a3", "cat": "파워 앰프", "name": "Martin Audio MA4.2s", "sub": "4채널 클래스D 파워 앰프", "spec": "4×700W @ 4Ω | DSP 내장", "qty": "보유"},
-    {"id": "a4", "cat": "DSP 프로세서", "name": "Spirit DSP-2006A", "sub": "2입력 6출력 DSP 프로세서", "spec": "2in 6out | PEQ / 딜레이 / 크로스오버\n48kHz 처리", "qty": "보유"}
+    {
+      "id": "a1",
+      "cat": "파워 앰프",
+      "name": "Martin Audio MA4.8Q",
+      "sub": "4채널 클래스D 파워 앰프",
+      "spec": "4×1200W @ 4Ω | DSP 내장\nDante 네트워크 오디오 옵션",
+      "qty": "보유"
+    },
+    {
+      "id": "a2",
+      "cat": "파워 앰프",
+      "name": "Martin Audio MA2.8s",
+      "sub": "2채널 클래스D 파워 앰프",
+      "spec": "2×1400W @ 4Ω | DSP 내장",
+      "qty": "보유"
+    },
+    {
+      "id": "a3",
+      "cat": "파워 앰프",
+      "name": "Martin Audio MA4.2s",
+      "sub": "4채널 클래스D 파워 앰프",
+      "spec": "4×700W @ 4Ω | DSP 내장",
+      "qty": "보유"
+    },
+    {
+      "id": "a4",
+      "cat": "DSP 프로세서",
+      "name": "Spirit DSP-2006A",
+      "sub": "2입력 6출력 DSP 프로세서",
+      "spec": "2in 6out | PEQ / 딜레이 / 크로스오버\n48kHz 처리",
+      "qty": "보유"
+    }
   ],
   "speakers": [
-    {"id": "s11", "cat": "액티브 PA", "name": "HK Audio POLAR 8", "sub": "컬럼 PA (1/2)", "spec": "", "qty": "보유", "price": 280000, "img": "/images/hk_polar8.png"},
-    {"id": "s12", "cat": "액티브 PA", "name": "HK Audio POLAR 10", "sub": "컬럼 PA (1/2)", "spec": "", "qty": "보유", "price": 350000, "img": "/images/hk_polar10.png"},
-    {"id": "s10", "cat": "액티브 PA", "name": "Studiomaster 121K", "sub": "컬럼 PA (1/4)", "spec": "", "qty": "보유", "price": 250000, "img": "/images/studiomaster.png"},
-    {"id": "s13", "cat": "액티브 PA", "name": "JBL PRX635", "sub": "15인치 액티브 (1/2)", "spec": "", "qty": "보유", "price": 250000, "img": "/images/jbl_prx635.png"},
-    {"id": "s15", "cat": "액티브 PA 서브", "name": "EV ELX200-18SP", "sub": "18인치 서브우퍼 (1/2)", "spec": "", "qty": "2ea", "price": 150000, "img": "/images/ev_elx200.png"},
-    {"id": "s7", "cat": "액티브 PA", "name": "Montarbo WIND 2200", "sub": "Mid/High (1/2)", "spec": "", "qty": "보유", "price": 300000, "img": "/images/montarbo_wind.png"},
-    {"id": "s8", "cat": "액티브 PA 서브", "name": "Montarbo BXB18A", "sub": "서브우퍼 (1/2)", "spec": "", "qty": "보유", "price": 500000, "img": "/images/montarbo_bxb.png"},
-    {"id": "s9", "cat": "액티브 PA", "name": "BIEMA X10", "sub": "컬럼 PA (1/2)", "spec": "", "qty": "보유", "price": 600000, "img": "/images/biema.png"},
-    {"id": "s1", "cat": "라인어레이", "name": "Martin Audio W8LC", "sub": "라인어레이 (1/6)", "spec": "", "qty": "보유", "price": 600000, "img": "/images/martin_w8lc.png"},
-    {"id": "s2", "cat": "라인어레이 서브", "name": "Martin Audio WLX", "sub": "서브우퍼 (1/4)", "spec": "", "qty": "보유", "price": 1000000, "img": "/images/martin_wlx.png"},
-    {"id": "s3", "cat": "라인어레이", "name": "Logic System VA", "sub": "라인어레이 (1/24)", "spec": "4ea | 400,000원/일", "qty": "보유", "price": 300000, "img": "/images/logic_va.png"},
-    {"id": "s4", "cat": "라인어레이 서브", "name": "Logic System SB2", "sub": "서브우퍼 (1/8)", "spec": "", "qty": "보유", "price": 500000, "img": "/images/logic_sb2.png"},
-    {"id": "s5", "cat": "라인어레이", "name": "X-Treme XTMLA", "sub": "라인어레이 (1/10)", "spec": "", "qty": "보유", "price": 300000, "img": "/images/xtreme_la.png"},
-    {"id": "s6", "cat": "라인어레이 서브", "name": "X-Treme XTHPS33", "sub": "서브우퍼 (1/2)", "spec": "", "qty": "보유", "price": 600000, "img": "/images/xtreme_sub.png"},
-    {"id": "s16", "cat": "모니터", "name": "Montarbo Fire12A MK2", "sub": "액티브 모니터 (1/2)", "spec": "", "qty": "보유", "price": 150000, "img": "/images/mon_montarbo.png"},
-    {"id": "s17", "cat": "모니터", "name": "Mackie HD 1221", "sub": "액티브 모니터 (1/2)", "spec": "", "qty": "보유", "price": 150000, "img": "/images/mackie_hd1221.png"},
-    {"id": "s18", "cat": "모니터", "name": "X-Treme XTMON 15", "sub": "패시브 모니터 (1/4)", "spec": "", "qty": "보유", "price": 100000, "img": "/images/mon_xtreme.png"},
-    {"id": "s14", "cat": "액티브 PA", "name": "JBL EON ONE Compact", "sub": "올인원 PA (1/2)", "spec": "", "qty": "보유", "price": 100000, "img": "/images/jbl_eoncompact.png"}
+    {
+      "id": "s11",
+      "cat": "액티브 PA",
+      "name": "HK Audio POLAR 8",
+      "sub": "컬럼 PA (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 280000,
+      "img": "/images/hk_polar8.png"
+    },
+    {
+      "id": "s12",
+      "cat": "액티브 PA",
+      "name": "HK Audio POLAR 10",
+      "sub": "컬럼 PA (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 350000,
+      "img": "/images/hk_polar10.png"
+    },
+    {
+      "id": "s10",
+      "cat": "액티브 PA",
+      "name": "Studiomaster 121K",
+      "sub": "컬럼 PA (1/4)",
+      "spec": "",
+      "qty": "보유",
+      "price": 250000,
+      "img": "/images/studiomaster.png"
+    },
+    {
+      "id": "s13",
+      "cat": "액티브 PA",
+      "name": "JBL PRX635",
+      "sub": "15인치 액티브 (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 250000,
+      "img": "/images/jbl_prx635.png"
+    },
+    {
+      "id": "s15",
+      "cat": "액티브 PA 서브",
+      "name": "EV ELX200-18SP",
+      "sub": "18인치 서브우퍼 (1/2)",
+      "spec": "",
+      "qty": "2ea",
+      "price": 150000,
+      "img": "/images/ev_elx200.png"
+    },
+    {
+      "id": "s7",
+      "cat": "액티브 PA",
+      "name": "Montarbo WIND 2200",
+      "sub": "Mid/High (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 300000,
+      "img": "/images/montarbo_wind.png"
+    },
+    {
+      "id": "s8",
+      "cat": "액티브 PA 서브",
+      "name": "Montarbo BXB18A",
+      "sub": "서브우퍼 (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 500000,
+      "img": "/images/montarbo_bxb.png"
+    },
+    {
+      "id": "s9",
+      "cat": "액티브 PA",
+      "name": "BIEMA X10",
+      "sub": "컬럼 PA (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 600000,
+      "img": "/images/biema.png"
+    },
+    {
+      "id": "s1",
+      "cat": "라인어레이",
+      "name": "Martin Audio W8LC",
+      "sub": "라인어레이 (1/6)",
+      "spec": "",
+      "qty": "보유",
+      "price": 600000,
+      "img": "/images/martin_w8lc.png"
+    },
+    {
+      "id": "s2",
+      "cat": "라인어레이 서브",
+      "name": "Martin Audio WLX",
+      "sub": "서브우퍼 (1/4)",
+      "spec": "",
+      "qty": "보유",
+      "price": 1000000,
+      "img": "/images/martin_wlx.png"
+    },
+    {
+      "id": "s3",
+      "cat": "라인어레이",
+      "name": "Logic System VA",
+      "sub": "라인어레이 (1/24)",
+      "spec": "4ea | 400,000원/일",
+      "qty": "보유",
+      "price": 300000,
+      "img": "/images/logic_va.png"
+    },
+    {
+      "id": "s4",
+      "cat": "라인어레이 서브",
+      "name": "Logic System SB2",
+      "sub": "서브우퍼 (1/8)",
+      "spec": "",
+      "qty": "보유",
+      "price": 500000,
+      "img": "/images/logic_sb2.png"
+    },
+    {
+      "id": "s5",
+      "cat": "라인어레이",
+      "name": "X-Treme XTMLA",
+      "sub": "라인어레이 (1/10)",
+      "spec": "",
+      "qty": "보유",
+      "price": 300000,
+      "img": "/images/xtreme_la.png"
+    },
+    {
+      "id": "s6",
+      "cat": "라인어레이 서브",
+      "name": "X-Treme XTHPS33",
+      "sub": "서브우퍼 (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 600000,
+      "img": "/images/xtreme_sub.png"
+    },
+    {
+      "id": "s16",
+      "cat": "모니터",
+      "name": "Montarbo Fire12A MK2",
+      "sub": "액티브 모니터 (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 150000,
+      "img": "/images/mon_montarbo.png"
+    },
+    {
+      "id": "s17",
+      "cat": "모니터",
+      "name": "Mackie HD 1221",
+      "sub": "액티브 모니터 (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 150000,
+      "img": "/images/mackie_hd1221.png"
+    },
+    {
+      "id": "s18",
+      "cat": "모니터",
+      "name": "X-Treme XTMON 15",
+      "sub": "패시브 모니터 (1/4)",
+      "spec": "",
+      "qty": "보유",
+      "price": 100000,
+      "img": "/images/mon_xtreme.png"
+    },
+    {
+      "id": "s14",
+      "cat": "액티브 PA",
+      "name": "JBL EON ONE Compact",
+      "sub": "올인원 PA (1/2)",
+      "spec": "",
+      "qty": "보유",
+      "price": 100000,
+      "img": "/images/jbl_eoncompact.png"
+    }
   ],
   "accessories": [
-    {"id": "ac1", "cat": "앰프", "name": "Laney AH 200", "sub": "베이스 콤보 앰프", "spec": "", "qty": "1ea", "price": 40000, "img": "/images/laney.png"},
-    {"id": "ac2", "cat": "DJ 테이블", "name": "Prox Z Shape Table", "sub": "프로 DJ 테이블", "spec": "", "qty": "1ea", "price": 200000, "img": "/images/djtable.png"},
-    {"id": "ac3", "cat": "보면대", "name": "고급형 보면대", "sub": "오케스트라/공연용", "spec": "", "qty": "보유", "price": 10000, "img": "/images/music_stand.png"},
-    {"id": "ac4", "cat": "마이크 스탠드", "name": "마이크 스탠드", "sub": "붐 마이크 스탠드", "spec": "", "qty": "다수", "price": 10000, "img": "/images/mic_stand.png"}
+    {
+      "id": "ac1",
+      "cat": "앰프",
+      "name": "Laney AH 200",
+      "sub": "베이스 콤보 앰프",
+      "spec": "",
+      "qty": "1ea",
+      "price": 40000,
+      "img": "/images/laney.png"
+    },
+    {
+      "id": "ac2",
+      "cat": "DJ 테이블",
+      "name": "Prox Z Shape Table",
+      "sub": "프로 DJ 테이블",
+      "spec": "",
+      "qty": "1ea",
+      "price": 200000,
+      "img": "/images/djtable.png"
+    },
+    {
+      "id": "ac3",
+      "cat": "보면대",
+      "name": "고급형 보면대",
+      "sub": "오케스트라/공연용",
+      "spec": "",
+      "qty": "보유",
+      "price": 10000,
+      "img": "/images/music_stand.png"
+    },
+    {
+      "id": "ac4",
+      "cat": "마이크 스탠드",
+      "name": "마이크 스탠드",
+      "sub": "붐 마이크 스탠드",
+      "spec": "",
+      "qty": "다수",
+      "price": 10000,
+      "img": "/images/mic_stand.png"
+    }
   ]
 }

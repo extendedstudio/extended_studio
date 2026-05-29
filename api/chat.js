@@ -34,10 +34,10 @@ export default async function handler(req, res) {
 - 손님의 행사 정보(인원, 장소, 일자)를 모르면 먼저 가볍게 물어봐서 맞춤 추천하세요.
 
 【렌탈 패키지】 (구성품 + 커버리지 + 가격)
-- Special Package (DJ PACKAGE): DJ 최대 150인 추천 / 커버리지 최대 150인
+- Special Package (DJ PACKAGE): DJ 최대 100인 추천 / 커버리지 최대 100인
   구성: STUDIOMASTER 121K 1Pair, XDJ-XZ 1EA
   가격: Self Pick up / 반납 400,000원 / 설치 및 철수 100,000원
-- DJ FULL SET (DJ PACKAGE): DJ FULL SET 추천 패키지 / 커버리지 최대 150인
+- DJ FULL SET (DJ PACKAGE): DJ FULL SET 추천 패키지 / 커버리지 최대 100인
   구성: STUDIOMASTER 121K 1Pair, XDJ-XZ 1EA, DJ TABLE, LED Moving, Beam Moving, LED Par, LED Bar
   가격: 설치 및 철수 1,200,000원
   ※ 현장 상황에 따라 조명이 바뀔 수 있습니다

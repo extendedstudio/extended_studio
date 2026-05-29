@@ -41,23 +41,27 @@ export default async function handler(req, res) {
   구성: STUDIOMASTER 121K 1Pair, XDJ-XZ 1EA, DJ TABLE, LED Moving, Beam Moving, LED Par, LED Bar
   가격: 설치 및 철수 1,200,000원
   ※ 현장 상황에 따라 조명이 바뀔 수 있습니다
-- HK AUDIO POLAR 8 (PA SYSTEM): 소형 이벤트 / 실내 공연 / 커버리지 최대 150인
+- HK AUDIO POLAR 8 (PA SYSTEM): 소형 이벤트 / 실내 공연 / 커버리지 최대 50인
   구성: HK AUDIO POLAR 8 1Pair, 아날로그 믹싱콘솔 1EA
   가격: 직접 수령 / 반납 560,000원
   ※ *오퍼레이터 포함시 디지털 믹서로 변환 가능
-- STUDIOMASTER DIRECT 121K (PA SYSTEM): 소형 이벤트 / 실내 공연 / 커버리지 최대 150인
+- STUDIOMASTER DIRECT 121K (PA SYSTEM): 소형 이벤트 / 실내 공연 / 커버리지 최대 100인
   구성: STUDIO MASTER 1Pair, 아날로그 믹싱콘솔 1EA
-  가격: 직접 수령 / 반납 600,000원
+  가격: 직접 수령 / 반납 500,000원
   ※ *오퍼레이터 포함시 디지털 믹서로 변환 가능
-- HK AUDIO POLAR 10 (PA SYSTEM): 중형 이벤트 / 야외 행사 / 커버리지 최대 200인
+- HK AUDIO POLAR 10 (PA SYSTEM): 중형 이벤트 / 야외 행사 / 커버리지 최대 100인
   구성: HK AUDIO POLAR 10 1Pair, 아날로그 믹싱콘솔 1EA
-  가격: 직접 수령 / 반납 800,000원
+  가격: 직접 수령 / 반납 700,000원
   ※ *오퍼레이터 포함시 디지털 믹서로 변환 가능
-- BIEMA X10 (PA SYSTEM): 중대형 페스티벌 / 야외 / 커버리지 최대 300인 (야외) ~ 500인 (실내)
+- JBL PRX635 + EV ELX200 SET (PA SYSTEM): 중형 이벤트 / 야외 행사 / 커버리지 최대 200인
+  구성: JBL PRX635 1Pair, ELX200-18SP 1Pair, 아날로그 믹싱콘솔 1EA
+  가격: 직접 수령 / 반납 800,000원
+  ※ 오퍼레이터 포함시 상황에 따라 디지털 믹서로 변환 가능합니다
+- BIEMA X10 (PA SYSTEM): 중대형 페스티벌 / 야외 / 커버리지 최대 200인 (야외) ~ 300인 (실내)
   구성: BIEMA X10 1Pair, 아날로그 믹싱콘솔 1EA
   가격: 직접 수령 / 반납 1,200,000원
   ※ *오퍼레이터 포함시 디지털 믹서로 변환 가능
-- MONTARBO WIND 2200 / BXB18A (PA SYSTEM): 중대형 페스티벌 / 야외 / 커버리지 최대 300인 (야외) ~ 500인 (실내)
+- MONTARBO WIND 2200 / BXB18A (PA SYSTEM): 중대형 페스티벌 / 야외 / 커버리지 최대 200인 (야외) ~ 300인 (실내)
   구성: MONTARBO WIND 2200 / BXB18A 1Pair, 아날로그 믹싱콘솔 1EA
   가격: 직접 수령 / 반납 1,600,000원
   ※ *오퍼레이터 포함시 디지털 믹서로 변환 가능
@@ -99,9 +103,9 @@ export default async function handler(req, res) {
 
 【스피커 / PA】 (1일 단가)
 - HK Audio POLAR 8: 280,000원 — 컬럼 PA (1/2)
-- HK Audio POLAR 10: 400,000원 — 컬럼 PA (1/2)
-- Studiomaster 121K: 300,000원 — 컬럼 PA (1/4)
-- JBL PRX635: 220,000원 — 15인치 액티브 (1/2)
+- HK Audio POLAR 10: 350,000원 — 컬럼 PA (1/2)
+- Studiomaster 121K: 250,000원 — 컬럼 PA (1/4)
+- JBL PRX635: 250,000원 — 15인치 액티브 (1/2)
 - EV ELX200-18SP: 150,000원 — 18인치 서브우퍼 (1/2) [2ea]
 - Montarbo WIND 2200: 300,000원 — Mid/High (1/2)
 - Montarbo BXB18A: 500,000원 — 서브우퍼 (1/2)
@@ -150,6 +154,19 @@ Dante 네트워크 오디오 옵션)
 - Prox Z Shape Table: 200,000원 — 프로 DJ 테이블 [1ea]
 - 고급형 보면대: 10,000원 — 오케스트라/공연용
 - 마이크 스탠드: 10,000원 — 붐 마이크 스탠드
+
+【가격 안내 시 주의 - 1대 vs 1Pair】
+스피커 단가는 **1대(개별) 기준**입니다. 보통 PA 운영은 1Pair(2대) 단위로 사용하므로, 가격을 안내할 때 **1대 가격과 1Pair 셋트 가격을 반드시 함께 명시**하세요. 그래야 손님이 셋트 가격으로 오해하지 않습니다.
+
+예시:
+- HK Audio POLAR 10: 1대 350,000원 / 1Pair(2대) 700,000원
+- HK Audio POLAR 8: 1대 280,000원 / 1Pair(2대) 560,000원
+- Studiomaster 121K: 1대 250,000원 / 1Pair(2대) 500,000원
+- JBL PRX635: 1대 250,000원 / 1Pair(2대) 500,000원
+- 다른 스피커들도 동일하게 1대 단가 × 2 = 1Pair 가격으로 안내
+
+답변 예시 (POLAR 10):
+"HK Audio POLAR 10은 **1대 350,000원**입니다. 보통 PA는 좌/우 1Pair로 운영하므로 **1Pair(2대) 700,000원**이에요. 행사 규모에 따라 1대만 쓰셔도 되고 1Pair로 쓰셔도 됩니다."
 
 【오퍼레이터/엔지니어 운영 안내】
 - 무선 마이크 (Sennheiser EW-D 835/845, Kanals BK-3002, Sennheiser/Kanals 인이어)와 콘솔(Yamaha MG16XU, Midas M32R, Allen & Heath QU-32, Behringer WING)을 사용하시는 경우 전문 엔지니어 운영이 필수입니다.

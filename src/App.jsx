@@ -559,10 +559,11 @@ function requiresOperator(item) {
 }
 
 const OPERATOR_FEE_REQUIRED = 350000  // 무선/콘솔용 필수 오퍼레이터 일당
-const OPERATOR_FEE_OPTIONAL = 200000  // 일반 요청 오퍼레이터 일당
+const OPERATOR_FEE_OPTIONAL = 400000  // 일반 요청 오퍼레이터 일당
+const INSTALL_FEE = 200000  // 전체 설치/철수 비용 (선택)
 
 function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
-  const [form, setForm] = useState({ name: '', phone: '', startDate: '', endDate: '', type: '', gear: [], qty: {}, operator: 'no', note: '' })
+  const [form, setForm] = useState({ name: '', phone: '', startDate: '', endDate: '', type: '', gear: [], qty: {}, operator: 'no', install: false, note: '' })
   const [done, setDone] = useState(false)
 
   // 장바구니 → form.gear 동기화
@@ -625,7 +626,8 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
   const effectiveOperator = operatorRequired ? 'yes' : form.operator
   const operatorFeePerDay = operatorRequired ? OPERATOR_FEE_REQUIRED : OPERATOR_FEE_OPTIONAL
   const operatorFee = effectiveOperator === 'yes' ? operatorFeePerDay * days : 0
-  const finalPrice = grossTotal - discountAmount + operatorFee
+  const installFee = form.install ? INSTALL_FEE : 0
+  const finalPrice = grossTotal - discountAmount + operatorFee + installFee
 
   const removeCartItem = (name) => {
     removeFromCart(name)
@@ -651,6 +653,8 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
         operator: effectiveOperator,
         operatorRequired,
         operatorFee,
+        install: form.install,
+        installFee,
         note: form.note,
         subtotal,
         discountRate: discount.rate,
@@ -874,6 +878,12 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                       <span>+ {won(operatorFee)}</span>
                     </div>
                   )}
+                  {installFee > 0 && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888' }}>
+                      <span>설치 / 철수</span>
+                      <span>+ {won(installFee)}</span>
+                    </div>
+                  )}
                   <div style={{
                     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                     marginTop: 8, paddingTop: 12, borderTop: '1px solid #2a2a2a'
@@ -884,8 +894,8 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                       color: $.gold, letterSpacing: '.04em'
                     }}>{won(finalPrice)}</span>
                   </div>
-                  <div style={{ fontSize: 10, color: '#555', textAlign: 'right', marginTop: 2 }}>
-                    * 실제 견적은 담당자 확인 후 안내드립니다
+                  <div style={{ fontSize: 10, color: '#777', lineHeight: 1.5, marginTop: 8, padding: '8px 10px', background: 'rgba(255,255,255,0.02)', borderRadius: 4, border: '1px solid #1f1f1f' }}>
+                    * 익스텐디드 스텝의 현장 상주 / 오퍼레이팅 비용은 별도입니다. 장비 왕복 배송료와 세팅/철수만 포함됩니다.
                   </div>
                   {/* 예약 문의 버튼 (견적 박스 안) */}
                   <button className="btn-gold"
@@ -1080,6 +1090,46 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                 })}
               </div>
             )}
+          </div>
+
+          {/* 설치 / 철수 */}
+          <div>
+            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
+              설치 / 철수
+              <span style={{ marginLeft: 8, color: '#666', fontSize: 10 }}>· 선택 사항</span>
+            </label>
+            <div onClick={() => set('install', !form.install)}
+              style={{
+                background: form.install ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                border: `1px solid ${form.install ? $.gold : '#222'}`,
+                borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
+                transition: 'all .15s ease',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
+              }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 13, color: form.install ? $.gold : '#888' }}>{form.install ? '☑' : '☐'}</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#eee' }}>전체 설치 / 철수 요청</div>
+                  <div style={{ fontSize: 10, color: '#666', marginTop: 2 }}>장비 운반 + 현장 설치 + 철수</div>
+                </div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: form.install ? $.gold : '#888', letterSpacing: '.04em' }}>
+                  + {won(INSTALL_FEE)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 서비스 안내 문구 */}
+          <div style={{ fontSize: 11, color: '#aaa', lineHeight: 1.7, padding: '14px 16px', background: 'rgba(200,169,110,0.04)', borderLeft: `2px solid ${$.gold}`, borderRadius: 4 }}>
+            <strong style={{ color: $.gold, letterSpacing: '.05em', display: 'block', marginBottom: 6 }}>📋 서비스 안내</strong>
+            익스텐디드 스텝이 현장에서 상주 및 오퍼레이팅하는 비용은 포함되어있지 않습니다. 장비의 왕복 배송료와 세팅 / 철수만 포함되어있는 서비스입니다. 스텝 상주시, 인건비는 별도입니다.
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(200,169,110,0.15)' }}>
+              <strong style={{ color: $.gold, fontSize: 10, letterSpacing: '.05em' }}>📦 수령 / 배송</strong><br />
+              · <strong style={{ color: '#ccc' }}>직접 수령</strong>: 창고 방문 (고양시 향동)<br />
+              · <strong style={{ color: '#ccc' }}>배송</strong>: 퀵비 서울 80,000원 기준 / 그외 지방 별도 시세 협의
+            </div>
           </div>
 
           {/* 요청사항 */}

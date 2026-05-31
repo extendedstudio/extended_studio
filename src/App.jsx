@@ -313,6 +313,15 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab }) {
   const [catFilter, setCatFilter] = useState('전체')
   const [selected, setSelected] = useState(null)
   const [tab, setTab] = useState(initialTab || '패키지')
+
+  // initialTab이 바뀌면 (홈에서 다른 카테고리 카드 클릭 시) 탭 동기화
+  useEffect(() => {
+    if (initialTab) {
+      setTab(initialTab)
+      setCatFilter('전체')  // 카테고리 필터도 리셋
+      setSelected(null)     // 선택된 패키지도 리셋
+    }
+  }, [initialTab])
   const [zoomImg, setZoomImg] = useState(null)
   const inCart = (name) => cartItems?.some(c => c.name === name)
   const handleBook = (item) => {

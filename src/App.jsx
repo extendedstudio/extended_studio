@@ -368,9 +368,25 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab }) {
                   ))}
                 </div>
                 {pkg.note && <p className="pkg-note">{pkg.note}</p>}
+                {pkg.blogUrl && (
+                  <a href={pkg.blogUrl} target="_blank" rel="noopener noreferrer"
+                    onClick={e => e.stopPropagation()}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      gap: 6, width: '100%', marginTop: 16, padding: '11px 14px',
+                      background: 'transparent', border: '1px solid #2a2a2a',
+                      borderRadius: 4, color: '#aaa', fontSize: 12,
+                      letterSpacing: '.08em', textDecoration: 'none',
+                      transition: 'all .15s ease', cursor: 'pointer',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = $.gold; e.currentTarget.style.color = $.gold }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = '#2a2a2a'; e.currentTarget.style.color = '#aaa' }}>
+                    📝 설치 사례 / 블로그 보기 →
+                  </a>
+                )}
                 <button
                   className={inCart(pkg.name) ? "btn-gold-outline" : "btn-gold"}
-                  style={{ width: '100%', marginTop: 16 }}
+                  style={{ width: '100%', marginTop: pkg.blogUrl ? 8 : 16 }}
                   onClick={e => {
                     e.stopPropagation()
                     handleBook(pkg)

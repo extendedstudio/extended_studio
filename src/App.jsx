@@ -1330,6 +1330,9 @@ function Admin() {
   const [adminTab, setAdminTab] = useState('requests')
   const [chatLogs, setChatLogs] = useState([])
   const [chatLoading, setChatLoading] = useState(false)
+  const [adminTab, setAdminTab] = useState('requests')
+  const [chatLogs, setChatLogs] = useState([])
+  const [chatLoading, setChatLoading] = useState(false)
   const STATUS = ['신청', '확인중', '확정', '취소']
   const STATUS_COLOR = { '신청': '#f59e0b', '확인중': '#3b82f6', '확정': '#22c55e', '취소': '#ef4444' }
 
@@ -1351,6 +1354,21 @@ function Admin() {
       setNotifStatus('default')
     }
   }, [authed])
+
+  // 채팅 로그 실시간 조회
+  useEffect(() => {
+    if (!authed || adminTab !== 'chat_logs') return
+    setChatLoading(true)
+    const q = query(collection(db, 'chat_logs'), orderBy('createdAt', 'desc'), limit(200))
+    const unsub = onSnapshot(q, snap => {
+      setChatLogs(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+      setChatLoading(false)
+    }, err => {
+      console.error('채팅 로그 조회 실패:', err)
+      setChatLoading(false)
+    })
+    return () => unsub()
+  }, [authed, adminTab])
 
   // 채팅 로그 실시간 조회
   useEffect(() => {
@@ -1572,7 +1590,8 @@ function Admin() {
         )}
 
         {adminTab === 'requests' && (
-        {loading ? (
+        {adminTab === 'requests' && (
+        loading ? (
           <div style={{ color: $.muted, textAlign: 'center', padding: 60 }}>불러오는 중...</div>
         ) : error ? (
           <div style={{ background: '#1a0e0e', border: '1px solid #ef4444', borderRadius: 8, padding: 24, color: '#fca5a5' }}>
@@ -1650,6 +1669,40 @@ function Admin() {
                 )}
               </div>
             ))}
+          </div>
+        )
+        )}
+
+        {adminTab === 'chat_logs' && (
+          <div style={{ marginTop: 24 }}>
+            {chatLoading && <p style={{ color: '#888', fontSize: 13 }}>로그 불러오는 중...</p>}
+            {!chatLoading && chatLogs.length === 0 && (
+              <p style={{ color: '#666', fontSize: 13, textAlign: 'center', padding: '40px 0' }}>
+                아직 AI 상담 기록이 없습니다.
+              </p>
+            )}
+            <div style={{ display: 'grid', gap: 12 }}>
+              {chatLogs.map(log => {
+                const date = log.createdAt?.toDate ? log.createdAt.toDate() : null
+                const dateStr = date ? `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}` : '...'
+                return (
+                  <div key={log.id} style={{ background: '#0e0e0e', border: '1px solid #1f1f1f', borderRadius: 6, padding: 14 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                      <span style={{ fontSize: 10, color: '#666', letterSpacing: '.05em' }}>
+                        {dateStr} · 대화 {log.conversationLength || 1}턴
+                        {log.outputTokens && ` · 토큰 ${log.inputTokens||0}+${log.outputTokens}`}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 13, color: '#ddd', marginBottom: 10, padding: '8px 10px', background: 'rgba(200,169,110,0.06)', borderRadius: 4, borderLeft: `2px solid ${$.gold}` }}>
+                      <strong style={{ color: $.gold, fontSize: 10 }}>Q.</strong> {log.question}
+                    </div>
+                    <div style={{ fontSize: 12, color: '#aaa', lineHeight: 1.6, whiteSpace: 'pre-wrap', maxHeight: 200, overflowY: 'auto' }}>
+                      <strong style={{ color: '#888', fontSize: 10 }}>A.</strong> {log.answer}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )}
         )}

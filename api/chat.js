@@ -1,5 +1,37 @@
 // Vercel Serverless Function: Claude AI 챗봇
 // Extended Studio 전용 상담 어시스턴트
+// Firebase Admin (채팅 로그 저장용)
+import { initializeApp, getApps, cert } from 'firebase-admin/app'
+import { getFirestore, FieldValue } from 'firebase-admin/firestore'
+
+function getAdminApp() {
+  if (getApps().length) return getApps()[0]
+  const projectId = process.env.FIREBASE_PROJECT_ID
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL
+  const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n')
+  if (!projectId || !clientEmail || !privateKey) return null
+  return initializeApp({ credential: cert({ projectId, clientEmail, privateKey }) })
+}
+
+async function saveChatLog(messages, answer, meta = {}) {
+  try {
+    const app = getAdminApp()
+    if (!app) return
+    const db = getFirestore(app)
+    const lastUserMsg = [...messages].reverse().find(m => m.role === 'user')
+    if (!lastUserMsg) return
+    await db.collection('chat_logs').add({
+      question: typeof lastUserMsg.content === 'string' ? lastUserMsg.content : JSON.stringify(lastUserMsg.content),
+      answer: answer || '',
+      conversationLength: messages.length,
+      createdAt: FieldValue.serverTimestamp(),
+      ...meta,
+    })
+  } catch (e) {
+    console.warn('채팅 로그 저장 실패 (무시):', e.message)
+  }
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')

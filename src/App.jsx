@@ -1330,9 +1330,6 @@ function Admin() {
   const [adminTab, setAdminTab] = useState('requests')
   const [chatLogs, setChatLogs] = useState([])
   const [chatLoading, setChatLoading] = useState(false)
-  const [adminTab, setAdminTab] = useState('requests')
-  const [chatLogs, setChatLogs] = useState([])
-  const [chatLoading, setChatLoading] = useState(false)
   const STATUS = ['신청', '확인중', '확정', '취소']
   const STATUS_COLOR = { '신청': '#f59e0b', '확인중': '#3b82f6', '확정': '#22c55e', '취소': '#ef4444' }
 

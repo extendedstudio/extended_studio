@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import data from './data.json'
 import { db, getFcmMessaging, getToken, onMessage, VAPID_KEY } from './firebase'
-import { collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc, setDoc, serverTimestamp, query, orderBy, limit } from 'firebase/firestore'
 import './index.css'
 
 const $ = {
@@ -313,6 +313,15 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab }) {
   const [catFilter, setCatFilter] = useState('전체')
   const [selected, setSelected] = useState(null)
   const [tab, setTab] = useState(initialTab || '패키지')
+
+  // initialTab이 바뀌면 (홈에서 다른 카테고리 카드 클릭 시) 탭 동기화
+  useEffect(() => {
+    if (initialTab) {
+      setTab(initialTab)
+      setCatFilter('전체')  // 카테고리 필터도 리셋
+      setSelected(null)     // 선택된 패키지도 리셋
+    }
+  }, [initialTab])
   const [zoomImg, setZoomImg] = useState(null)
   const inCart = (name) => cartItems?.some(c => c.name === name)
   const handleBook = (item) => {
@@ -368,9 +377,25 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab }) {
                   ))}
                 </div>
                 {pkg.note && <p className="pkg-note">{pkg.note}</p>}
+                {pkg.blogUrl && (
+                  <a href={pkg.blogUrl} target="_blank" rel="noopener noreferrer"
+                    onClick={e => e.stopPropagation()}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      gap: 6, width: '100%', marginTop: 16, padding: '11px 14px',
+                      background: 'transparent', border: '1px solid #2a2a2a',
+                      borderRadius: 4, color: '#aaa', fontSize: 12,
+                      letterSpacing: '.08em', textDecoration: 'none',
+                      transition: 'all .15s ease', cursor: 'pointer',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = $.gold; e.currentTarget.style.color = $.gold }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = '#2a2a2a'; e.currentTarget.style.color = '#aaa' }}>
+                    📝 설치 사례 / 블로그 보기 →
+                  </a>
+                )}
                 <button
                   className={inCart(pkg.name) ? "btn-gold-outline" : "btn-gold"}
-                  style={{ width: '100%', marginTop: 16 }}
+                  style={{ width: '100%', marginTop: pkg.blogUrl ? 8 : 16 }}
                   onClick={e => {
                     e.stopPropagation()
                     handleBook(pkg)
@@ -501,7 +526,6 @@ function buildGearGroups(d) {
   const SECTIONS = [
     { key: 'mics',        label: '마이크' },
     { key: 'consoles',    label: '콘솔' },
-    { key: 'amps',        label: '앰프/DSP' },
     { key: 'accessories', label: '액세서리' },
   ]
   SECTIONS.forEach(({ key, label }) => {
@@ -560,10 +584,11 @@ function requiresOperator(item) {
 }
 
 const OPERATOR_FEE_REQUIRED = 350000  // 무선/콘솔용 필수 오퍼레이터 일당
-const OPERATOR_FEE_OPTIONAL = 200000  // 일반 요청 오퍼레이터 일당
+const OPERATOR_FEE_OPTIONAL = 400000  // 일반 요청 오퍼레이터 일당
+const INSTALL_FEE = 200000  // 전체 설치/철수 비용 (선택)
 
 function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
-  const [form, setForm] = useState({ name: '', phone: '', startDate: '', endDate: '', type: '', gear: [], qty: {}, operator: 'no', note: '' })
+  const [form, setForm] = useState({ name: '', phone: '', startDate: '', endDate: '', type: '', gear: [], qty: {}, operator: 'no', install: false, note: '' })
   const [done, setDone] = useState(false)
 
   // 장바구니 → form.gear 동기화
@@ -626,7 +651,8 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
   const effectiveOperator = operatorRequired ? 'yes' : form.operator
   const operatorFeePerDay = operatorRequired ? OPERATOR_FEE_REQUIRED : OPERATOR_FEE_OPTIONAL
   const operatorFee = effectiveOperator === 'yes' ? operatorFeePerDay * days : 0
-  const finalPrice = grossTotal - discountAmount + operatorFee
+  const installFee = form.install ? INSTALL_FEE : 0
+  const finalPrice = grossTotal - discountAmount + operatorFee + installFee
 
   const removeCartItem = (name) => {
     removeFromCart(name)
@@ -652,6 +678,8 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
         operator: effectiveOperator,
         operatorRequired,
         operatorFee,
+        install: form.install,
+        installFee,
         note: form.note,
         subtotal,
         discountRate: discount.rate,
@@ -875,6 +903,12 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                       <span>+ {won(operatorFee)}</span>
                     </div>
                   )}
+                  {installFee > 0 && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888' }}>
+                      <span>설치 / 철수</span>
+                      <span>+ {won(installFee)}</span>
+                    </div>
+                  )}
                   <div style={{
                     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                     marginTop: 8, paddingTop: 12, borderTop: '1px solid #2a2a2a'
@@ -885,9 +919,15 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                       color: $.gold, letterSpacing: '.04em'
                     }}>{won(finalPrice)}</span>
                   </div>
-                  <div style={{ fontSize: 10, color: '#555', textAlign: 'right', marginTop: 2 }}>
-                    * 실제 견적은 담당자 확인 후 안내드립니다
+                  <div style={{ fontSize: 10, color: '#777', lineHeight: 1.5, marginTop: 8, padding: '8px 10px', background: 'rgba(255,255,255,0.02)', borderRadius: 4, border: '1px solid #1f1f1f' }}>
+                    * 익스텐디드 스텝의 현장 상주 / 오퍼레이팅 비용은 별도입니다. 장비 왕복 배송료와 세팅/철수만 포함됩니다.
                   </div>
+                  {/* 예약 문의 버튼 (견적 박스 안) */}
+                  <button className="btn-gold"
+                    style={{ width: '100%', padding: '14px', fontSize: 14, letterSpacing: '.1em', marginTop: 14 }}
+                    onClick={submit}>
+                    예약 문의 보내기
+                  </button>
                 </div>
               )}
             </div>
@@ -1077,6 +1117,46 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
             )}
           </div>
 
+          {/* 설치 / 철수 */}
+          <div>
+            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
+              설치 / 철수
+              <span style={{ marginLeft: 8, color: '#666', fontSize: 10 }}>· 선택 사항</span>
+            </label>
+            <div onClick={() => set('install', !form.install)}
+              style={{
+                background: form.install ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                border: `1px solid ${form.install ? $.gold : '#222'}`,
+                borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
+                transition: 'all .15s ease',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
+              }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 13, color: form.install ? $.gold : '#888' }}>{form.install ? '☑' : '☐'}</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#eee' }}>전체 설치 / 철수 요청</div>
+                  <div style={{ fontSize: 10, color: '#666', marginTop: 2 }}>장비 운반 + 현장 설치 + 철수</div>
+                </div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: form.install ? $.gold : '#888', letterSpacing: '.04em' }}>
+                  + {won(INSTALL_FEE)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 서비스 안내 문구 */}
+          <div style={{ fontSize: 11, color: '#aaa', lineHeight: 1.7, padding: '14px 16px', background: 'rgba(200,169,110,0.04)', borderLeft: `2px solid ${$.gold}`, borderRadius: 4 }}>
+            <strong style={{ color: $.gold, letterSpacing: '.05em', display: 'block', marginBottom: 6 }}>📋 서비스 안내</strong>
+            익스텐디드 스텝이 현장에서 상주 및 오퍼레이팅하는 비용은 포함되어있지 않습니다. 장비의 왕복 배송료와 세팅 / 철수만 포함되어있는 서비스입니다. 스텝 상주시, 인건비는 별도입니다.
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(200,169,110,0.15)' }}>
+              <strong style={{ color: $.gold, fontSize: 10, letterSpacing: '.05em' }}>📦 수령 / 배송</strong><br />
+              · <strong style={{ color: '#ccc' }}>직접 수령</strong>: 창고 방문 (고양시 향동)<br />
+              · <strong style={{ color: '#ccc' }}>배송</strong>: 퀵비 서울 80,000원 기준 / 그외 지방 별도 시세 협의
+            </div>
+          </div>
+
           {/* 요청사항 */}
           <div>
             <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 7 }}>추가 요청사항</label>
@@ -1084,9 +1164,12 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
               value={form.note} onChange={e => set('note', e.target.value)} style={{ resize: 'vertical' }} />
           </div>
 
-          <button className="btn-gold" style={{ width: '100%', padding: '14px', fontSize: 14, letterSpacing: '.1em' }} onClick={submit}>
-            예약 문의 보내기
-          </button>
+          {/* 견적 요약이 안 보일 때(장비 미선택)도 예약 보낼 수 있게 폴백 */}
+          {selectedItems.length === 0 && (
+            <button className="btn-gold" style={{ width: '100%', padding: '14px', fontSize: 14, letterSpacing: '.1em' }} onClick={submit}>
+              예약 문의 보내기
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -1244,6 +1327,9 @@ function Admin() {
   // 알림 상태: 'unsupported' | 'denied' | 'granted-active' | 'granted-inactive' | 'default'
   const [notifStatus, setNotifStatus] = useState('default')
   const [notifMsg, setNotifMsg] = useState('')
+  const [adminTab, setAdminTab] = useState('requests')
+  const [chatLogs, setChatLogs] = useState([])
+  const [chatLoading, setChatLoading] = useState(false)
   const STATUS = ['신청', '확인중', '확정', '취소']
   const STATUS_COLOR = { '신청': '#f59e0b', '확인중': '#3b82f6', '확정': '#22c55e', '취소': '#ef4444' }
 
@@ -1265,6 +1351,21 @@ function Admin() {
       setNotifStatus('default')
     }
   }, [authed])
+
+  // 채팅 로그 실시간 조회
+  useEffect(() => {
+    if (!authed || adminTab !== 'chat_logs') return
+    setChatLoading(true)
+    const q = query(collection(db, 'chat_logs'), orderBy('createdAt', 'desc'), limit(200))
+    const unsub = onSnapshot(q, snap => {
+      setChatLogs(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+      setChatLoading(false)
+    }, err => {
+      console.error('채팅 로그 조회 실패:', err)
+      setChatLoading(false)
+    })
+    return () => unsub()
+  }, [authed, adminTab])
 
   // 알림 활성화 + 토큰 발급 + Firestore 저장
   const enableNotifications = async () => {
@@ -1418,7 +1519,25 @@ function Admin() {
           <div>
             <div style={{ width: 40, height: 2, background: $.gold, marginBottom: 16 }} />
             <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 44, letterSpacing: '.08em', marginBottom: 4 }}>ADMIN</h1>
-            <p style={{ color: $.muted, fontSize: 13 }}>예약 신청 관리 · 총 {requests.length}건</p>
+            <p style={{ color: $.muted, fontSize: 13 }}>
+            {adminTab === 'requests' ? `예약 신청 관리 · 총 ${requests.length}건` : `AI 상담 로그 · 총 ${chatLogs.length}건`}
+          </p>
+          <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+            <button onClick={() => setAdminTab('requests')} style={{
+              padding: '8px 16px', fontSize: 12, letterSpacing: '.08em',
+              background: adminTab === 'requests' ? $.gold : 'transparent',
+              color: adminTab === 'requests' ? '#000' : '#888',
+              border: `1px solid ${adminTab === 'requests' ? $.gold : '#2a2a2a'}`,
+              borderRadius: 4, cursor: 'pointer', fontWeight: 600
+            }}>📋 예약 신청</button>
+            <button onClick={() => setAdminTab('chat_logs')} style={{
+              padding: '8px 16px', fontSize: 12, letterSpacing: '.08em',
+              background: adminTab === 'chat_logs' ? $.gold : 'transparent',
+              color: adminTab === 'chat_logs' ? '#000' : '#888',
+              border: `1px solid ${adminTab === 'chat_logs' ? $.gold : '#2a2a2a'}`,
+              borderRadius: 4, cursor: 'pointer', fontWeight: 600
+            }}>💬 AI 상담 로그</button>
+          </div>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
             {/* 알림 활성화 버튼 */}
@@ -1452,6 +1571,7 @@ function Admin() {
           </div>
         )}
 
+        {adminTab === 'requests' && (
         {loading ? (
           <div style={{ color: $.muted, textAlign: 'center', padding: 60 }}>불러오는 중...</div>
         ) : error ? (
@@ -1530,6 +1650,40 @@ function Admin() {
                 )}
               </div>
             ))}
+          </div>
+        )}
+        )}
+
+        {adminTab === 'chat_logs' && (
+          <div style={{ marginTop: 24 }}>
+            {chatLoading && <p style={{ color: '#888', fontSize: 13 }}>로그 불러오는 중...</p>}
+            {!chatLoading && chatLogs.length === 0 && (
+              <p style={{ color: '#666', fontSize: 13, textAlign: 'center', padding: '40px 0' }}>
+                아직 AI 상담 기록이 없습니다.
+              </p>
+            )}
+            <div style={{ display: 'grid', gap: 12 }}>
+              {chatLogs.map(log => {
+                const date = log.createdAt?.toDate ? log.createdAt.toDate() : null
+                const dateStr = date ? `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}` : '...'
+                return (
+                  <div key={log.id} style={{ background: '#0e0e0e', border: '1px solid #1f1f1f', borderRadius: 6, padding: 14 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                      <span style={{ fontSize: 10, color: '#666', letterSpacing: '.05em' }}>
+                        {dateStr} · 대화 {log.conversationLength || 1}턴
+                        {log.outputTokens && ` · 토큰 ${log.inputTokens||0}+${log.outputTokens}`}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 13, color: '#ddd', marginBottom: 10, padding: '8px 10px', background: 'rgba(200,169,110,0.06)', borderRadius: 4, borderLeft: `2px solid ${$.gold}` }}>
+                      <strong style={{ color: $.gold, fontSize: 10 }}>Q.</strong> {log.question}
+                    </div>
+                    <div style={{ fontSize: 12, color: '#aaa', lineHeight: 1.6, whiteSpace: 'pre-wrap', maxHeight: 200, overflowY: 'auto' }}>
+                      <strong style={{ color: '#888', fontSize: 10 }}>A.</strong> {log.answer}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )}
       </div>

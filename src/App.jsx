@@ -1590,7 +1590,6 @@ function Admin() {
         )}
 
         {adminTab === 'requests' && (
-        {adminTab === 'requests' && (
         loading ? (
           <div style={{ color: $.muted, textAlign: 'center', padding: 60 }}>불러오는 중...</div>
         ) : error ? (
@@ -1704,7 +1703,7 @@ function Admin() {
               })}
             </div>
           </div>
-        )}
+        )
         )}
 
         {adminTab === 'chat_logs' && (

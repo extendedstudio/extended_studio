@@ -584,7 +584,7 @@ function requiresOperator(item) {
 }
 
 const OPERATOR_FEE_REQUIRED = 350000  // 무선/콘솔용 필수 오퍼레이터 일당
-const OPERATOR_FEE_OPTIONAL = 400000  // 일반 요청 오퍼레이터 일당
+const OPERATOR_FEE_OPTIONAL = 350000  // 일반 요청 오퍼레이터 일당
 const INSTALL_FEE = 200000  // 전체 설치/철수 비용 (선택)
 
 function Booking({ setPage, cartItems, removeFromCart, clearCart }) {

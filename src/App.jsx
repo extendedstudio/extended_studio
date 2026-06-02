@@ -787,7 +787,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
             기본 대여는 직접 수령 / 반납 기준이며 행사 시간 6시간 기준입니다. 배송 요청 시 퀵비 별도 (서울 기준 80,000원), 설치 및 철수 +200,000원은 선택 가능합니다. 현장 상주가 필요하신 경우 음향 오퍼레이터 +350,000원 / 스텝 +200,000원으로 별도 요청 가능합니다.
             <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(200,169,110,0.15)' }}>
               <strong style={{ color: $.gold, fontSize: 10, letterSpacing: '.05em' }}>📦 수령 / 배송</strong><br />
-              · <strong style={{ color: '#ccc' }}>직접 수령</strong>: 창고 방문 (고양시 향동)<br />
+              · <strong style={{ color: '#ccc' }}>직접 수령</strong>: 창고 방문 (고양시 향동 현대테라타워) / DJ 장비는 이태원 또는 논현동 픽업 가능<br />
               · <strong style={{ color: '#ccc' }}>배송</strong>: 퀵비 서울 80,000원 기준 / 그외 지방 별도 시세 협의
             </div>
             <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(200,169,110,0.15)' }}>
@@ -1718,6 +1718,8 @@ function Admin() {
                         {dateStr} · 대화 {log.conversationLength || 1}턴
                         {log.outputTokens && ` · 토큰 ${log.inputTokens||0}+${log.outputTokens}`}
                       </span>
+                      <button onClick={async () => { if(window.confirm('이 상담 기록을 삭제할까요?')) { await deleteDoc(doc(db, 'chat_logs', log.id)); } }}
+                        style={{ background: 'transparent', border: 'none', color: '#555', cursor: 'pointer', fontSize: 16, lineHeight: 1, padding: '0 4px' }} title="삭제">✕</button>
                     </div>
                     <div style={{ fontSize: 13, color: '#ddd', marginBottom: 10, padding: '8px 10px', background: 'rgba(200,169,110,0.06)', borderRadius: 4, borderLeft: `2px solid ${$.gold}` }}>
                       <strong style={{ color: $.gold, fontSize: 10 }}>Q.</strong> {log.question}

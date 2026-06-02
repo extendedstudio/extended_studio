@@ -953,7 +953,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
               }}>
                 {selectedItems.map(item => (
                   <div key={item.name} style={{
-                    display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12,
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8,
                     fontSize: 12, color: '#ccc'
                   }}>
                     <span style={{
@@ -966,6 +966,20 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                     <span style={{ color: '#888', flexShrink: 0 }}>
                       {item.price > 0 ? won(item.price * (item.qty || 1)) : '견적'}
                     </span>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); removeCartItem(item.name) }}
+                      title="제거"
+                      style={{
+                        background: 'transparent', border: 'none',
+                        color: '#555', cursor: 'pointer',
+                        padding: '2px 6px', fontSize: 16, lineHeight: 1,
+                        flexShrink: 0, fontWeight: 300,
+                        transition: 'color .15s ease'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = '#ef4444' }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = '#555' }}
+                    >×</button>
                   </div>
                 ))}
               </div>

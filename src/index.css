@@ -759,20 +759,26 @@ body {
 }
 
 
-/* ───── 다크모드 캘린더 아이콘 흰색 ───── */
-input[type="date"] {
-  color-scheme: dark;
+/* ───── 다크모드 캘린더 (강화) ───── */
+input[type="date"],
+input[type="date"].field,
+.field[type="date"] {
+  color-scheme: dark !important;
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1) brightness(0.9);
-  cursor: pointer;
-  opacity: 0.85;
+  filter: invert(1) brightness(1.2) !important;
+  cursor: pointer !important;
+  opacity: 0.9 !important;
+  padding: 0 4px !important;
 }
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
+  opacity: 1 !important;
 }
 
-/* ───── 모달 열릴 때 페이지 점프 방지 ───── */
-html {
-  scrollbar-gutter: stable;
+/* ───── 모달 열려도 페이지 점프 방지 ───── */
+html, body {
+  scrollbar-gutter: stable !important;
+}
+body {
+  overflow-y: scroll !important;
 }

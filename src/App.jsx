@@ -934,6 +934,22 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
             </div>
           )}
 
+          {/* ─── 서비스 안내 ─── */}
+          <div style={{ fontSize: 11, color: '#aaa', lineHeight: 1.8, padding: '14px 16px', background: 'rgba(200,169,110,0.04)', borderLeft: `2px solid ${$.gold}`, borderRadius: 4 }}>
+            <strong style={{ color: $.gold, letterSpacing: '.05em', display: 'block', marginBottom: 8 }}>📋 서비스 안내</strong>
+            기본 대여는 직접 수령 / 반납 기준이며 행사 시간 6시간 기준입니다. 배송 요청 시 퀵비 별도 (서울 기준 80,000원), 설치 및 철수 +200,000원은 선택 가능합니다. 현장 상주가 필요하신 경우 음향 오퍼레이터 +350,000원 / 스텝 +200,000원으로 별도 요청 가능합니다.
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(200,169,110,0.15)' }}>
+              <strong style={{ color: $.gold, fontSize: 10, letterSpacing: '.05em' }}>📦 수령 / 배송</strong><br />
+              · <strong style={{ color: '#ccc' }}>직접 수령</strong>: 창고 방문 (고양시 향동)<br />
+              · <strong style={{ color: '#ccc' }}>배송</strong>: 퀵비 서울 80,000원 기준 / 그외 지방 별도 시세 협의
+            </div>
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(200,169,110,0.15)' }}>
+              <strong style={{ color: $.gold, fontSize: 10, letterSpacing: '.05em' }}>🗓️ 장기 렌탈 할인</strong><br />
+              · 3박 4일 이상 20% · 6박 7일 이상 30% · 10박 11일 이상 50%<br />
+              · 20박 21일 이상 60% · 1개월 이상 70% · 2개월 이상 80%
+            </div>
+          </div>
+
           {/* ─── 견적 요약 (sticky) ─── */}
           {selectedItems.length > 0 && (
             <div style={{
@@ -1169,16 +1185,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
             </div>
           </div>
 
-          {/* 서비스 안내 문구 */}
-          <div style={{ fontSize: 11, color: '#aaa', lineHeight: 1.7, padding: '14px 16px', background: 'rgba(200,169,110,0.04)', borderLeft: `2px solid ${$.gold}`, borderRadius: 4 }}>
-            <strong style={{ color: $.gold, letterSpacing: '.05em', display: 'block', marginBottom: 6 }}>📋 서비스 안내</strong>
-            익스텐디드 스텝이 현장에서 상주 및 오퍼레이팅하는 비용은 포함되어있지 않습니다. 장비의 왕복 배송료와 세팅 / 철수만 포함되어있는 서비스입니다. 스텝 상주시, 인건비는 별도입니다.
-            <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(200,169,110,0.15)' }}>
-              <strong style={{ color: $.gold, fontSize: 10, letterSpacing: '.05em' }}>📦 수령 / 배송</strong><br />
-              · <strong style={{ color: '#ccc' }}>직접 수령</strong>: 창고 방문 (고양시 향동)<br />
-              · <strong style={{ color: '#ccc' }}>배송</strong>: 퀵비 서울 80,000원 기준 / 그외 지방 별도 시세 협의
-            </div>
-          </div>
+
 
           {/* 요청사항 */}
           <div>

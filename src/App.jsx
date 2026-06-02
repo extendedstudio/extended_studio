@@ -597,7 +597,7 @@ const INSTALL_FEE = 200000  // 전체 설치/철수 비용 (선택)
 
 function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
   const todayISO = new Date().toISOString().slice(0, 10)
-  const [form, setForm] = useState({ name: '', phone: '', startDate: todayISO, endDate: todayISO, type: '', gear: [], qty: {}, operator: 'no', install: false, note: '' })
+  const [form, setForm] = useState({ name: '', phone: '', startDate: todayISO, endDate: todayISO, type: '', gear: [], qty: {}, operator: 'no', install: false, staff: false, rehearsal: false, rehearsalDate: '', note: '' })
   const [done, setDone] = useState(false)
 
   // 장바구니 → form.gear 동기화
@@ -661,7 +661,10 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
   const operatorFeePerDay = operatorRequired ? OPERATOR_FEE_REQUIRED : OPERATOR_FEE_OPTIONAL
   const operatorFee = effectiveOperator === 'yes' ? operatorFeePerDay * days : 0
   const installFee = form.install ? INSTALL_FEE : 0
-  const finalPrice = grossTotal - discountAmount + operatorFee + installFee
+  const STAFF_FEE = 200000
+  const staffFee = form.staff ? STAFF_FEE * days : 0
+  const rehearsalFee = form.rehearsal ? Math.round(subtotal * 0.5) : 0
+  const finalPrice = grossTotal - discountAmount + operatorFee + installFee + staffFee + rehearsalFee
 
   const removeCartItem = (name) => {
     removeFromCart(name)
@@ -689,6 +692,11 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
         operatorFee,
         install: form.install,
         installFee,
+        staff: form.staff,
+        staffFee,
+        rehearsal: form.rehearsal,
+        rehearsalDate: form.rehearsalDate,
+        rehearsalFee,
         note: form.note,
         subtotal,
         discountRate: discount.rate,
@@ -794,6 +802,11 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
               <strong style={{ color: $.gold, fontSize: 10, letterSpacing: '.05em' }}>🗓️ 장기 렌탈 할인</strong><br />
               · 3박 4일 이상 20% · 6박 7일 이상 30% · 10박 11일 이상 50%<br />
               · 20박 21일 이상 60% · 1개월 이상 70% · 2개월 이상 80%
+            </div>
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(200,169,110,0.15)' }}>
+              <strong style={{ color: $.gold, fontSize: 10, letterSpacing: '.05em' }}>⚠️ 고장 / 파손 안내</strong><br />
+              · 장비 반납 시 고장 또는 파손이 확인될 경우 수리 비용이 청구될 수 있습니다.<br />
+              · 사용 중 이상이 발생하면 즉시 연락 주시기 바랍니다. 임의 수리는 불가합니다.
             </div>
           </div>
 
@@ -927,6 +940,72 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
             </div>
           </div>
 
+          {/* 스텝 상주 */}
+          <div>
+            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
+              스텝 상주
+              <span style={{ marginLeft: 8, color: '#666', fontSize: 10 }}>· 선택 사항</span>
+            </label>
+            <div onClick={() => set('staff', !form.staff)}
+              style={{
+                background: form.staff ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                border: `1px solid ${form.staff ? $.gold : '#222'}`,
+                borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
+                transition: 'all .15s ease',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
+              }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 13, color: form.staff ? $.gold : '#888' }}>{form.staff ? '☑' : '☐'}</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#eee' }}>스텝 상주 요청</div>
+                  <div style={{ fontSize: 10, color: '#666', marginTop: 2 }}>행사 진행 보조 스텝 현장 상주</div>
+                </div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: form.staff ? $.gold : '#888', letterSpacing: '.04em' }}>
+                  + {won(200000)}/일
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 리허설 */}
+          <div>
+            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
+              리허설
+              <span style={{ marginLeft: 8, color: '#666', fontSize: 10 }}>· 선택 사항</span>
+            </label>
+            <div onClick={() => set('rehearsal', !form.rehearsal)}
+              style={{
+                background: form.rehearsal ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                border: `1px solid ${form.rehearsal ? $.gold : '#222'}`,
+                borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
+                transition: 'all .15s ease',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
+              }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 13, color: form.rehearsal ? $.gold : '#888' }}>{form.rehearsal ? '☑' : '☐'}</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#eee' }}>전날 리허설 추가</div>
+                  <div style={{ fontSize: 10, color: '#666', marginTop: 2 }}>장비 대여비의 50% 추가 청구</div>
+                </div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: form.rehearsal ? $.gold : '#888', letterSpacing: '.04em' }}>
+                  {subtotal > 0 ? `+ ${won(Math.round(subtotal * 0.5))}` : '50%'}
+                </div>
+              </div>
+            </div>
+            {form.rehearsal && (
+              <div style={{ marginTop: 8 }}>
+                <label style={{ fontSize: 11, color: '#555', display: 'block', marginBottom: 6 }}>리허설 날짜</label>
+                <input type="date" className="field" value={form.rehearsalDate}
+                  onChange={e => set('rehearsalDate', e.target.value)}
+                  style={{ width: '100%', boxSizing: 'border-box' }} />
+              </div>
+            )}
+          </div>
+
           {/* 기간 자동 표시 */}
           {form.startDate && form.endDate && (
             <div style={{
@@ -1037,6 +1116,18 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888' }}>
                       <span>설치 / 철수</span>
                       <span>+ {won(installFee)}</span>
+                    </div>
+                  )}
+                  {staffFee > 0 && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888' }}>
+                      <span>스텝 상주 ({days}일)</span>
+                      <span>+ {won(staffFee)}</span>
+                    </div>
+                  )}
+                  {rehearsalFee > 0 && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888' }}>
+                      <span>리허설 (+50%){form.rehearsalDate ? ` · ${form.rehearsalDate}` : ''}</span>
+                      <span>+ {won(rehearsalFee)}</span>
                     </div>
                   )}
                   <div style={{

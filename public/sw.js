@@ -1,4 +1,4 @@
-// Extended Studio Service Worker - 보수적 캐싱 전략
+// Extended Studio Service Worker
 const CACHE_VERSION = 'v2026-06-02-1'
 const CACHE_NAME = `extended-studio-${CACHE_VERSION}`
 
@@ -20,12 +20,9 @@ self.addEventListener('fetch', (event) => {
   if (url.pathname.startsWith('/api/')) return
 
   if (req.mode === 'navigate' || req.destination === 'document') {
-    event.respondWith(
-      fetch(req).catch(() => caches.match(req).then(r => r || caches.match('/')))
-    )
+    event.respondWith(fetch(req).catch(() => caches.match(req).then(r => r || caches.match('/'))))
     return
   }
-
   if (['image', 'style', 'script', 'font'].includes(req.destination)) {
     event.respondWith(
       caches.open(CACHE_NAME).then(cache =>

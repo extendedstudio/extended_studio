@@ -65,127 +65,31 @@ export default async function handler(req, res) {
 - 이모지는 적절히 사용 가능 (🎛️🎚️🎤🔊 등).
 - 손님의 행사 정보(인원, 장소, 일자)를 모르면 먼저 가볍게 물어봐서 맞춤 추천하세요.
 
-【렌탈 패키지】 (구성품 + 커버리지 + 가격)
-- Special Package (DJ PACKAGE): DJ 최대 100인 추천 / 커버리지 최대 100인
-  구성: STUDIOMASTER 121K 1Pair, XDJ-XZ 1EA
-  가격: Self Pick up / 반납 400,000원 / 설치 및 철수 100,000원
-- DJ FULL SET (DJ PACKAGE): DJ FULL SET 추천 패키지 / 커버리지 최대 100인
-  구성: STUDIOMASTER 121K 1Pair, XDJ-XZ 1EA, DJ TABLE, LED Moving, Beam Moving, LED Par, LED Bar
-  가격: 설치 및 철수 1,200,000원
-  ※ 현장 상황에 따라 조명이 바뀔 수 있습니다
-- HK AUDIO POLAR 8 (PA SYSTEM): 소형 이벤트 / 실내 공연 / 커버리지 최대 50인
-  구성: HK AUDIO POLAR 8 1Pair, 아날로그 믹싱콘솔 1EA
-  가격: 직접 수령 / 반납 560,000원
-  ※ *오퍼레이터 포함시 디지털 믹서로 변환 가능
-- STUDIOMASTER DIRECT 121K (PA SYSTEM): 소형 이벤트 / 실내 공연 / 커버리지 최대 100인
-  구성: STUDIO MASTER 1Pair, 아날로그 믹싱콘솔 1EA
-  가격: 직접 수령 / 반납 500,000원
-  ※ *오퍼레이터 포함시 디지털 믹서로 변환 가능
-- HK AUDIO POLAR 10 (PA SYSTEM): 중형 이벤트 / 야외 행사 / 커버리지 최대 100인
-  구성: HK AUDIO POLAR 10 1Pair, 아날로그 믹싱콘솔 1EA
-  가격: 직접 수령 / 반납 700,000원
-  ※ *오퍼레이터 포함시 디지털 믹서로 변환 가능
-- JBL PRX635 + EV ELX200 SET (PA SYSTEM): 중형 이벤트 / 야외 행사 / 커버리지 최대 200인
-  구성: JBL PRX635 1Pair, ELX200-18SP 1Pair, 아날로그 믹싱콘솔 1EA
-  가격: 직접 수령 / 반납 800,000원
-  ※ 오퍼레이터 포함시 상황에 따라 디지털 믹서로 변환 가능합니다
-- BIEMA X10 (PA SYSTEM): 중대형 페스티벌 / 야외 / 커버리지 최대 200인 (야외) ~ 300인 (실내)
-  구성: BIEMA X10 1Pair, 아날로그 믹싱콘솔 1EA
-  가격: 직접 수령 / 반납 1,200,000원
-  ※ *오퍼레이터 포함시 디지털 믹서로 변환 가능
-- MONTARBO WIND 2200 / BXB18A (PA SYSTEM): 중대형 페스티벌 / 야외 / 커버리지 최대 200인 (야외) ~ 300인 (실내)
-  구성: MONTARBO WIND 2200 / BXB18A 1Pair, 아날로그 믹싱콘솔 1EA
-  가격: 직접 수령 / 반납 1,600,000원
-  ※ *오퍼레이터 포함시 디지털 믹서로 변환 가능
-- Logic Systems VA SMALL (LINE ARRAY): 대형 페스티벌 / 콘서트 / 커버리지 최대 500인
-  구성: Logic Systems VA × 8, SB2 × 4
-  가격: 설치 및 철수 3,600,000원
-  ※ *오퍼레이터 포함시 추가 금액이 발생할 수 있습니다
-- X-Treme FULL SET (LINE ARRAY): 대형 페스티벌 / 콘서트 / 커버리지 최대 500인
-  구성: XTMLA × 8, XTHPS33 (DOUBLE) × 2
-  가격: 설치 및 철수 3,600,000원
-  ※ *오퍼레이터 포함시 추가 금액이 발생할 수 있습니다
-- Logic Systems VA MEDIUM (LINE ARRAY): 대형 콘서트 / 페스티벌 / 커버리지 최대 800인
-  구성: Logic Systems VA × 12, SB2 × 4
-  가격: 설치 및 철수 4,400,000원
-  ※ *오퍼레이터 포함시 추가 금액이 발생할 수 있습니다
-- Martin Audio W8LC (LINE ARRAY): 클럽/EDM/테크노 최적화 / 커버리지 최대 800~1,000인
-  구성: Martin Audio W8LC × 8, WLX Sub × 4, MA 4.8Q Amp × 2
-  가격: 설치 및 철수 7,600,000원
-  ※ *오퍼레이터 포함시 추가 금액이 발생할 수 있습니다
-- Logic Systems VA LARGE (LINE ARRAY): 초대형 페스티벌 / 커버리지 최대 2,000인
-  구성: Logic Systems VA × 16, SB2 × 6
-  가격: 설치 및 철수 8,400,000원
-  ※ *오퍼레이터 포함시 추가 금액이 발생할 수 있습니다
-- Logic Systems VA MAX (LINE ARRAY): 초대형 내한공연 / 페스티벌 / 커버리지 최대 5,000인
-  구성: Logic Systems VA × 24, SB2 × 10
-  가격: 설치 및 철수 12,000,000원
-  ※ *오퍼레이터 포함시 추가 금액이 발생할 수 있습니다
+■ 패키지 (구성/커버리지/가격)
+- Special Package (최대 100인): STUDIOMASTER 121K 1Pair, XDJ-XZ 1EA | 패키지 가격 1,200,000원 + 설치 및 철수 200,000원
+- DJ FULL SET (최대 100인): STUDIOMASTER 121K 1Pair, XDJ-XZ 1EA, DJ TABLE, LED Moving, Beam Moving, LED Par, LED Bar | 패키지 가격 1,200,000원 + 설치 및 철수 200,000원
+- HK AUDIO POLAR 8 (최대 50인): HK AUDIO POLAR 8 1Pair, 아날로그 믹싱콘솔 1EA | 직접 수령 / 반납 560,000원 + 설치 및 철수 200,000원
+- STUDIOMASTER DIRECT 121K (최대 100인): STUDIO MASTER 1Pair, 아날로그 믹싱콘솔 1EA | 직접 수령 / 반납 500,000원 + 설치 및 철수 200,000원
+- HK AUDIO POLAR 10 (최대 100인): HK AUDIO POLAR 10 1Pair, 아날로그 믹싱콘솔 1EA | 직접 수령 / 반납 700,000원 + 설치 및 철수 200,000원
+- JBL PRX635 + EV ELX200 SET (최대 200인): JBL PRX635 1Pair, ELX200-18SP 1Pair, 아날로그 믹싱콘솔 1EA | 직접 수령 / 반납 800,000원 + 설치 및 철수 200,000원
+- BIEMA X10 (최대 200인 (야외) ~ 300인 (실내)): BIEMA X10 1Pair, 아날로그 믹싱콘솔 1EA | 직접 수령 / 반납 1,200,000원 + 설치 및 철수 200,000원
+- MONTARBO WIND 2200 / BXB18A (최대 200인 (야외) ~ 300인 (실내)): MONTARBO WIND 2200 / BXB18A 1Pair, 아날로그 믹싱콘솔 1EA | 직접 수령 / 반납 1,600,000원 + 설치 및 철수 200,000원
+- Logic Systems VA SMALL (최대 500인): Logic Systems VA × 8, SB2 × 4 | 패키지 가격 3,600,000원 + 설치 및 철수 상담 후 결정
+- X-Treme FULL SET (최대 500인): XTMLA × 8, XTHPS33 (DOUBLE) × 2 | 패키지 가격 3,600,000원 + 설치 및 철수 상담 후 결정
+- Logic Systems VA MEDIUM (최대 800인): Logic Systems VA × 12, SB2 × 4 | 패키지 가격 4,400,000원 + 설치 및 철수 상담 후 결정
+- Martin Audio W8LC (최대 800~1,000인): Martin Audio W8LC × 8, WLX Sub × 4, MA 4.8Q Amp × 2 | 패키지 가격 7,600,000원 + 설치 및 철수 상담 후 결정
+- Logic Systems VA LARGE (최대 2,000인): Logic Systems VA × 16, SB2 × 6 | 패키지 가격 8,400,000원 + 설치 및 철수 상담 후 결정
+- Logic Systems VA MAX (최대 5,000인): Logic Systems VA × 24, SB2 × 10 | 패키지 가격 12,000,000원 + 설치 및 철수 상담 후 결정
 
-【DJ 장비】 (1일 단가)
-- Pioneer CDJ-3000: 150,000원 — 프로 멀티플레이어 [1ea]
-- Pioneer CDJ-2000NXS2: 120,000원 — 프로 멀티플레이어 [1ea]
-- Pioneer XDJ-XZ: 200,000원 — 4채널 올인원 DJ 시스템 [1ea]
-- Technics SL-1200MK7: 150,000원 — 프로 턴테이블 [1ea]
-- Pioneer PLX-1000: 120,000원 — 프로 턴테이블 [1ea]
-- Pioneer DJM-A9: 150,000원 — 4채널 플래그십 DJ 믹서 [1ea]
-- Pioneer DJM-900NXS2: 120,000원 — 4채널 프로 DJ 믹서 [1ea]
-- Pioneer DJM-S11: 120,000원 — 2채널 스크래치 DJ 믹서 [1ea]
-- Pioneer DJM-2000: 100,000원 — 4채널 플래그십 DJ 믹서 [1ea]
+■ 스피커/PA (1일 단가): HK Audio POLAR 8(컬럼 PA (1/2)) 280,000원 / HK Audio POLAR 10(컬럼 PA (1/2)) 350,000원 / Studiomaster 121K(컬럼 PA (1/4)) 250,000원 / JBL PRX635(15인치 액티브 (1/2)) 250,000원 / EV ELX200-18SP(18인치 서브우퍼 (1/2)) 150,000원 / Montarbo WIND 2200(Mid/High (1/2)) 300,000원 / Montarbo BXB18A(서브우퍼 (1/2)) 500,000원 / BIEMA X10(컬럼 PA (1/2)) 600,000원 / Martin Audio W8LC(라인어레이 (1/6)) 600,000원 / Martin Audio WLX(서브우퍼 (1/4)) 1,000,000원 / Logic System VA(라인어레이 (1/24)) 300,000원 / Logic System SB2(서브우퍼 (1/8)) 500,000원 / X-Treme XTMLA(라인어레이 (1/10)) 300,000원 / X-Treme XTHPS33(서브우퍼 (1/2)) 600,000원 / Montarbo Fire12A MK2(액티브 모니터 (1/2)) 150,000원 / Mackie HD 1221(액티브 모니터 (1/2)) 150,000원 / X-Treme XTMON 15(패시브 모니터 (1/4)) 100,000원 / JBL EON ONE Compact(올인원 PA (1/2)) 100,000원
 
-【스피커 / PA】 (1일 단가)
-- HK Audio POLAR 8: 280,000원 — 컬럼 PA (1/2)
-- HK Audio POLAR 10: 350,000원 — 컬럼 PA (1/2)
-- Studiomaster 121K: 250,000원 — 컬럼 PA (1/4)
-- JBL PRX635: 250,000원 — 15인치 액티브 (1/2)
-- EV ELX200-18SP: 150,000원 — 18인치 서브우퍼 (1/2) [2ea]
-- Montarbo WIND 2200: 300,000원 — Mid/High (1/2)
-- Montarbo BXB18A: 500,000원 — 서브우퍼 (1/2)
-- BIEMA X10: 600,000원 — 컬럼 PA (1/2)
-- Martin Audio W8LC: 600,000원 — 라인어레이 (1/6)
-- Martin Audio WLX: 1,000,000원 — 서브우퍼 (1/4)
-- Logic System VA: 300,000원 — 라인어레이 (1/24) (4ea | 400,000원/일)
-- Logic System SB2: 500,000원 — 서브우퍼 (1/8)
-- X-Treme XTMLA: 300,000원 — 라인어레이 (1/10)
-- X-Treme XTHPS33: 600,000원 — 서브우퍼 (1/2)
-- Montarbo Fire12A MK2: 150,000원 — 액티브 모니터 (1/2)
-- Mackie HD 1221: 150,000원 — 액티브 모니터 (1/2)
-- X-Treme XTMON 15: 100,000원 — 패시브 모니터 (1/4)
-- JBL EON ONE Compact: 100,000원 — 올인원 PA (1/2)
+■ 마이크/인이어 (1일 단가): Sennheiser EW-D 835(디지털 무선 핸드마이크 (1/8)) 100,000원 / Sennheiser EW-D 845(디지털 무선 핸드마이크 (1/4)) 100,000원 / Kanals BK-3002(2채널 아날로그 무선 (1/2)) 100,000원 / Sennheiser E908 B-EW(악기용 콘덴서 마이크) 50,000원 / Shure Drum Kit5(드럼 마이크 세트) 50,000원 / Shure SM57(악기용 다이나믹) 10,000원 / Shure SM58(보컬용 다이나믹) 10,000원 / Sennheiser 인이어(무선 인이어 모니터) 100,000원 / Kanals 인이어(무선 인이어 모니터) 50,000원
 
-【마이크 / 인이어】 (1일 단가)
-- Sennheiser EW-D 835: 100,000원 — 디지털 무선 핸드마이크 (1/8) [최대 8세트]
-- Sennheiser EW-D 845: 100,000원 — 디지털 무선 핸드마이크 (1/4) [최대 4세트]
-- Kanals BK-3002: 100,000원 — 2채널 아날로그 무선 (1/2) (핸드+바디팩 포함)
-- Sennheiser E908 B-EW: 50,000원 — 악기용 콘덴서 마이크 [2ea]
-- Shure Drum Kit5: 50,000원 — 드럼 마이크 세트 [1세트]
-- Shure SM57: 10,000원 — 악기용 다이나믹
-- Shure SM58: 10,000원 — 보컬용 다이나믹
-- Sennheiser 인이어: 100,000원 — 무선 인이어 모니터
-- Kanals 인이어: 50,000원 — 무선 인이어 모니터
+■ 콘솔/믹서 (1일 단가): Yamaha MG16XU(16채널 아날로그 믹서) 50,000원 / Midas M32R(40채널 디지털 콘솔) 100,000원 / Allen & Heath QU-32(32채널 디지털 콘솔) 130,000원 / Behringer WING Rack(48ch 랙형 디지털 콘솔) 100,000원 / Allen & Heath AR2412(24in/12out 스테이지박스) 150,000원 / Behringer S16(16in/8out 스테이지박스) 100,000원
 
-【콘솔 / 믹서 / 스테이지박스】 (1일 단가)
-- Yamaha MG16XU: 50,000원 — 16채널 아날로그 믹서 (16채널 | USB 오디오) [1ea]
-- Midas M32R: 100,000원 — 40채널 디지털 콘솔 (40채널 | M32-Mix 앱 지원) [1ea]
-- Allen & Heath QU-32: 130,000원 — 32채널 디지털 콘솔 (32채널 | USB 레코딩) [1ea]
-- Behringer WING Rack: 100,000원 — 48ch 랙형 디지털 콘솔 (1세트 | 
-48채널 | S16 스테이지박스 포함) [1세트]
-- Allen & Heath AR2412: 150,000원 — 24in/12out 스테이지박스 [1ea]
-- Behringer S16: 100,000원 — 16in/8out 스테이지박스 [1ea]
+■ DJ장비 (1일 단가): Pioneer CDJ-3000(프로 멀티플레이어) 150,000원 / Pioneer CDJ-2000NXS2(프로 멀티플레이어) 120,000원 / Pioneer XDJ-XZ(4채널 올인원 DJ 시스템) 200,000원 / Technics SL-1200MK7(프로 턴테이블) 150,000원 / Pioneer PLX-1000(프로 턴테이블) 120,000원 / Pioneer DJM-A9(4채널 플래그십 DJ 믹서) 150,000원 / Pioneer DJM-900NXS2(4채널 프로 DJ 믹서) 120,000원 / Pioneer DJM-S11(2채널 스크래치 DJ 믹서) 120,000원 / Pioneer DJM-2000(4채널 플래그십 DJ 믹서) 100,000원
 
-【파워앰프 / DSP】 (1일 단가)
-- Martin Audio MA4.8Q: 별도견적 — 4채널 클래스D 파워 앰프 (4×1200W @ 4Ω | DSP 내장
-Dante 네트워크 오디오 옵션)
-- Martin Audio MA2.8s: 별도견적 — 2채널 클래스D 파워 앰프 (2×1400W @ 4Ω | DSP 내장)
-- Martin Audio MA4.2s: 별도견적 — 4채널 클래스D 파워 앰프 (4×700W @ 4Ω | DSP 내장)
-- Spirit DSP-2006A: 별도견적 — 2입력 6출력 DSP 프로세서 (2in 6out | PEQ / 딜레이 / 크로스오버
-48kHz 처리)
-
-【액세서리】 (1일 단가)
-- Laney AH 200: 40,000원 — 베이스 콤보 앰프 [1ea]
-- Prox Z Shape Table: 200,000원 — 프로 DJ 테이블 [1ea]
-- 고급형 보면대: 10,000원 — 오케스트라/공연용
-- 마이크 스탠드: 10,000원 — 붐 마이크 스탠드
+■ 액세서리 (1일 단가): Laney AH 200(베이스 콤보 앰프) 40,000원 / Prox Z Shape Table(프로 DJ 테이블) 200,000원 / 고급형 보면대(오케스트라/공연용) 10,000원 / 마이크 스탠드(붐 마이크 스탠드) 10,000원
 
 【가격 안내 시 주의 - 1대 vs 1Pair】
 스피커 단가는 **1대(개별) 기준**입니다. 보통 PA 운영은 1Pair(2대) 단위로 사용하므로, 가격을 안내할 때 **1대 가격과 1Pair 셋트 가격을 반드시 함께 명시**하세요. 그래야 손님이 셋트 가격으로 오해하지 않습니다.
@@ -237,7 +141,7 @@ Dante 네트워크 오디오 옵션)
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 500,
+        max_tokens: 400,
         system: systemPrompt,
         messages: trimmed,
       }),

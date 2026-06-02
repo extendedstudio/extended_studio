@@ -146,7 +146,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           system_instruction: { parts: [{ text: systemPrompt }] },
           contents: geminiMessages,
-          generationConfig: { maxOutputTokens: 400, temperature: 0.7 }
+          generationConfig: { maxOutputTokens: 800, temperature: 0.7 }
         }),
       }
     )

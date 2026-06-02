@@ -282,7 +282,6 @@ function Lightbox({ src, alt, onClose }) {
 }
 
 function GearCard({ item, onBook, inCart }) {
-  const [zoom, setZoom] = useState(false)
   return (
     <div className="gear-card">
       {item.img && (
@@ -291,11 +290,9 @@ function GearCard({ item, onBook, inCart }) {
           src={item.img}
           alt={item.name}
           loading="lazy"
-          style={{ objectFit: 'contain', objectPosition: 'center', background: 'transparent', cursor: 'zoom-in' }}
-          onClick={() => setZoom(true)}
+          style={{ objectFit: 'contain', objectPosition: 'center', background: 'transparent' }}
         />
       )}
-      {zoom && <Lightbox src={item.img} alt={item.name} onClose={() => setZoom(false)} />}
       <div className="gear-body">
         <div className="gear-cat">{item.cat}</div>
         <div className="gear-name">{item.name}</div>

@@ -39,9 +39,9 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end()
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' })
 
-  const apiKey = process.env.ANTHROPIC_API_KEY
+  const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) {
-    return res.status(500).json({ error: 'ANTHROPIC_API_KEY 환경변수가 설정되지 않았습니다' })
+    return res.status(500).json({ error: 'GEMINI_API_KEY 환경변수가 설정되지 않았습니다' })
   }
 
   try {
@@ -132,28 +132,38 @@ export default async function handler(req, res) {
 
 손님이 무리한 요구를 하거나 답하기 어려운 경우 정중하게 "카카오톡 문의를 통해 사장님이 직접 안내드릴 수 있도록 도와드릴게요"라고 안내하세요.`
 
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 400,
-        system: systemPrompt,
-        messages: trimmed,
-      }),
-    })
+    // Gemini API 호출
+    const geminiMessages = trimmed.map(m => ({
+      role: m.role === 'user' ? 'user' : 'model',
+      parts: [{ text: m.content }]
+    }))
+
+    const r = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemPrompt }] },
+          contents: geminiMessages,
+          generationConfig: { maxOutputTokens: 400, temperature: 0.7 }
+        }),
+      }
+    )
 
     if (!r.ok) {
       const errText = await r.text()
-      console.error('Anthropic API error:', r.status, errText)
+      console.error('Gemini API error:', r.status, errText)
       return res.status(r.status).json({ error: 'AI 응답 실패', detail: errText.slice(0, 200) })
     }
 
-    const data = await r.json()
+    const geminiData = await r.json()
+    const text = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || ''
+
+    // Anthropic 포맷으로 변환 (프론트엔드 호환)
+    const data = {
+      content: [{ type: 'text', text }]
+    }
     return res.status(200).json(data)
   } catch (e) {
     console.error('chat error:', e)

@@ -588,7 +588,8 @@ const OPERATOR_FEE_OPTIONAL = 400000  // 일반 요청 오퍼레이터 일당
 const INSTALL_FEE = 200000  // 전체 설치/철수 비용 (선택)
 
 function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
-  const [form, setForm] = useState({ name: '', phone: '', startDate: '', endDate: '', type: '', gear: [], qty: {}, operator: 'no', install: false, note: '' })
+  const todayISO = new Date().toISOString().slice(0, 10)
+  const [form, setForm] = useState({ name: '', phone: '', startDate: todayISO, endDate: todayISO, type: '', gear: [], qty: {}, operator: 'no', install: false, note: '' })
   const [done, setDone] = useState(false)
 
   // 장바구니 → form.gear 동기화
@@ -808,6 +809,97 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
               <select className="field" value={form.type} onChange={e => set('type', e.target.value)}>
                 {['','브랜드 이벤트','기업 행사','공연/콘서트','클럽/파티','야외 페스티벌','웨딩','기타'].map(t => <option key={t}>{t}</option>)}
               </select>
+            </div>
+          </div>
+
+          {/* 오퍼레이터 */}
+          <div>
+            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
+              오퍼레이터 / 엔지니어
+              {operatorRequired && (
+                <span style={{ marginLeft: 8, color: $.gold, fontSize: 10, letterSpacing: '.05em' }}>
+                  · 무선 마이크/콘솔 선택으로 자동 적용됨
+                </span>
+              )}
+            </label>
+            {operatorRequired ? (
+              <div style={{
+                background: 'rgba(200,169,110,0.08)',
+                border: `1px solid ${$.gold}`,
+                borderRadius: 8, padding: '14px 18px',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
+              }}>
+                <div>
+                  <div style={{ fontSize: 13, color: $.gold, fontWeight: 700, marginBottom: 4 }}>
+                    🎚 오퍼레이터 필수 적용
+                  </div>
+                  <div style={{ fontSize: 11, color: '#888' }}>
+                    선택하신 {requiredOperatorItems.map(it => it.name).slice(0, 2).join(', ')}
+                    {requiredOperatorItems.length > 2 && ` 외 ${requiredOperatorItems.length - 2}개`}
+                    {' '}운영을 위해 전문 엔지니어가 동행합니다
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, color: $.gold, letterSpacing: '.04em' }}>
+                    {won(OPERATOR_FEE_REQUIRED)}
+                  </div>
+                  <div style={{ fontSize: 10, color: '#666' }}>/ 일</div>
+                </div>
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px,1fr))', gap: 10 }}>
+                {[
+                  { v: 'no', label: '필요 없음', sub: '셀프 운영' },
+                  { v: 'yes', label: '필요함', sub: `+ 일당 ${won(OPERATOR_FEE_OPTIONAL)} (참고)` },
+                  { v: 'consult', label: '협의', sub: '카톡 상의' },
+                ].map(opt => {
+                  const on = form.operator === opt.v
+                  return (
+                    <div key={opt.v} onClick={() => set('operator', opt.v)}
+                      style={{
+                        background: on ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                        border: `1px solid ${on ? $.gold : '#222'}`,
+                        borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
+                        transition: 'all .15s ease'
+                      }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                        <span style={{ fontSize: 13, color: on ? $.gold : '#888' }}>{on ? '◉' : '○'}</span>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: '#eee' }}>{opt.label}</span>
+                      </div>
+                      <div style={{ fontSize: 10, color: '#666', marginLeft: 24 }}>{opt.sub}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* 설치 / 철수 */}
+          <div>
+            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
+              설치 / 철수
+              <span style={{ marginLeft: 8, color: '#666', fontSize: 10 }}>· 선택 사항</span>
+            </label>
+            <div onClick={() => set('install', !form.install)}
+              style={{
+                background: form.install ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                border: `1px solid ${form.install ? $.gold : '#222'}`,
+                borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
+                transition: 'all .15s ease',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
+              }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 13, color: form.install ? $.gold : '#888' }}>{form.install ? '☑' : '☐'}</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#eee' }}>전체 설치 / 철수 요청</div>
+                  <div style={{ fontSize: 10, color: '#666', marginTop: 2 }}>장비 운반 + 현장 설치 + 철수</div>
+                </div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: form.install ? $.gold : '#888', letterSpacing: '.04em' }}>
+                  + {won(INSTALL_FEE)}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1052,97 +1144,6 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* 오퍼레이터 */}
-          <div>
-            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
-              오퍼레이터 / 엔지니어
-              {operatorRequired && (
-                <span style={{ marginLeft: 8, color: $.gold, fontSize: 10, letterSpacing: '.05em' }}>
-                  · 무선 마이크/콘솔 선택으로 자동 적용됨
-                </span>
-              )}
-            </label>
-            {operatorRequired ? (
-              <div style={{
-                background: 'rgba(200,169,110,0.08)',
-                border: `1px solid ${$.gold}`,
-                borderRadius: 8, padding: '14px 18px',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
-              }}>
-                <div>
-                  <div style={{ fontSize: 13, color: $.gold, fontWeight: 700, marginBottom: 4 }}>
-                    🎚 오퍼레이터 필수 적용
-                  </div>
-                  <div style={{ fontSize: 11, color: '#888' }}>
-                    선택하신 {requiredOperatorItems.map(it => it.name).slice(0, 2).join(', ')}
-                    {requiredOperatorItems.length > 2 && ` 외 ${requiredOperatorItems.length - 2}개`}
-                    {' '}운영을 위해 전문 엔지니어가 동행합니다
-                  </div>
-                </div>
-                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, color: $.gold, letterSpacing: '.04em' }}>
-                    {won(OPERATOR_FEE_REQUIRED)}
-                  </div>
-                  <div style={{ fontSize: 10, color: '#666' }}>/ 일</div>
-                </div>
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px,1fr))', gap: 10 }}>
-                {[
-                  { v: 'no', label: '필요 없음', sub: '셀프 운영' },
-                  { v: 'yes', label: '필요함', sub: `+ 일당 ${won(OPERATOR_FEE_OPTIONAL)} (참고)` },
-                  { v: 'consult', label: '협의', sub: '카톡 상의' },
-                ].map(opt => {
-                  const on = form.operator === opt.v
-                  return (
-                    <div key={opt.v} onClick={() => set('operator', opt.v)}
-                      style={{
-                        background: on ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
-                        border: `1px solid ${on ? $.gold : '#222'}`,
-                        borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
-                        transition: 'all .15s ease'
-                      }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                        <span style={{ fontSize: 13, color: on ? $.gold : '#888' }}>{on ? '◉' : '○'}</span>
-                        <span style={{ fontSize: 13, fontWeight: 600, color: '#eee' }}>{opt.label}</span>
-                      </div>
-                      <div style={{ fontSize: 10, color: '#666', marginLeft: 24 }}>{opt.sub}</div>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-
-          {/* 설치 / 철수 */}
-          <div>
-            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
-              설치 / 철수
-              <span style={{ marginLeft: 8, color: '#666', fontSize: 10 }}>· 선택 사항</span>
-            </label>
-            <div onClick={() => set('install', !form.install)}
-              style={{
-                background: form.install ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
-                border: `1px solid ${form.install ? $.gold : '#222'}`,
-                borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
-                transition: 'all .15s ease',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
-              }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span style={{ fontSize: 13, color: form.install ? $.gold : '#888' }}>{form.install ? '☑' : '☐'}</span>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#eee' }}>전체 설치 / 철수 요청</div>
-                  <div style={{ fontSize: 10, color: '#666', marginTop: 2 }}>장비 운반 + 현장 설치 + 철수</div>
-                </div>
-              </div>
-              <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: form.install ? $.gold : '#888', letterSpacing: '.04em' }}>
-                  + {won(INSTALL_FEE)}
-                </div>
-              </div>
             </div>
           </div>
 

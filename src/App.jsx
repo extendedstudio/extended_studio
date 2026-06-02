@@ -197,9 +197,15 @@ function Lightbox({ src, alt, onClose }) {
     setIsDragging(true)
   }
   const handleMouseMove = (e) => {
-    if (!dragRef.current.dragging) return
-    setTx(dragRef.current.tx + (e.clientX - dragRef.current.x))
-    setTy(dragRef.current.ty + (e.clientY - dragRef.current.y))
+    if (!dragRef.current.dragging || scale <= 1) return
+    const newTx = dragRef.current.tx + (e.clientX - dragRef.current.x)
+    const newTy = dragRef.current.ty + (e.clientY - dragRef.current.y)
+    dragRef.current.lastTx = newTx
+    dragRef.current.lastTy = newTy
+    requestAnimationFrame(() => {
+      setTx(dragRef.current.lastTx)
+      setTy(dragRef.current.lastTy)
+    })
   }
   const handleMouseUp = () => { dragRef.current.dragging = false; setIsDragging(false) }
 

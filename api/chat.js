@@ -160,6 +160,9 @@ export default async function handler(req, res) {
     const geminiData = await r.json()
     const text = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || ''
 
+    // 채팅 로그 저장
+    await saveChatLog(trimmed, text)
+
     // Anthropic 포맷으로 변환 (프론트엔드 호환)
     const data = {
       content: [{ type: 'text', text }]

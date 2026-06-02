@@ -597,7 +597,7 @@ const INSTALL_FEE = 200000  // 전체 설치/철수 비용 (선택)
 
 function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
   const todayISO = new Date().toISOString().slice(0, 10)
-  const [form, setForm] = useState({ name: '', phone: '', startDate: todayISO, endDate: todayISO, type: '', gear: [], qty: {}, operator: 'no', install: false, staff: false, rehearsal: false, rehearsalDate: '', note: '' })
+  const [form, setForm] = useState({ name: '', phone: '', startDate: todayISO, endDate: todayISO, type: '', gear: [], qty: {}, operator: 'no', install: false, staffCount: 0, rehearsal: false, rehearsalDate: '', note: '' })
   const [done, setDone] = useState(false)
 
   // 장바구니 → form.gear 동기화
@@ -662,7 +662,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
   const operatorFee = effectiveOperator === 'yes' ? operatorFeePerDay * days : 0
   const installFee = form.install ? INSTALL_FEE : 0
   const STAFF_FEE = 200000
-  const staffFee = form.staff ? STAFF_FEE * days : 0
+  const staffFee = (form.staffCount || 0) * STAFF_FEE * days
   const rehearsalFee = form.rehearsal ? Math.round(subtotal * 0.5) : 0
   const finalPrice = grossTotal - discountAmount + operatorFee + installFee + staffFee + rehearsalFee
 
@@ -692,7 +692,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
         operatorFee,
         install: form.install,
         installFee,
-        staff: form.staff,
+        staffCount: form.staffCount || 0,
         staffFee,
         rehearsal: form.rehearsal,
         rehearsalDate: form.rehearsalDate,
@@ -911,6 +911,39 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
             )}
           </div>
 
+          {/* 스텝 상주 */}
+          <div>
+            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
+              스텝 상주
+              <span style={{ marginLeft: 8, color: '#666', fontSize: 10 }}>· 선택 사항 · 200,000원/일 · 인원당</span>
+            </label>
+            <div style={{
+              background: (form.staffCount||0) > 0 ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+              border: `1px solid ${(form.staffCount||0) > 0 ? $.gold : '#222'}`,
+              borderRadius: 8, padding: '12px 14px',
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
+            }}>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#eee' }}>스텝 상주 요청</div>
+                <div style={{ fontSize: 10, color: '#666', marginTop: 2 }}>행사 진행 보조 스텝 현장 상주</div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                {(form.staffCount||0) > 0 && (
+                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, color: $.gold }}>
+                    + {won((form.staffCount||0) * 200000)}/일
+                  </div>
+                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <button onClick={e => { e.stopPropagation(); set('staffCount', Math.max(0, (form.staffCount||0) - 1)) }}
+                    style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid #333', background: '#1a1a1a', color: '#fff', cursor: 'pointer', fontSize: 16, lineHeight: 1 }}>−</button>
+                  <span style={{ fontSize: 16, fontWeight: 700, color: (form.staffCount||0) > 0 ? $.gold : '#555', minWidth: 20, textAlign: 'center' }}>{form.staffCount||0}</span>
+                  <button onClick={e => { e.stopPropagation(); set('staffCount', (form.staffCount||0) + 1) }}
+                    style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid #333', background: '#1a1a1a', color: '#fff', cursor: 'pointer', fontSize: 16, lineHeight: 1 }}>+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* 설치 / 철수 */}
           <div>
             <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
@@ -935,35 +968,6 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
               <div style={{ textAlign: 'right', flexShrink: 0 }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: form.install ? $.gold : '#888', letterSpacing: '.04em' }}>
                   + {won(INSTALL_FEE)}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 스텝 상주 */}
-          <div>
-            <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#555', display: 'block', marginBottom: 10 }}>
-              스텝 상주
-              <span style={{ marginLeft: 8, color: '#666', fontSize: 10 }}>· 선택 사항</span>
-            </label>
-            <div onClick={() => set('staff', !form.staff)}
-              style={{
-                background: form.staff ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
-                border: `1px solid ${form.staff ? $.gold : '#222'}`,
-                borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
-                transition: 'all .15s ease',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
-              }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span style={{ fontSize: 13, color: form.staff ? $.gold : '#888' }}>{form.staff ? '☑' : '☐'}</span>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#eee' }}>스텝 상주 요청</div>
-                  <div style={{ fontSize: 10, color: '#666', marginTop: 2 }}>행사 진행 보조 스텝 현장 상주</div>
-                </div>
-              </div>
-              <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: form.staff ? $.gold : '#888', letterSpacing: '.04em' }}>
-                  + {won(200000)}/일
                 </div>
               </div>
             </div>
@@ -1120,7 +1124,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                   )}
                   {staffFee > 0 && (
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888' }}>
-                      <span>스텝 상주 ({days}일)</span>
+                      <span>스텝 상주 {form.staffCount}명 ({days}일)</span>
                       <span>+ {won(staffFee)}</span>
                     </div>
                   )}

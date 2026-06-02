@@ -19,6 +19,7 @@ const CAT_ICON = {
 // ─── AI 챗봇 ────────────────────────────────────────────
 function AiChat() {
   const [open, setOpen] = useState(false)
+  const msgsEndRef = useRef(null)
   const [msgs, setMsgs] = useState([{ role: 'assistant', content: '안녕하세요! Extended Studio AI 상담사입니다 🎛️\n행사 규모나 필요한 장비를 말씀해 주시면 맞춤 추천해 드릴게요!' }])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -49,6 +50,7 @@ function AiChat() {
       setMsgs(prev => [...prev, { role: 'assistant', content: '죄송해요, 지금 응답이 어려워요. 카카오톡으로 문의해 주세요 🙏' }])
     }
     setLoading(false)
+    setTimeout(() => msgsEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50)
   }
 
   return (
@@ -73,6 +75,7 @@ function AiChat() {
               </div>
             ))}
             {loading && <div className="ai-msg bot"><div className="ai-bubble" style={{ color: '#888' }}>답변 작성 중...</div></div>}
+            <div ref={msgsEndRef} />
           </div>
           <div className="ai-quick">
             {['100명 행사 추천', '야외 행사 장비', '예산 50만원'].map(q => (
@@ -153,6 +156,7 @@ function Lightbox({ src, alt, onClose }) {
   const [scale, setScale] = useState(1)
   const [tx, setTx] = useState(0)
   const [ty, setTy] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
   const stageRef = useRef(null)
   const dragRef = useRef({ dragging: false, x: 0, y: 0, tx: 0, ty: 0 })
   const pinchRef = useRef({ pinching: false, dist: 0, scale: 1 })
@@ -190,13 +194,14 @@ function Lightbox({ src, alt, onClose }) {
     if (scale <= 1) return
     e.preventDefault()
     dragRef.current = { dragging: true, x: e.clientX, y: e.clientY, tx, ty }
+    setIsDragging(true)
   }
   const handleMouseMove = (e) => {
     if (!dragRef.current.dragging) return
     setTx(dragRef.current.tx + (e.clientX - dragRef.current.x))
     setTy(dragRef.current.ty + (e.clientY - dragRef.current.y))
   }
-  const handleMouseUp = () => { dragRef.current.dragging = false }
+  const handleMouseUp = () => { dragRef.current.dragging = false; setIsDragging(false) }
 
   const handleTouchStart = (e) => {
     if (e.touches.length === 2) {
@@ -253,8 +258,8 @@ function Lightbox({ src, alt, onClose }) {
             onClick={e => e.stopPropagation()}
             style={{
               transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
-              transition: (dragRef.current.dragging || pinchRef.current.pinching) ? 'none' : 'transform .15s ease-out',
-              cursor: scale > 1 ? (dragRef.current.dragging ? 'grabbing' : 'grab') : 'zoom-in'
+              transition: isDragging ? 'none' : 'transform .15s ease-out',
+              cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'zoom-in'
             }}
           />
           <button className="lightbox-close" onClick={(e) => { e.stopPropagation(); onClose() }} aria-label="닫기">×</button>

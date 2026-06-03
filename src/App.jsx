@@ -647,16 +647,16 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
     const items = []
     form.gear.forEach(name => {
       const meta = getGearMeta(name)
-      const qty = form.qty[name] || 1
+      const cartItem = cartItems.find(c => c.name === name)
+      const qty = cartItem?.qty || form.qty[name] || 1
       if (meta) items.push({ name, price: meta.price || 0, img: meta.img, qty })
       else {
-        const c = cartItems.find(c => c.name === name)
-        if (c) items.push({ name, price: c.price || 0, img: c.img, qty })
+        if (cartItem) items.push({ name, price: cartItem.price || 0, img: cartItem.img, qty })
       }
     })
     cartItems.forEach(c => {
       if (!items.some(i => i.name === c.name)) {
-        items.push({ name: c.name, price: c.price || 0, img: c.img, qty: form.qty[c.name] || 1 })
+        items.push({ name: c.name, price: c.price || 0, img: c.img, qty: c.qty || form.qty[c.name] || 1 })
       }
     })
     return items

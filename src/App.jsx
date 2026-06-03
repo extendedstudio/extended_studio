@@ -282,6 +282,7 @@ function Lightbox({ src, alt, onClose }) {
 }
 
 function GearCard({ item, onBook, inCart }) {
+  const [qty, setQty] = useState(1)
   return (
     <div className="gear-card">
       {item.img && (
@@ -299,14 +300,31 @@ function GearCard({ item, onBook, inCart }) {
         <div className="gear-sub">{item.sub}</div>
         {item.price > 0 && <div style={{color:'#c8a96e',fontWeight:700,fontSize:17,margin:'10px 0'}}>{item.price.toLocaleString('ko-KR')}원/일</div>}
         {item.spec && <div className="gear-spec">{item.spec}</div>}
-        {onBook && (
+        {onBook && !inCart && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#111', border: '1px solid #2a2a2a', borderRadius: 8, padding: '6px 10px' }}>
+              <button onClick={e => { e.stopPropagation(); setQty(q => Math.max(1, q - 1)) }}
+                style={{ background: 'transparent', border: 'none', color: '#aaa', cursor: 'pointer', fontSize: 18, lineHeight: 1, padding: '0 2px' }}>−</button>
+              <span style={{ fontSize: 15, fontWeight: 700, color: '#fff', minWidth: 20, textAlign: 'center' }}>{qty}</span>
+              <button onClick={e => { e.stopPropagation(); setQty(q => q + 1) }}
+                style={{ background: 'transparent', border: 'none', color: '#aaa', cursor: 'pointer', fontSize: 18, lineHeight: 1, padding: '0 2px' }}>+</button>
+            </div>
+            <button
+              className="btn-gold"
+              style={{ flex: 1, padding: '10px', fontSize: 12, letterSpacing: '.1em' }}
+              onClick={e => { e.stopPropagation(); onBook(item, qty) }}
+            >
+              + 예약하기
+            </button>
+          </div>
+        )}
+        {onBook && inCart && (
           <button
-            className={inCart ? "btn-gold-outline" : "btn-gold"}
+            className="btn-gold-outline"
             style={{ width: '100%', marginTop: 14, padding: '10px', fontSize: 12, letterSpacing: '.1em' }}
-            onClick={e => { e.stopPropagation(); onBook(item) }}
-            disabled={inCart}
+            disabled
           >
-            {inCart ? '✓ 장바구니 담김' : '+ 예약하기'}
+            ✓ 장바구니 담김
           </button>
         )}
       </div>
@@ -332,8 +350,8 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab }) {
   }, [initialTab])
   const [zoomImg, setZoomImg] = useState(null)
   const inCart = (name) => cartItems?.some(c => c.name === name)
-  const handleBook = (item) => {
-    addToCart(item)
+  const handleBook = (item, qty = 1) => {
+    addToCart({ ...item, qty })
   }
 
   const filtered = catFilter === '전체' ? data.packages : data.packages.filter(p => p.cat === catFilter)
@@ -595,7 +613,7 @@ const OPERATOR_FEE_REQUIRED = 350000  // 무선/콘솔용 필수 오퍼레이터
 const OPERATOR_FEE_OPTIONAL = 350000  // 일반 요청 오퍼레이터 일당
 const INSTALL_FEE = 200000  // 전체 설치/철수 비용 (선택)
 
-function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
+function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty }) {
   const todayISO = new Date().toISOString().slice(0, 10)
   const [form, setForm] = useState({ name: '', phone: '', startDate: todayISO, endDate: todayISO, type: '', gear: [], qty: {}, operator: 'no', install: false, staffCount: 0, rehearsal: false, rehearsalDate: '', note: '' })
   const [done, setDone] = useState(false)
@@ -778,11 +796,18 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart }) {
                       <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, letterSpacing: '.04em', marginBottom: 2 }}>{item.name}</div>
                       {item.sub && <div style={{ fontSize: 11, color: '#666' }}>{item.sub}</div>}
                     </div>
-                    <button onClick={() => removeCartItem(item.name)} style={{
-                      background: 'transparent', border: '1px solid #333', color: '#aaa',
-                      width: 28, height: 28, borderRadius: '50%', cursor: 'pointer', fontSize: 14, flexShrink: 0,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0
-                    }}>×</button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                      <button onClick={() => updateCartQty(item.name, (item.qty||1) - 1)}
+                        style={{ background: 'transparent', border: '1px solid #333', color: '#aaa', width: 26, height: 26, borderRadius: '50%', cursor: 'pointer', fontSize: 15, lineHeight: 1 }}>−</button>
+                      <span style={{ fontSize: 14, fontWeight: 700, color: '#fff', minWidth: 18, textAlign: 'center' }}>{item.qty || 1}</span>
+                      <button onClick={() => updateCartQty(item.name, (item.qty||1) + 1)}
+                        style={{ background: 'transparent', border: '1px solid #333', color: '#aaa', width: 26, height: 26, borderRadius: '50%', cursor: 'pointer', fontSize: 15, lineHeight: 1 }}>+</button>
+                      <button onClick={() => removeCartItem(item.name)} style={{
+                        background: 'transparent', border: '1px solid #333', color: '#555',
+                        width: 26, height: 26, borderRadius: '50%', cursor: 'pointer', fontSize: 13, flexShrink: 0,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, marginLeft: 2
+                      }}>×</button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1887,9 +1912,10 @@ export default function App() {
   }
 
   const addToCart = (item) => setCartItems(prev =>
-    prev.some(p => p.name === item.name) ? prev : [...prev, item]
+    prev.some(p => p.name === item.name) ? prev : [...prev, { ...item, qty: item.qty || 1 }]
   )
   const removeFromCart = (name) => setCartItems(prev => prev.filter(p => p.name !== name))
+  const updateCartQty = (name, qty) => setCartItems(prev => prev.map(p => p.name === name ? { ...p, qty: Math.max(1, qty) } : p))
   const clearCart = () => setCartItems([])
 
   // 뒤로가기 로직
@@ -1928,7 +1954,7 @@ export default function App() {
       {page === 'landing' && <Landing setPage={setPage} goToRental={goToRental} />}
       {page === 'rental' && <RentalGear setPage={setPage} addToCart={addToCart} cartItems={cartItems} initialTab={rentalTab} />}
       {page === 'portfolio' && <Portfolio setPage={setPage} />}
-      {page === 'booking' && <Booking setPage={setPage} cartItems={cartItems} removeFromCart={removeFromCart} clearCart={clearCart} />}
+      {page === 'booking' && <Booking setPage={setPage} cartItems={cartItems} removeFromCart={removeFromCart} clearCart={clearCart} updateCartQty={updateCartQty} />}
       {page === 'admin' && <Admin />}
       {/* Floating cart button (rental 페이지에서만 보임, 1개 이상일 때) */}
       {page === 'rental' && cartItems.length > 0 && (

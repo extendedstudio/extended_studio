@@ -335,7 +335,7 @@ function GearCard({ item, onBook, inCart }) {
 const PKG_CATS = ['전체', 'DJ PACKAGE', 'PA SYSTEM', 'LINE ARRAY']
 const RENTAL_TABS = ['패키지', 'DJ 장비', '스피커', '마이크', '콘솔', '액세서리']
 
-function RentalGear({ setPage, addToCart, cartItems, initialTab }) {
+function RentalGear({ setPage, addToCart, cartItems, initialTab, initialCat }) {
   const [catFilter, setCatFilter] = useState('전체')
   const [selected, setSelected] = useState(null)
   const [tab, setTab] = useState(initialTab || '패키지')
@@ -344,7 +344,7 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab }) {
   useEffect(() => {
     if (initialTab) {
       setTab(initialTab)
-      setCatFilter('전체')  // 카테고리 필터도 리셋
+      setCatFilter(initialCat || '전체')
       setSelected(null)     // 선택된 패키지도 리셋
     }
   }, [initialTab])
@@ -1302,7 +1302,7 @@ function Landing({ setPage, goToRental }) {
   // 카테고리 카드 (tab: 클릭 시 이동할 RentalGear 탭)
   const categories = [
     { label: 'DJ 장비', desc: 'CDJ-3000, DJM-A9, XDJ-XZ', count: data.dj_gear?.length || 0, tab: 'DJ 장비' },
-    { label: '라인어레이', desc: 'Martin Audio, Logic Systems', count: 5, tab: '스피커' },
+    { label: '라인어레이', desc: 'Martin Audio, Logic Systems', count: 5, tab: '스피커', cat: '라인어레이' },
     { label: 'PA 시스템', desc: 'HK Audio, Studiomaster', count: 8, tab: '스피커' },
     { label: '마이크', desc: 'Sennheiser, Shure, Kanals', count: data.mics?.length || 0, tab: '마이크' },
     { label: '믹싱 콘솔', desc: 'Behringer WING, Midas M32', count: data.consoles?.length || 0, tab: '콘솔' },
@@ -1358,7 +1358,7 @@ function Landing({ setPage, goToRental }) {
         </div>
         <div className="cat-grid">
           {categories.map(c => (
-            <div className="cat-card" key={c.label} onClick={() => goToRental(c.tab)}>
+            <div className="cat-card" key={c.label} onClick={() => goToRental(c.tab, c.cat)}>
               <div className="cat-count">{String(c.count).padStart(2, '0')}</div>
               <div className="cat-label">{c.label}</div>
               <div className="cat-desc">{c.desc}</div>
@@ -1872,11 +1872,13 @@ function Nav({ page, setPage }) {
 export default function App() {
   const [page, setPage] = useState('landing')
   const [rentalTab, setRentalTab] = useState('패키지')
+  const [rentalCat, setRentalCat] = useState('전체')
   const [cartItems, setCartItems] = useState([])
 
   // 카테고리 카드 → rental 페이지로 이동 + 탭 선택
-  const goToRental = (tab) => {
+  const goToRental = (tab, cat) => {
     if (tab) setRentalTab(tab)
+    setRentalCat(cat || '전체')
     setPage('rental')
   }
 
@@ -1921,7 +1923,7 @@ export default function App() {
         </button>
       )}
       {page === 'landing' && <Landing setPage={setPage} goToRental={goToRental} />}
-      {page === 'rental' && <RentalGear setPage={setPage} addToCart={addToCart} cartItems={cartItems} initialTab={rentalTab} />}
+      {page === 'rental' && <RentalGear setPage={setPage} addToCart={addToCart} cartItems={cartItems} initialTab={rentalTab} initialCat={rentalCat} />}
       {page === 'portfolio' && <Portfolio setPage={setPage} />}
       {page === 'booking' && <Booking setPage={setPage} cartItems={cartItems} removeFromCart={removeFromCart} clearCart={clearCart} updateCartQty={updateCartQty} />}
       {page === 'admin' && <Admin />}

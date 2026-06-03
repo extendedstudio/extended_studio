@@ -773,46 +773,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-          {/* 장바구니 (선택한 장비 리스트) */}
-          {cartItems && cartItems.length > 0 && (
-            <div style={{
-              background: '#1a1a1a', border: `1px solid ${$.gold}`,
-              borderRadius: 10, padding: '16px 18px'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                <div style={{ fontSize: 10, letterSpacing: '.2em', color: $.gold }}>🛒 선택한 장비 · {cartItems.length}개</div>
-                <button onClick={() => { clearCart(); setForm(f => ({...f, gear: f.gear.filter(g => !cartItems.some(c => c.name === g))})) }}
-                  style={{ background: 'transparent', border: 'none', color: '#666', fontSize: 11, cursor: 'pointer' }}>
-                  전체 비우기
-                </button>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {cartItems.map(item => (
-                  <div key={item.name} style={{
-                    display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12,
-                    background: '#0e0e0e', borderRadius: 8, padding: '10px 14px'
-                  }}>
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, letterSpacing: '.04em', marginBottom: 2 }}>{item.name}</div>
-                      {item.sub && <div style={{ fontSize: 11, color: '#666' }}>{item.sub}</div>}
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-                      <button onClick={() => updateCartQty(item.name, (item.qty||1) - 1)}
-                        style={{ background: 'transparent', border: '1px solid #333', color: '#aaa', width: 26, height: 26, borderRadius: '50%', cursor: 'pointer', fontSize: 15, lineHeight: 1 }}>−</button>
-                      <span style={{ fontSize: 14, fontWeight: 700, color: '#fff', minWidth: 18, textAlign: 'center' }}>{item.qty || 1}</span>
-                      <button onClick={() => updateCartQty(item.name, (item.qty||1) + 1)}
-                        style={{ background: 'transparent', border: '1px solid #333', color: '#aaa', width: 26, height: 26, borderRadius: '50%', cursor: 'pointer', fontSize: 15, lineHeight: 1 }}>+</button>
-                      <button onClick={() => removeCartItem(item.name)} style={{
-                        background: 'transparent', border: '1px solid #333', color: '#555',
-                        width: 26, height: 26, borderRadius: '50%', cursor: 'pointer', fontSize: 13, flexShrink: 0,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, marginLeft: 2
-                      }}>×</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+
 
           {/* ─── 서비스 안내 ─── */}
           <div style={{ fontSize: 11, color: '#aaa', lineHeight: 1.8, padding: '14px 16px', background: 'rgba(200,169,110,0.04)', borderLeft: `2px solid ${$.gold}`, borderRadius: 4 }}>
@@ -1070,11 +1031,13 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
                 <div style={{ fontSize: 10, letterSpacing: '.2em', color: $.gold, fontWeight: 700 }}>
                   견적 요약 · {selectedItems.length}개 장비
                 </div>
-                {form.startDate && form.endDate && (
-                  <div style={{ fontSize: 11, color: '#888' }}>
-                    {formatDuration(days)}
-                  </div>
-                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  {form.startDate && form.endDate && (
+                    <div style={{ fontSize: 11, color: '#888' }}>{formatDuration(days)}</div>
+                  )}
+                  <button onClick={() => { clearCart(); setForm(f => ({...f, gear: []})) }}
+                    style={{ background: 'transparent', border: 'none', color: '#555', fontSize: 11, cursor: 'pointer' }}>전체 비우기</button>
+                </div>
               </div>
 
               {/* 장비 명세 */}
@@ -1086,32 +1049,26 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
                 {selectedItems.map(item => (
                   <div key={item.name} style={{
                     display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8,
-                    fontSize: 12, color: '#ccc'
+                    fontSize: 12, color: '#ccc', padding: '6px 0',
+                    borderBottom: '1px solid #1a1a1a'
                   }}>
-                    <span style={{
-                      flex: 1, minWidth: 0,
-                      whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
-                    }}>
+                    <span style={{ flex: 1, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {item.name}
-                      {item.qty > 1 && <span style={{ color: $.gold, marginLeft: 6, fontWeight: 700 }}>× {item.qty}</span>}
                     </span>
-                    <span style={{ color: '#888', flexShrink: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                      <button onClick={() => updateCartQty(item.name, (item.qty||1) - 1)}
+                        style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#888', width: 22, height: 22, borderRadius: '50%', cursor: 'pointer', fontSize: 13, lineHeight: 1 }}>−</button>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: (item.qty||1) > 1 ? $.gold : '#888', minWidth: 16, textAlign: 'center' }}>{item.qty || 1}</span>
+                      <button onClick={() => updateCartQty(item.name, (item.qty||1) + 1)}
+                        style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#888', width: 22, height: 22, borderRadius: '50%', cursor: 'pointer', fontSize: 13, lineHeight: 1 }}>+</button>
+                    </div>
+                    <span style={{ color: '#888', flexShrink: 0, minWidth: 60, textAlign: 'right' }}>
                       {item.price > 0 ? won(item.price * (item.qty || 1)) : '견적'}
                     </span>
-                    <button
-                      type="button"
-                      onClick={(e) => { e.stopPropagation(); removeCartItem(item.name) }}
-                      title="제거"
-                      style={{
-                        background: 'transparent', border: 'none',
-                        color: '#555', cursor: 'pointer',
-                        padding: '2px 6px', fontSize: 16, lineHeight: 1,
-                        flexShrink: 0, fontWeight: 300,
-                        transition: 'color .15s ease'
-                      }}
+                    <button type="button" onClick={(e) => { e.stopPropagation(); removeCartItem(item.name) }}
+                      style={{ background: 'transparent', border: 'none', color: '#555', cursor: 'pointer', padding: '2px 4px', fontSize: 15, lineHeight: 1, flexShrink: 0 }}
                       onMouseEnter={(e) => { e.currentTarget.style.color = '#ef4444' }}
-                      onMouseLeave={(e) => { e.currentTarget.style.color = '#555' }}
-                    >×</button>
+                      onMouseLeave={(e) => { e.currentTarget.style.color = '#555' }}>×</button>
                   </div>
                 ))}
               </div>
@@ -1136,27 +1093,39 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
                     </div>
                   )}
                   {operatorFee > 0 && (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: operatorRequired ? $.gold : '#888' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, color: operatorRequired ? $.gold : '#888' }}>
                       <span>오퍼레이터 {operatorRequired ? '(무선/콘솔 필수)' : '(요청)'} × {days}일</span>
-                      <span>+ {won(operatorFee)}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span>+ {won(operatorFee)}</span>
+                        {!operatorRequired && <button onClick={() => set('operator', 'no')} style={{ background: 'transparent', border: 'none', color: '#555', cursor: 'pointer', fontSize: 15, lineHeight: 1, padding: '0 2px' }} onMouseEnter={e => e.currentTarget.style.color='#ef4444'} onMouseLeave={e => e.currentTarget.style.color='#555'}>×</button>}
+                      </div>
                     </div>
                   )}
                   {installFee > 0 && (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, color: '#888' }}>
                       <span>설치 / 철수</span>
-                      <span>+ {won(installFee)}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span>+ {won(installFee)}</span>
+                        <button onClick={() => set('install', false)} style={{ background: 'transparent', border: 'none', color: '#555', cursor: 'pointer', fontSize: 15, lineHeight: 1, padding: '0 2px' }} onMouseEnter={e => e.currentTarget.style.color='#ef4444'} onMouseLeave={e => e.currentTarget.style.color='#555'}>×</button>
+                      </div>
                     </div>
                   )}
                   {staffFee > 0 && (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, color: '#888' }}>
                       <span>스텝 상주 {form.staffCount}명 ({days}일)</span>
-                      <span>+ {won(staffFee)}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span>+ {won(staffFee)}</span>
+                        <button onClick={() => set('staffCount', 0)} style={{ background: 'transparent', border: 'none', color: '#555', cursor: 'pointer', fontSize: 15, lineHeight: 1, padding: '0 2px' }} onMouseEnter={e => e.currentTarget.style.color='#ef4444'} onMouseLeave={e => e.currentTarget.style.color='#555'}>×</button>
+                      </div>
                     </div>
                   )}
                   {rehearsalFee > 0 && (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, color: '#888' }}>
                       <span>리허설 (+50%){form.rehearsalDate ? ` · ${form.rehearsalDate}` : ''}</span>
-                      <span>+ {won(rehearsalFee)}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span>+ {won(rehearsalFee)}</span>
+                        <button onClick={() => set('rehearsal', false)} style={{ background: 'transparent', border: 'none', color: '#555', cursor: 'pointer', fontSize: 15, lineHeight: 1, padding: '0 2px' }} onMouseEnter={e => e.currentTarget.style.color='#ef4444'} onMouseLeave={e => e.currentTarget.style.color='#555'}>×</button>
+                      </div>
                     </div>
                   )}
                   <div style={{

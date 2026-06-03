@@ -345,9 +345,15 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab, initialCat }) {
     if (initialTab) {
       setTab(initialTab)
       setCatFilter(initialCat || '전체')
-      setSelected(null)     // 선택된 패키지도 리셋
+      setSelected(null)
+      if (initialCat && initialCat !== '전체') {
+        setTimeout(() => {
+          const el = document.getElementById(`speaker-cat-${initialCat}`)
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }, 100)
+      }
     }
-  }, [initialTab])
+  }, [initialTab, initialCat])
   const [zoomImg, setZoomImg] = useState(null)
   const inCart = (name) => cartItems?.some(c => c.name === name)
   const handleBook = (item, qty = 1) => {
@@ -450,7 +456,7 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab, initialCat }) {
               const items = data.speakers.filter(s => s.cat === cat)
               if(!items.length) return null
               return (
-                <div key={cat} style={{marginBottom: 40}}>
+                <div key={cat} id={`speaker-cat-${cat}`} style={{marginBottom: 40}}>
                   <div style={{fontSize:10,letterSpacing:'.2em',color:'#c8a96e',marginBottom:16}}>{cat.toUpperCase()}</div>
                   <div className="pkg-grid">{items.map(item => <GearCard key={item.id} item={item} onBook={handleBook} inCart={inCart(item.name)} />)}</div>
                 </div>

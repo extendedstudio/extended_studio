@@ -1383,7 +1383,7 @@ function Landing({ setPage, goToRental }) {
         </div>
 
         {/* 하단 바 */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+        <div>
           <div style={{ padding: '18px 24px', borderRight: '1px solid #1a1a1a' }}>
             <div style={{ fontSize: 9, letterSpacing: '.25em', color: '#333', marginBottom: 8 }}>PICKUP LOCATION</div>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -1392,12 +1392,7 @@ function Landing({ setPage, goToRental }) {
               ))}
             </div>
           </div>
-          <div style={{ padding: '18px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-            <div style={{ fontSize: 11, color: '#333', lineHeight: 1.6 }}>견적은 확인 후<br />카카오로 안내드립니다</div>
-            <button onClick={() => {}} style={{ background: $.gold, color: '#000', fontSize: 10, fontWeight: 800, letterSpacing: '.12em', padding: '10px 16px', border: 'none', borderRadius: 2, cursor: 'pointer', whiteSpace: 'nowrap' }}>
-              AI 상담하기 →
-            </button>
-          </div>
+
         </div>
       </section>
 

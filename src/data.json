@@ -1101,6 +1101,16 @@
       "qty": "보유",
       "price": 100000,
       "img": "/images/jbl_eoncompact.png"
+    },
+    {
+      "id": "s15",
+      "cat": "액티브 PA",
+      "name": "Line 6 StageSource L3m",
+      "sub": "액티브 PA 스피커",
+      "spec": "",
+      "qty": "보유",
+      "price": 200000,
+      "img": "/images/line6_l3m.png"
     }
   ],
   "accessories": [

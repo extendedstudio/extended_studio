@@ -1315,84 +1315,61 @@ function Landing({ setPage, goToRental }) {
     { label: '액세서리', desc: 'DJ테이블, 스탠드, 보면대', count: data.accessories?.length || 0, tab: '액세서리' },
   ]
 
-  const slideImgs = (data.portfolio || []).filter(p => p.img).slice(0, 4)
-
-  const newCats = [
-    { tag: 'DJ', name: 'CDJ-3000', sub: 'DJM-A9 · XDJ-XZ', tab: 'DJ 장비' },
-    { tag: 'PA SYSTEM', name: 'HK Audio', sub: 'Studiomaster · POLAR', tab: '스피커' },
-    { tag: 'LINE ARRAY', name: 'Martin Audio', sub: 'Logic Systems', tab: '스피커', cat: '라인어레이' },
-    { tag: 'CONSOLE', name: 'Midas M32', sub: 'Behringer WING', tab: '콘솔' },
-  ]
-
   return (
     <div style={{ background: $.bg }}>
-      {/* ── NEW HERO ── */}
-      <style>{`
-        @keyframes slideUpPf {
-          0%   { transform: translateY(0) }
-          28%  { transform: translateY(0) }
-          33%  { transform: translateY(-100%) }
-          61%  { transform: translateY(-100%) }
-          66%  { transform: translateY(-200%) }
-          94%  { transform: translateY(-200%) }
-          99%  { transform: translateY(-300%) }
-          100% { transform: translateY(-300%) }
-        }
-      `}</style>
-      <section style={{ background: '#080808', borderBottom: '1px solid #1a1a1a' }}>
-        {/* 히어로 */}
-        <div style={{ borderBottom: '1px solid #1a1a1a' }}>
-          <div style={{ padding: '48px 36px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: 280 }}>
-            <div>
-              <div style={{ fontSize: 9, letterSpacing: '.35em', color: $.gold, fontWeight: 600, marginBottom: 18 }}>SEOUL · PROFESSIONAL SOUND RENTAL</div>
-              <div style={{ fontSize: 'clamp(52px,7vw,80px)', fontWeight: 900, lineHeight: .88, letterSpacing: '-.03em', color: '#fff', marginBottom: 24 }}>
-                PRO<br />
-                <span style={{ background: $.gold, color: '#000', padding: '0 10px', display: 'inline-block', lineHeight: 1 }}>SOUND</span><br />
-                RENTAL
-              </div>
-              <div style={{ fontSize: 12, color: '#444', lineHeight: 1.7, letterSpacing: '.03em', marginBottom: 32 }}>
-                DJ · PA · 라인어레이 · 믹싱 콘솔<br />서울 이태원 기반 · 예약제 운영
-              </div>
-            </div>
-            <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => setPage('booking')}
-                style={{ background: $.gold, color: '#000', fontSize: 12, fontWeight: 800, letterSpacing: '.15em', padding: '14px 28px', border: 'none', borderRadius: 2, cursor: 'pointer' }}>
-                장비 예약하기 →
-              </button>
-              <button onClick={() => setPage('portfolio')}
-                style={{ background: 'transparent', color: '#555', fontSize: 12, letterSpacing: '.1em', padding: '14px 22px', border: '1px solid #1e1e1e', borderRadius: 2, cursor: 'pointer' }}>
-                포트폴리오 보기
-              </button>
-            </div>
+      {/* Hero */}
+      <section className="hero">
+        <div className="hero-grid" />
+        <div className="hero-content">
+          <p className="hero-eyebrow">Extended Rental</p>
+          <h1 className="hero-title">
+            PROFESSIONAL<br />
+            <span className="gold">DJ & PA SYSTEM</span><br />
+            RENTAL
+          </h1>
+          <p className="hero-sub">"Better Experience, Extended Life."</p>
+          <div className="hero-btns">
+            <button className="btn-gold" style={{ fontSize: 14, padding: '13px 36px' }} onClick={() => setPage('rental')}>장비 패키지 보기</button>
+            <button className="btn-ghost" style={{ fontSize: 14, padding: '13px 36px' }} onClick={() => setPage('booking')}>예약 문의</button>
           </div>
         </div>
+      </section>
 
-        {/* 카테고리 4개 */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', borderBottom: '1px solid #1a1a1a' }}>
-          {newCats.map((c, i) => (
-            <div key={c.tag} onClick={() => goToRental(c.tab, c.cat)}
-              style={{ padding: '18px 20px', borderRight: i < 3 ? '1px solid #1a1a1a' : 'none', cursor: 'pointer', transition: 'background .15s' }}
-              onMouseEnter={e => e.currentTarget.style.background = '#0e0e0e'}
-              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-              <div style={{ fontSize: 9, letterSpacing: '.22em', color: '#333', marginBottom: 6 }}>{c.tag}</div>
-              <div style={{ fontSize: 14, fontWeight: 800, color: '#fff' }}>{c.name}</div>
-              <div style={{ fontSize: 10, color: '#333', marginTop: 3 }}>{c.sub}</div>
-              <div style={{ fontSize: 16, color: $.gold, marginTop: 10 }}>→</div>
+      {/* About 한 줄 */}
+      <section className="about-strip">
+        <div className="about-inner">
+          <div className="about-item">
+            <div className="about-num">45+</div>
+            <div className="about-label">PROFESSIONAL<br />EQUIPMENT</div>
+          </div>
+          <div className="about-divider" />
+          <div className="about-item">
+            <div className="about-num">100%</div>
+            <div className="about-label">CUSTOM<br />QUOTE</div>
+          </div>
+          <div className="about-divider" />
+          <div className="about-item">
+            <div className="about-num">BY</div>
+            <div className="about-label">APPOINTMENT<br />BASED</div>
+          </div>
+        </div>
+      </section>
+
+      {/* 장비 카테고리 */}
+      <section className="section-block">
+        <div className="section-head">
+          <div className="section-bar" />
+          <h2 className="section-title">EQUIPMENT</h2>
+          <p className="section-sub">최고급 장비로 완벽한 사운드를 제공합니다</p>
+        </div>
+        <div className="cat-grid">
+          {categories.map(c => (
+            <div className="cat-card" key={c.label} onClick={() => goToRental(c.tab, c.cat)}>
+              <div className="cat-count">{String(c.count).padStart(2, '0')}</div>
+              <div className="cat-label">{c.label}</div>
+              <div className="cat-desc">{c.desc}</div>
             </div>
           ))}
-        </div>
-
-        {/* 하단 바 */}
-        <div>
-          <div style={{ padding: '18px 24px', borderRight: '1px solid #1a1a1a' }}>
-            <div style={{ fontSize: 9, letterSpacing: '.25em', color: '#333', marginBottom: 8 }}>PICKUP LOCATION</div>
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              {['고양시 향동', '이태원', '논현동'].map(loc => (
-                <span key={loc} style={{ fontSize: 10, color: '#555', border: '1px solid #1e1e1e', padding: '4px 10px', borderRadius: 2 }}>{loc}</span>
-              ))}
-            </div>
-          </div>
-
         </div>
       </section>
 

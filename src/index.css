@@ -264,7 +264,7 @@ body {
   transition: background .2s;
 }
 @media (max-width: 768px) {
-  .ai-btn { display: none; }
+  .ai-btn { bottom: 90px; right: 16px; font-size: 12px; height: 44px; }
 }
 .ai-btn.open { background: #333; color: #fff; }
 .ai-box {
@@ -276,7 +276,7 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
 }
 @media (max-width: 768px) {
-  .ai-box { bottom: 70px; left: 8px; right: 8px; width: auto; }
+  .ai-box { bottom: 148px; right: 16px; width: calc(100vw - 32px); }
 }
 .ai-header {
   background: #111; padding: 12px 16px;

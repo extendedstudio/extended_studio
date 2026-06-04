@@ -17,8 +17,6 @@ const CAT_ICON = {
 }
 
 // ─── AI 챗봇 ────────────────────────────────────────────
-const AiChatContext = React.createContext(null)
-
 function AiChat() {
   const [open, setOpen] = useState(false)
   const msgsEndRef = useRef(null)
@@ -57,7 +55,7 @@ function AiChat() {
 
   return (
     <>
-      <button className={`ai-btn desktop-only${open ? ' open' : ''}`} onClick={() => setOpen(!open)}>
+      <button className={`ai-btn${open ? ' open' : ''}`} onClick={() => setOpen(!open)}>
         {open ? '✕ 닫기' : '🎛️ AI 상담하기'}
       </button>
       {open && (
@@ -1856,13 +1854,10 @@ function Nav({ page, setPage }) {
           <span className="nav-link admin" style={{ fontSize: 10, opacity: .4 }} onClick={() => setPage('admin')}>ADMIN</span>
         </div>
 
-        {/* 모바일 우측 버튼들 */}
-        <div className="mobile-only" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <AiChatToggle />
-          <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="menu">
-            {menuOpen ? '✕' : '☰'}
-          </button>
-        </div>
+        {/* 모바일 햄버거 버튼 */}
+        <button className="hamburger mobile-only" onClick={() => setMenuOpen(!menuOpen)} aria-label="menu">
+          {menuOpen ? '✕' : '☰'}
+        </button>
       </div>
 
       {/* 모바일 드롭다운 메뉴 */}
@@ -1876,20 +1871,6 @@ function Nav({ page, setPage }) {
         </div>
       )}
     </nav>
-  )
-}
-
-function AiChatToggle() {
-  // AiChat의 open state를 직접 트리거할 수 없으므로 별도 이벤트 사용
-  const handleClick = () => {
-    const btn = document.querySelector('.ai-btn')
-    if (btn) btn.click()
-  }
-  return (
-    <button onClick={handleClick}
-      style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#c8a96e', borderRadius: 8, padding: '5px 10px', fontSize: 11, fontWeight: 700, cursor: 'pointer', letterSpacing: '.05em', whiteSpace: 'nowrap' }}>
-      🎛️ AI
-    </button>
   )
 }
 

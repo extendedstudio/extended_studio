@@ -1341,50 +1341,29 @@ function Landing({ setPage, goToRental }) {
       `}</style>
       <section style={{ background: '#080808', borderBottom: '1px solid #1a1a1a' }}>
         {/* 히어로 */}
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', borderBottom: '1px solid #1a1a1a' }}>
-          {/* 왼쪽 */}
-          <div style={{ padding: '40px 36px 36px', borderRight: '1px solid #1a1a1a', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: 300 }}>
+        <div style={{ borderBottom: '1px solid #1a1a1a' }}>
+          <div style={{ padding: '48px 36px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: 280 }}>
             <div>
               <div style={{ fontSize: 9, letterSpacing: '.35em', color: $.gold, fontWeight: 600, marginBottom: 18 }}>SEOUL · PROFESSIONAL SOUND RENTAL</div>
-              <div style={{ fontSize: 'clamp(40px,5vw,58px)', fontWeight: 900, lineHeight: .88, letterSpacing: '-.03em', color: '#fff', marginBottom: 20 }}>
+              <div style={{ fontSize: 'clamp(52px,7vw,80px)', fontWeight: 900, lineHeight: .88, letterSpacing: '-.03em', color: '#fff', marginBottom: 24 }}>
                 PRO<br />
-                <span style={{ background: $.gold, color: '#000', padding: '0 8px', display: 'inline-block', lineHeight: 1 }}>SOUND</span><br />
+                <span style={{ background: $.gold, color: '#000', padding: '0 10px', display: 'inline-block', lineHeight: 1 }}>SOUND</span><br />
                 RENTAL
               </div>
-              <div style={{ fontSize: 11, color: '#444', lineHeight: 1.7, letterSpacing: '.03em', marginBottom: 28 }}>
+              <div style={{ fontSize: 12, color: '#444', lineHeight: 1.7, letterSpacing: '.03em', marginBottom: 32 }}>
                 DJ · PA · 라인어레이 · 믹싱 콘솔<br />서울 이태원 기반 · 예약제 운영
               </div>
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <button onClick={() => setPage('booking')}
-                style={{ background: $.gold, color: '#000', fontSize: 11, fontWeight: 800, letterSpacing: '.15em', padding: '12px 22px', border: 'none', borderRadius: 2, cursor: 'pointer' }}>
+                style={{ background: $.gold, color: '#000', fontSize: 12, fontWeight: 800, letterSpacing: '.15em', padding: '14px 28px', border: 'none', borderRadius: 2, cursor: 'pointer' }}>
                 장비 예약하기 →
               </button>
               <button onClick={() => setPage('portfolio')}
-                style={{ background: 'transparent', color: '#555', fontSize: 11, letterSpacing: '.1em', padding: '12px 18px', border: '1px solid #1e1e1e', borderRadius: 2, cursor: 'pointer' }}>
+                style={{ background: 'transparent', color: '#555', fontSize: 12, letterSpacing: '.1em', padding: '14px 22px', border: '1px solid #1e1e1e', borderRadius: 2, cursor: 'pointer' }}>
                 포트폴리오 보기
               </button>
             </div>
-          </div>
-          {/* 오른쪽 슬라이드 */}
-          <div style={{ position: 'relative', overflow: 'hidden', height: 300 }}>
-            {slideImgs.length > 0 ? (
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, display: 'flex', flexDirection: 'column', animation: 'slideUpPf 16s linear infinite' }}>
-                {[...slideImgs, slideImgs[0]].map((p, i) => (
-                  <div key={i} style={{ flexShrink: 0, height: 300, position: 'relative', cursor: 'pointer' }} onClick={() => setPage('portfolio')}>
-                    <img src={p.img} alt={p.title || ''} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(.65)', display: 'block' }} />
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '12px 16px', background: 'linear-gradient(transparent,rgba(0,0,0,.75))' }}>
-                      <div style={{ fontSize: 9, letterSpacing: '.25em', color: $.gold }}>PORTFOLIO</div>
-                      <div style={{ fontSize: 12, fontWeight: 700, color: '#fff', marginTop: 2 }}>{p.title || p.venue || ''}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ height: '100%', background: '#0e0e0e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontSize: 9, letterSpacing: '.2em', color: '#333' }}>PORTFOLIO</span>
-              </div>
-            )}
           </div>
         </div>
 

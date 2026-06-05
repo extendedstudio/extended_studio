@@ -356,7 +356,12 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab, initialCat }) {
   }, [initialTab, initialCat])
   const [zoomImg, setZoomImg] = useState(null)
   const inCart = (name) => cartItems?.some(c => c.name === name)
+  const hasPackageInCart = () => cartItems?.some(c => data.packages?.some(p => p.name === c.name))
   const handleBook = (item, qty = 1) => {
+    if (hasPackageInCart()) {
+      if (!window.confirm('장바구니에 패키지가 담겨있습니다. 비우고 개별 장비를 추가할까요?')) return
+      clearCart()
+    }
     addToCart({ ...item, qty })
   }
 

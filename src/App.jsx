@@ -430,7 +430,14 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab, initialCat }) {
                   style={{ width: '100%', marginTop: pkg.blogUrl ? 8 : 16 }}
                   onClick={e => {
                     e.stopPropagation()
-                    handleBook(pkg)
+                    if (!inCart(pkg.name)) {
+                      // 패키지 담을 때 기존 장바구니 초기화
+                      if (cartItems && cartItems.length > 0) {
+                        if (!window.confirm('장바구니에 담긴 장비가 있습니다. 비우고 이 패키지로 교체할까요?')) return
+                      }
+                      clearCart()
+                      handleBook(pkg)
+                    }
                   }}
                   disabled={inCart(pkg.name)}
                 >

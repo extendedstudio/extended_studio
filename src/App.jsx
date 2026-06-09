@@ -443,7 +443,7 @@ function RentalGear({ setPage, addToCart, cartItems, clearCart, initialTab, init
                       clearCart()
                       // pricing에서 가격 파싱해서 price 필드 추가
                       const pkgPrice = (() => {
-                        const pr = pkg.pricing?.find(p => p.l === '패키지 가격')
+                        const pr = pkg.pricing?.find(pp => pp.l === '패키지 가격')
                         if (!pr) return 0
                         return parseInt(pr.p.replace(/[^0-9]/g, '')) || 0
                       })()

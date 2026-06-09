@@ -335,7 +335,7 @@ function GearCard({ item, onBook, inCart }) {
 const PKG_CATS = ['전체', 'DJ PACKAGE', 'PA SYSTEM', 'LINE ARRAY']
 const RENTAL_TABS = ['패키지', 'DJ 장비', '스피커', '마이크', '콘솔', '액세서리']
 
-function RentalGear({ setPage, addToCart, cartItems, initialTab, initialCat }) {
+function RentalGear({ setPage, addToCart, cartItems, clearCart, initialTab, initialCat }) {
   const [catFilter, setCatFilter] = useState('전체')
   const [selected, setSelected] = useState(null)
   const [tab, setTab] = useState(initialTab || '패키지')
@@ -448,6 +448,7 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab, initialCat }) {
                         return parseInt(pr.p.replace(/[^0-9]/g, '')) || 0
                       })()
                       handleBook({ ...pkg, price: pkgPrice })
+                      setPage('booking')
                     }
                   }}
                   disabled={inCart(pkg.name)}
@@ -1947,7 +1948,7 @@ export default function App() {
         </button>
       )}
       {page === 'landing' && <Landing setPage={setPage} goToRental={goToRental} />}
-      {page === 'rental' && <RentalGear setPage={setPage} addToCart={addToCart} cartItems={cartItems} initialTab={rentalTab} initialCat={rentalCat} />}
+      {page === 'rental' && <RentalGear setPage={setPage} addToCart={addToCart} cartItems={cartItems} clearCart={clearCart} initialTab={rentalTab} initialCat={rentalCat} />}
       {page === 'portfolio' && <Portfolio setPage={setPage} />}
       {page === 'booking' && <Booking setPage={setPage} cartItems={cartItems} removeFromCart={removeFromCart} clearCart={clearCart} updateCartQty={updateCartQty} />}
       {page === 'admin' && <Admin />}

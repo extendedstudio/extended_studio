@@ -441,7 +441,13 @@ function RentalGear({ setPage, addToCart, cartItems, initialTab, initialCat }) {
                         if (!window.confirm('장바구니에 담긴 장비가 있습니다. 비우고 이 패키지로 교체할까요?')) return
                       }
                       clearCart()
-                      handleBook(pkg)
+                      // pricing에서 가격 파싱해서 price 필드 추가
+                      const pkgPrice = (() => {
+                        const pr = pkg.pricing?.find(p => p.l === '패키지 가격')
+                        if (!pr) return 0
+                        return parseInt(pr.p.replace(/[^0-9]/g, '')) || 0
+                      })()
+                      handleBook({ ...pkg, price: pkgPrice })
                     }
                   }}
                   disabled={inCart(pkg.name)}

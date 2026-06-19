@@ -69,14 +69,14 @@
       "pricing": [
         {
           "l": "직접 수령 / 반납",
-          "p": "560,000원"
+          "p": "300,000원"
         },
         {
           "l": "설치 및 철수",
           "p": "200,000원"
         }
       ],
-      "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
+      "note": "소규모 실내 행사 / 버스킹에 최적화된 컴팩트 시스템",
       "img": "/images/pkg_hk_polar8.jpg",
       "blogUrl": "https://m.blog.naver.com/extended-studio/224216135458"
     },
@@ -94,14 +94,14 @@
       "pricing": [
         {
           "l": "직접 수령 / 반납",
-          "p": "500,000원"
+          "p": "350,000원"
         },
         {
           "l": "설치 및 철수",
           "p": "200,000원"
         }
       ],
-      "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
+      "note": "가성비 높은 중소형 행사용 올라운더",
       "img": "/images/pkg_studiomaster.jpg",
       "blogUrl": "https://m.blog.naver.com/extended-studio/224199133000"
     },
@@ -119,14 +119,14 @@
       "pricing": [
         {
           "l": "직접 수령 / 반납",
-          "p": "700,000원"
+          "p": "500,000원"
         },
         {
           "l": "설치 및 철수",
           "p": "200,000원"
         }
       ],
-      "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
+      "note": "실내외 겸용 / 넉넉한 출력으로 100인 행사까지 커버",
       "img": "/images/pkg_hk_polar10.jpg",
       "blogUrl": "https://m.blog.naver.com/extended-studio/224287533863"
     },
@@ -144,7 +144,7 @@
       "pricing": [
         {
           "l": "직접 수령 / 반납",
-          "p": "800,000원"
+          "p": "900,000원"
         },
         {
           "l": "설치 및 철수",
@@ -152,7 +152,7 @@
         }
       ],
       "img": "/images/pkg_jbl_ev.jpg",
-      "note": "오퍼레이터 포함시 상황에 따라 디지털 믹서로 변환 가능합니다",
+      "note": "서브우퍼 포함 풀 시스템 / 중형 야외 행사에 최적",
       "blogUrl": "https://blog.naver.com/extended-studio/224301287434"
     },
     {
@@ -160,7 +160,7 @@
       "cat": "PA SYSTEM",
       "cc": "#6e9ec8",
       "name": "BIEMA X10",
-      "sub": "중대형 페스티벌 / 야외",
+      "sub": "야외 페스티벌 / 고음압 행사",
       "coverage": "최대 200인 (야외) ~ 300인 (실내)",
       "items": [
         "BIEMA X10 1Pair",
@@ -169,14 +169,14 @@
       "pricing": [
         {
           "l": "직접 수령 / 반납",
-          "p": "1,200,000원"
+          "p": "1,300,000원"
         },
         {
           "l": "설치 및 철수",
           "p": "200,000원"
         }
       ],
-      "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
+      "note": "강력한 출력으로 야외 대형 행사에 최적화",
       "img": "/images/pkg_biema.jpg",
       "blogUrl": "https://m.blog.naver.com/extended-studio/224277999234"
     },
@@ -185,7 +185,7 @@
       "cat": "PA SYSTEM",
       "cc": "#6e9ec8",
       "name": "MONTARBO WIND 2200 / BXB18A",
-      "sub": "중대형 페스티벌 / 야외",
+      "sub": "웨딩 / 기업행사 / 음질 중심 실내",
       "coverage": "최대 200인 (야외) ~ 300인 (실내)",
       "items": [
         "MONTARBO WIND 2200 / BXB18A 1Pair",
@@ -194,14 +194,14 @@
       "pricing": [
         {
           "l": "직접 수령 / 반납",
-          "p": "1,600,000원"
+          "p": "1,400,000원"
         },
         {
           "l": "설치 및 철수",
           "p": "200,000원"
         }
       ],
-      "note": "*오퍼레이터 포함시 디지털 믹서로 변환 가능",
+      "note": "클리어한 사운드로 웨딩 / 기업행사 등 음질이 중요한 행사에 추천",
       "img": "/images/pkg_montarbo.jpg",
       "blogUrl": "https://m.blog.naver.com/extended-studio/224157124104"
     },

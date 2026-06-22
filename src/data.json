@@ -355,6 +355,67 @@
       "note": "*오퍼레이터 포함시 추가 금액이 발생할 수 있습니다",
       "img": "/images/pkg_logic_va_max.jpg",
       "blogUrl": "https://m.blog.naver.com/extended-studio/224206730640"
+    },
+    {
+      "id": 15,
+      "cat": "POPUP SET",
+      "cc": "#7eb8c8",
+      "name": "HK Audio SoundCaddy One",
+      "sub": "소규모 팝업 / 브랜드 행사",
+      "coverage": "최대 50인 (실내)",
+      "items": [
+        "HK Audio SoundCaddy One 1EA"
+      ],
+      "pricing": [
+        {
+          "l": "직접 수령 / 반납",
+          "p": "200,000원"
+        }
+      ],
+      "note": "버튼 하나로 완성되는 올인원 PA / 팝업 행사 최적화 시스템",
+      "img": "/images/pkg_soundcaddy.jpg",
+      "blogUrl": ""
+    },
+    {
+      "id": 16,
+      "cat": "POPUP SET",
+      "cc": "#7eb8c8",
+      "name": "Behringer POPUP SET",
+      "sub": "팝업 부스 / 쇼룸",
+      "coverage": "최대 30인 (실내)",
+      "items": [
+        "Behringer SAT1008SUBA 1EA",
+        "Behringer PK108 1Pair"
+      ],
+      "pricing": [
+        {
+          "l": "직접 수령 / 반납",
+          "p": "150,000원"
+        }
+      ],
+      "note": "서브우퍼 포함 초소형 셋업 / 팝업 부스 / 쇼룸 추천",
+      "img": "/images/pkg_behringer_popup.jpg",
+      "blogUrl": ""
+    },
+    {
+      "id": 17,
+      "cat": "POPUP SET",
+      "cc": "#7eb8c8",
+      "name": "JBL EON One Compact SET",
+      "sub": "소규모 팝업 / 야외 행사",
+      "coverage": "최대 50인 (실내)",
+      "items": [
+        "JBL EON One Compact 2EA"
+      ],
+      "pricing": [
+        {
+          "l": "직접 수령 / 반납",
+          "p": "200,000원"
+        }
+      ],
+      "note": "배터리 내장 스테레오 올인원 / 어디서든 빠른 셋업 가능",
+      "img": "/images/pkg_jbl_eon_compact.jpg",
+      "blogUrl": ""
     }
   ],
   "portfolio": [
@@ -1111,6 +1172,36 @@
       "qty": "보유",
       "price": 200000,
       "img": "/images/line6_l3m.png"
+    },
+    {
+      "id": "s19",
+      "cat": "액티브 PA",
+      "name": "HK Audio SoundCaddy One",
+      "sub": "올인원 컬럼 PA",
+      "spec": "",
+      "qty": "보유",
+      "price": 200000,
+      "img": "/images/soundcaddy_one.png"
+    },
+    {
+      "id": "s20",
+      "cat": "패시브 PA",
+      "name": "Behringer PK108",
+      "sub": "8인치 패시브 위성 스피커",
+      "spec": "",
+      "qty": "보유",
+      "price": 50000,
+      "img": "/images/behringer_pk108.png"
+    },
+    {
+      "id": "s21",
+      "cat": "액티브 서브",
+      "name": "Behringer SAT1008SUBA",
+      "sub": "8인치 액티브 서브우퍼",
+      "spec": "",
+      "qty": "보유",
+      "price": 50000,
+      "img": "/images/behringer_sat1008suba.png"
     }
   ],
   "accessories": [

@@ -81,6 +81,26 @@
       "blogUrl": "https://m.blog.naver.com/extended-studio/224216135458"
     },
     {
+      "id": 15,
+      "cat": "POPUP SET",
+      "cc": "#7eb8c8",
+      "name": "HK Audio SoundCaddy One",
+      "sub": "소규모 팝업 / 브랜드 행사",
+      "coverage": "최대 50인 (실내)",
+      "items": [
+        "HK Audio SoundCaddy One 1EA"
+      ],
+      "pricing": [
+        {
+          "l": "직접 수령 / 반납",
+          "p": "200,000원"
+        }
+      ],
+      "note": "버튼 하나로 완성되는 올인원 PA / 팝업 행사 최적화 시스템",
+      "img": "/images/pkg_soundcaddy.jpg",
+      "blogUrl": ""
+    },
+    {
       "id": 4,
       "cat": "PA SYSTEM",
       "cc": "#6e9ec8",
@@ -355,26 +375,6 @@
       "note": "*오퍼레이터 포함시 추가 금액이 발생할 수 있습니다",
       "img": "/images/pkg_logic_va_max.jpg",
       "blogUrl": "https://m.blog.naver.com/extended-studio/224206730640"
-    },
-    {
-      "id": 15,
-      "cat": "POPUP SET",
-      "cc": "#7eb8c8",
-      "name": "HK Audio SoundCaddy One",
-      "sub": "소규모 팝업 / 브랜드 행사",
-      "coverage": "최대 50인 (실내)",
-      "items": [
-        "HK Audio SoundCaddy One 1EA"
-      ],
-      "pricing": [
-        {
-          "l": "직접 수령 / 반납",
-          "p": "200,000원"
-        }
-      ],
-      "note": "버튼 하나로 완성되는 올인원 PA / 팝업 행사 최적화 시스템",
-      "img": "/images/pkg_soundcaddy.jpg",
-      "blogUrl": ""
     },
     {
       "id": 16,

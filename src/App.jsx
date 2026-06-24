@@ -341,7 +341,7 @@ function RentalGear({ setPage, addToCart, cartItems, clearCart, initialTab, init
   const [selected, setSelected] = useState(null)
   const [tab, setTab] = useState(initialTab || '패키지')
   const [confirmModal, setConfirmModal] = useState(null) // { msg, onOk }
-  const showConfirm = (msg, onOk) => setConfirmModal({ msg, onOk })
+  const showConfirm = (msg, onOk, okLabel = '확인', cancelLabel = '취소') => setConfirmModal({ msg, onOk, okLabel, cancelLabel })
 
   // initialTab이 바뀌면 (홈에서 다른 카테고리 카드 클릭 시) 탭 동기화
   useEffect(() => {
@@ -361,11 +361,10 @@ function RentalGear({ setPage, addToCart, cartItems, clearCart, initialTab, init
   const inCart = (name) => cartItems?.some(c => c.name === name)
   const hasPackageInCart = () => cartItems?.some(c => data.packages?.some(p => p.name === c.name))
   const handleBook = (item, qty = 1) => {
-    if (hasPackageInCart()) {
-      showConfirm('장바구니에 패키지가 담겨있습니다. 비우고 개별 장비를 추가할까요?', () => {
-        clearCart()
+    if (cartItems && cartItems.length > 0 && !inCart(item.name)) {
+      showConfirm('장바구니에 장비가 있습니다. 추가로 담을까요?', () => {
         addToCart({ ...item, qty })
-      })
+      }, '추가로 담기', '그냥 두기')
       return
     }
     addToCart({ ...item, qty })
@@ -395,11 +394,11 @@ function RentalGear({ setPage, addToCart, cartItems, clearCart, initialTab, init
             <div style={{ display: 'flex', gap: 10 }}>
               <button onClick={() => setConfirmModal(null)}
                 style={{ flex: 1, padding: '12px', background: 'transparent', border: '1px solid #ddd6cc', borderRadius: 8, fontSize: 14, color: '#7a7168', cursor: 'pointer', fontFamily: 'Noto Sans KR, sans-serif' }}>
-                취소
+                {confirmModal.cancelLabel || '취소'}
               </button>
               <button onClick={() => { confirmModal.onOk(); setConfirmModal(null) }}
                 style={{ flex: 1, padding: '12px', background: '#b8973a', border: 'none', borderRadius: 8, fontSize: 14, color: '#fff', cursor: 'pointer', fontWeight: 700, fontFamily: 'Noto Sans KR, sans-serif' }}>
-                확인
+                {confirmModal.okLabel || '확인'}
               </button>
             </div>
           </div>
@@ -472,16 +471,6 @@ function RentalGear({ setPage, addToCart, cartItems, clearCart, initialTab, init
                   onClick={e => {
                     e.stopPropagation()
                     if (!inCart(pkg.name)) {
-                      // 패키지 담을 때 기존 장바구니 초기화
-                      if (cartItems && cartItems.length > 0) {
-                        showConfirm('장바구니에 담긴 장비가 있습니다. 비우고 이 패키지로 교체할까요?', () => {
-                      clearCart()
-                      handleBook({ ...pkg, price: pkgPrice })
-                    })
-                    return
-                      }
-                      clearCart()
-                      // pricing에서 가격 파싱해서 price 필드 추가
                       const pkgPrice = (() => {
                         const pr = pkg.pricing?.find(pp => pp.l === '패키지 가격')
                         if (!pr) return 0

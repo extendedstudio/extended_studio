@@ -8,7 +8,7 @@
   --bg: #f2ede6;
   --bg2: #ede7df;
   --text: #1a1814;
-  --muted: #7a7168;
+  --muted: #3a3530;
   --border: #ddd6cc;
   --card-bg: #ffffff;
   --card-border: #e4ddd4;
@@ -45,15 +45,15 @@ body {
 .nav-links { display: flex; align-items: center; gap: clamp(8px,2vw,24px); flex-wrap: nowrap; }
 .nav-link {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 11px; letter-spacing: .1em; cursor: pointer;
-  color: var(--muted); transition: color .2s;
+  font-size: 14px; letter-spacing: .1em; cursor: pointer;
+  color: #2a2520; transition: color .2s;
 }
 .nav-link:hover, .nav-link.active { color: var(--text); }
 .btn-booking {
   background: var(--gold); color: #fff;
   border: none; padding: 7px 14px;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 11px; letter-spacing: .08em;
+  font-size: 13px; letter-spacing: .08em;
   cursor: pointer; white-space: nowrap;
 }
 .btn-kakao {
@@ -61,7 +61,7 @@ body {
   text-decoration: none;
   padding: 7px 14px;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 11px; letter-spacing: .08em;
+  font-size: 13px; letter-spacing: .08em;
   cursor: pointer; white-space: nowrap;
 }
 
@@ -70,7 +70,7 @@ body {
   background: var(--gold); color: #fff;
   border: none; padding: 12px 32px;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 14px; letter-spacing: .1em;
+  font-size: 15px; letter-spacing: .1em;
   cursor: pointer; transition: opacity .2s;
 }
 .btn-gold:hover { opacity: .85; }
@@ -78,7 +78,7 @@ body {
   background: transparent; color: var(--text);
   border: 1px solid var(--border); padding: 12px 32px;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 14px; letter-spacing: .1em;
+  font-size: 15px; letter-spacing: .1em;
   cursor: pointer; transition: border-color .2s;
 }
 .btn-ghost:hover { border-color: var(--gold); }
@@ -143,7 +143,7 @@ body {
   color: var(--text);
 }
 .hero-title .gold { color: var(--gold); }
-.hero-sub { font-size: 14px; color: var(--muted); letter-spacing: .14em; margin-bottom: 44px; }
+.hero-sub { font-size: 16px; color: var(--muted); letter-spacing: .14em; margin-bottom: 44px; }
 .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
 /* 섹션 공통 */
@@ -154,7 +154,7 @@ body {
   font-size: clamp(36px,5vw,60px); letter-spacing: .08em; margin-bottom: 8px;
   color: var(--text);
 }
-.section-sub { color: var(--muted); font-size: 13px; margin-bottom: 48px; }
+.section-sub { color: var(--muted); font-size: 15px; margin-bottom: 48px; }
 
 /* 패키지 카드 */
 .pkg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(380px,100%), 1fr)); gap: 24px; }
@@ -173,34 +173,34 @@ body {
 }
 .pkg-body { padding: 20px; }
 .pkg-cat {
-  font-size: 9px; letter-spacing: .2em; color: var(--gold);
+  font-size: 11px; letter-spacing: .2em; color: var(--gold);
   text-transform: uppercase; margin-bottom: 6px;
 }
 .pkg-name {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px; letter-spacing: .06em; margin-bottom: 4px;
+  font-size: 24px; letter-spacing: .06em; margin-bottom: 4px;
   color: var(--text);
 }
-.pkg-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.pkg-sub { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
 .pkg-coverage {
   display: inline-block; background: #f5f0e8;
   border: 1px solid var(--border); border-radius: 20px;
-  padding: 4px 12px; font-size: 11px; color: var(--gold); margin-bottom: 14px;
+  padding: 4px 12px; font-size: 13px; color: var(--gold); margin-bottom: 14px;
 }
 .pkg-items { list-style: none; margin-bottom: 16px; }
-.pkg-items li { font-size: 12px; color: var(--muted); padding: 3px 0; }
+.pkg-items li { font-size: 14px; color: var(--muted); padding: 3px 0; }
 .pkg-items li::before { content: '— '; color: var(--gold); }
 .pkg-pricing { border-top: 1px solid var(--border); padding-top: 14px; }
-.pkg-price-row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; }
+.pkg-price-row { display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0; }
 .pkg-price-row .price { color: var(--gold); font-weight: 700; }
-.pkg-note { font-size: 10px; color: var(--muted); margin-top: 8px; }
+.pkg-note { font-size: 12px; color: var(--muted); margin-top: 8px; }
 
 /* 포트폴리오 */
 .pf-tabs { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
 .tab-btn {
   background: transparent; border: 1px solid var(--border);
-  color: var(--muted); padding: 7px 16px;
-  font-size: 11px; letter-spacing: .1em; cursor: pointer;
+  color: var(--muted); padding: 8px 18px;
+  font-size: 13px; letter-spacing: .1em; cursor: pointer;
   transition: all .2s;
 }
 .tab-btn.on, .tab-btn:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
@@ -219,9 +219,9 @@ body {
   display: flex; flex-direction: column; justify-content: flex-end;
   padding: 16px 14px;
 }
-.pf-cat { font-size: 9px; color: var(--gold); letter-spacing: .18em; margin-bottom: 4px; }
+.pf-cat { font-size: 11px; color: var(--gold); letter-spacing: .18em; margin-bottom: 4px; }
 .pf-title { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: .06em; margin-bottom: 2px; line-height: 1.1; color: #fff; }
-.pf-venue { font-size: 11px; color: #ccc; }
+.pf-venue { font-size: 13px; color: #ccc; }
 
 /* 모달 */
 .modal-backdrop {
@@ -381,10 +381,10 @@ body {
 .gear-card:hover { border-color: var(--gold); transform: translateY(-2px); }
 .gear-img { width: 100%; height: 400px; object-fit: contain; display: block; background: var(--bg); }
 .gear-body { padding: 20px; }
-.gear-cat { font-size: 11px; letter-spacing: .2em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
+.gear-cat { font-size: 13px; letter-spacing: .2em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
 .gear-name { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: .06em; margin-bottom: 6px; color: var(--text); }
-.gear-sub { font-size: 14px; color: var(--muted); margin-bottom: 10px; }
-.gear-spec { font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px; line-height: 1.6; }
+.gear-sub { font-size: 15px; color: var(--muted); margin-bottom: 10px; }
+.gear-spec { font-size: 14px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px; line-height: 1.6; }
 .gear-qty { display: inline-block; background: #f5f0e8; border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px; font-size: 10px; color: var(--gold); margin-top: 8px; }
 
 /* 섹션 탭 */
@@ -403,7 +403,7 @@ body {
   color: var(--muted);
   padding: 12px 20px;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 14px; letter-spacing: .1em;
+  font-size: 15px; letter-spacing: .1em;
   cursor: pointer; transition: all .2s;
   margin-bottom: -1px;
   white-space: nowrap;
@@ -432,7 +432,7 @@ body {
 }
 .about-label {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 12px; letter-spacing: .2em;
+  font-size: 14px; letter-spacing: .2em;
   color: var(--muted); line-height: 1.5;
 }
 .about-divider {
@@ -484,7 +484,7 @@ body {
 .cat-card:hover::after { transform: scaleX(1); }
 .cat-count {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 14px; color: var(--gold);
+  font-size: 15px; color: var(--gold);
   letter-spacing: .1em;
   margin-bottom: 16px;
 }
@@ -493,7 +493,7 @@ body {
   font-size: 22px; letter-spacing: .04em;
   margin-bottom: 8px; color: var(--text);
 }
-.cat-desc { color: var(--muted); font-size: 12px; }
+.cat-desc { color: var(--muted); font-size: 14px; }
 
 /* 포트폴리오 미리보기 */
 .pf-preview-grid {
@@ -564,7 +564,7 @@ body {
   margin-bottom: 16px; color: var(--text);
 }
 .cta-sub {
-  color: var(--muted); font-size: 15px;
+  color: var(--muted); font-size: 16px;
   margin-bottom: 36px;
 }
 .cta-btns {
@@ -589,7 +589,7 @@ body {
   margin-bottom: 20px;
 }
 .footer-info {
-  color: #888; font-size: 13px;
+  color: #888; font-size: 14px;
   line-height: 1.9;
   margin-bottom: 24px;
 }
@@ -604,7 +604,7 @@ body {
 }
 .footer-ig:hover { opacity: 0.7; }
 .footer-copy {
-  color: #444; font-size: 11px;
+  color: #444; font-size: 13px;
   letter-spacing: .05em;
 }
 

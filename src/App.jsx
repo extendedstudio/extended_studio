@@ -642,6 +642,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
   const todayISO = new Date().toISOString().slice(0, 10)
   const [form, setForm] = useState({ name: '', phone: '', startDate: todayISO, endDate: todayISO, type: '', gear: [], qty: {}, operator: 'no', install: false, staffCount: 0, rehearsal: false, rehearsalDate: '', note: '' })
   const [done, setDone] = useState(false)
+  const [quoteOpen, setQuoteOpen] = useState(true)
 
   // 장바구니 → form.gear 동기화
   useEffect(() => {
@@ -1044,26 +1045,44 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
             </div>
           )}
 
-          {/* ─── 견적 요약 (sticky) ─── */}
+          {/* ─── 견적 요약 (fixed bottom) ─── */}
           {selectedItems.length > 0 && (
             <div style={{
-              position: 'sticky', top: 16, zIndex: 20,
-              background: 'linear-gradient(180deg, #1c1c1c 0%, #0e0e0e 100%)',
-              border: `1px solid ${$.gold}`, borderRadius: 12, padding: '18px 20px',
-              boxShadow: '0 10px 40px rgba(0,0,0,0.7)'
+              position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 200,
+              background: 'linear-gradient(180deg, #1c1c1c 0%, #0a0a0a 100%)',
+              borderTop: `2px solid ${$.gold}`,
+              boxShadow: '0 -8px 40px rgba(0,0,0,0.85)',
+              maxHeight: quoteOpen ? '70vh' : '56px',
+              overflow: 'hidden',
+              transition: 'max-height 0.3s ease',
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
-                <div style={{ fontSize: 10, letterSpacing: '.2em', color: $.gold, fontWeight: 700 }}>
-                  견적 요약 · {selectedItems.length}개 장비
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  {form.startDate && form.endDate && (
-                    <div style={{ fontSize: 11, color: '#888' }}>{formatDuration(days)}</div>
+              {/* 토글 헤더 */}
+              <div onClick={() => setQuoteOpen(o => !o)} style={{
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                padding: '14px 20px', cursor: 'pointer', userSelect: 'none',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ fontSize: 10, letterSpacing: '.2em', color: $.gold, fontWeight: 700 }}>
+                    견적 요약 · {selectedItems.length}개 장비
+                  </span>
+                  {subtotal > 0 && (
+                    <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, color: $.gold, letterSpacing: '.04em' }}>
+                      {won(finalPrice)}
+                    </span>
                   )}
-                  <button onClick={() => { clearCart(); setForm(f => ({...f, gear: []})) }}
-                    style={{ background: 'transparent', border: 'none', color: '#555', fontSize: 11, cursor: 'pointer' }}>전체 비우기</button>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                  {form.startDate && form.endDate && (
+                    <span style={{ fontSize: 11, color: '#888' }}>{formatDuration(days)}</span>
+                  )}
+                  <button onClick={(e) => { e.stopPropagation(); clearCart(); setForm(f => ({...f, gear: []})) }}
+                    style={{ background: 'transparent', border: 'none', color: '#555', fontSize: 11, cursor: 'pointer' }}>비우기</button>
+                  <span style={{ color: $.gold, fontSize: 18, lineHeight: 1 }}>{quoteOpen ? '▼' : '▲'}</span>
                 </div>
               </div>
+              {/* 펼쳐진 내용 */}
+              <div style={{ padding: '0 20px 20px', overflowY: 'auto', maxHeight: 'calc(70vh - 56px)' }}>
+              <div style={{ marginBottom: 12 }}></div>
 
               {/* 장비 명세 */}
               <div style={{
@@ -1175,7 +1194,11 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
                 </div>
               )}
             </div>
+            </div>
           )}
+
+          {/* fixed 패널 가림 방지 여백 */}
+          {selectedItems.length > 0 && <div style={{ height: 80 }} />}
 
           {/* 장비 선택 */}
           <div>

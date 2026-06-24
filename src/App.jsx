@@ -6,10 +6,11 @@ import './index.css'
 
 const $ = {
   gold: '#b8973a',
-  bg: '#080808',
-  text: '#f0ede6',
-  muted: '#666',
-  border: '#1e1e1e',
+  bg: '#f2ede6',
+  bg2: '#ffffff',
+  text: '#1a1814',
+  muted: '#7a7168',
+  border: '#ddd6cc',
 }
 
 const CAT_ICON = {
@@ -906,7 +907,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
                   return (
                     <div key={opt.v} onClick={() => set('operator', opt.v)}
                       style={{
-                        background: on ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                        background: on ? 'rgba(200,169,110,0.08)' : '#f5f0e9',
                         border: `1px solid ${on ? '#b8973a' : '#222'}`,
                         borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
                         transition: 'all .15s ease'
@@ -930,7 +931,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
               <span style={{ marginLeft: 8, color: '#9a9188', fontSize: 10 }}>· 선택 사항 · 200,000원/일 · 인원당</span>
             </label>
             <div style={{
-              background: (form.staffCount||0) > 0 ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+              background: (form.staffCount||0) > 0 ? 'rgba(200,169,110,0.08)' : '#f5f0e9',
               border: `1px solid ${(form.staffCount||0) > 0 ? '#b8973a' : '#222'}`,
               borderRadius: 8, padding: '12px 14px',
               display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12
@@ -964,7 +965,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
             </label>
             <div onClick={() => set('install', !form.install)}
               style={{
-                background: form.install ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                background: form.install ? 'rgba(200,169,110,0.08)' : '#f5f0e9',
                 border: `1px solid ${form.install ? '#b8973a' : '#222'}`,
                 borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
                 transition: 'all .15s ease',
@@ -993,7 +994,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
             </label>
             <div onClick={() => set('rehearsal', !form.rehearsal)}
               style={{
-                background: form.rehearsal ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                background: form.rehearsal ? 'rgba(200,169,110,0.08)' : '#f5f0e9',
                 border: `1px solid ${form.rehearsal ? '#b8973a' : '#222'}`,
                 borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
                 transition: 'all .15s ease',
@@ -1216,7 +1217,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
                       return (
                         <div key={name}
                           style={{
-                            background: on ? 'rgba(200,169,110,0.08)' : '#0e0e0e',
+                            background: on ? 'rgba(200,169,110,0.08)' : '#f5f0e9',
                             border: `1px solid ${on ? '#b8973a' : '#222'}`,
                             borderRadius: 10,
                             overflow: 'hidden',
@@ -1287,7 +1288,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
                                   disabled={qty <= 1}
                                   style={{
                                     width: 28, height: 28, borderRadius: 4,
-                                    background: qty <= 1 ? '#1a1a1a' : '#222',
+                                    background: qty <= 1 ? '#ede7df' : '#222',
                                     border: '1px solid #d8d0c4', color: qty <= 1 ? '#444' : '#fff',
                                     cursor: qty <= 1 ? 'not-allowed' : 'pointer',
                                     fontSize: 16, lineHeight: 1, fontWeight: 700,
@@ -1680,7 +1681,7 @@ function Admin() {
             onChange={e => { setPinInput(e.target.value); setPinError(false) }}
             placeholder="••••"
             style={{
-              width: '100%', background: '#0f0f0f', border: `1px solid ${pinError ? '#ef4444' : '#2a2a2a'}`,
+              width: '100%', background: '#f5f0e9', border: `1px solid ${pinError ? '#ef4444' : '#2a2a2a'}`,
               borderRadius: 10, padding: '18px 20px', color: '#1a1814', fontSize: 24, letterSpacing: '.4em',
               textAlign: 'center', outline: 'none', marginBottom: 16, fontFamily: 'inherit'
             }}

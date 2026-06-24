@@ -1919,7 +1919,8 @@ function Nav({ page, setPage }) {
 
 // ─── 앱 루트 ────────────────────────────────────────────
 export default function App() {
-  const [page, setPage] = useState('landing')
+  const [page, setPageRaw] = useState('landing')
+  const setPage = (p) => { setPageRaw(p); window.scrollTo(0, 0) }
   const [rentalTab, setRentalTab] = useState('패키지')
   const [rentalCat, setRentalCat] = useState('전체')
   const [cartItems, setCartItems] = useState([])

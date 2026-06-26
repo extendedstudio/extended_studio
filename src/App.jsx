@@ -15,7 +15,7 @@ function InAppBrowserBanner() {
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       fontSize: '13px', lineHeight: '1.4', gap: '12px'
     }}>
-      <span>🌐 원활한 이용을 위해 <strong style={{color:'#b8973a'}}>Safari 또는 Chrome</strong>으로 열어주세요<br/>
+      <span>🌐 원활한 이용을 위해 브라우저에서 열어주세요<br/>
         <span style={{fontSize:'11px', opacity:0.7}}>우측 하단 ··· → '브라우저에서 열기'</span>
       </span>
       <button onClick={() => setShow(false)} style={{

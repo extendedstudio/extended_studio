@@ -1,4 +1,29 @@
 import { useState, useEffect, useRef } from 'react'
+
+function InAppBrowserBanner() {
+  const [show, setShow] = useState(false)
+  useEffect(() => {
+    const ua = navigator.userAgent || ''
+    const isInApp = /Instagram|FBAN|FBAV|Line|KakaoTalk|NAVER|Snapchat|Twitter|TikTok/.test(ua)
+    if (isInApp) setShow(true)
+  }, [])
+  if (!show) return null
+  return (
+    <div style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 99999,
+      background: '#1a1814', color: '#f2ede6', padding: '12px 16px',
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      fontSize: '13px', lineHeight: '1.4', gap: '12px'
+    }}>
+      <span>🌐 원활한 이용을 위해 <strong style={{color:'#b8973a'}}>Safari 또는 Chrome</strong>으로 열어주세요<br/>
+        <span style={{fontSize:'11px', opacity:0.7}}>우측 하단 ··· → '브라우저에서 열기'</span>
+      </span>
+      <button onClick={() => setShow(false)} style={{
+        background: 'none', border: 'none', color: '#f2ede6', fontSize: '18px', cursor: 'pointer', flexShrink: 0
+      }}>✕</button>
+    </div>
+  )
+}
 import data from './data.json'
 import { db, getFcmMessaging, getToken, onMessage, VAPID_KEY } from './firebase'
 import { collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc, setDoc, serverTimestamp, query, orderBy, limit } from 'firebase/firestore'
@@ -1992,6 +2017,7 @@ export default function App() {
 
   return (
     <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <InAppBrowserBanner />
       <Nav page={page} setPage={setPage} />
       {/* 데스크탑 뒤로가기 버튼 (landing 제외) */}
       {page !== 'landing' && (

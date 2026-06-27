@@ -1951,6 +1951,7 @@ export default function App() {
   const [rentalTab, setRentalTab] = useState('패키지')
   const [rentalCat, setRentalCat] = useState('전체')
   const [cartItems, setCartItems] = useState([])
+  const [showIntro, setShowIntro] = useState(() => !sessionStorage.getItem('introSeen'))
 
   // 카테고리 카드 → rental 페이지로 이동 + 탭 선택
   const goToRental = (tab, cat) => {
@@ -1965,6 +1966,7 @@ export default function App() {
   const removeFromCart = (name) => setCartItems(prev => prev.filter(p => p.name !== name))
   const updateCartQty = (name, qty) => setCartItems(prev => prev.map(p => p.name === name ? { ...p, qty: Math.max(1, qty) } : p))
   const clearCart = () => setCartItems([])
+  const closeIntro = () => { sessionStorage.setItem('introSeen', '1'); setShowIntro(false) }
 
   // 뒤로가기 로직
   const goBack = () => {
@@ -1992,6 +1994,14 @@ export default function App() {
 
   return (
     <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      {showIntro && (
+        <div onClick={closeIntro} style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.82)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <div onClick={e=>e.stopPropagation()} style={{position:'relative',width:'min(90vw,720px)',borderRadius:12,overflow:'hidden',boxShadow:'0 8px 40px rgba(0,0,0,0.6)'}}>
+            <iframe src="https://www.youtube.com/embed/iXDLwa6DC8Q?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowFullScreen style={{width:'100%',aspectRatio:'16/9',display:'block',border:'none'}} />
+            <button onClick={closeIntro} style={{position:'absolute',top:10,right:12,background:'rgba(0,0,0,0.55)',border:'none',color:'#fff',fontSize:22,width:36,height:36,borderRadius:'50%',cursor:'pointer',lineHeight:'36px',textAlign:'center'}}>✕</button>
+          </div>
+        </div>
+      )}
       <Nav page={page} setPage={setPage} />
       {/* 데스크탑 뒤로가기 버튼 (landing 제외) */}
       {page !== 'landing' && (

@@ -1997,7 +1997,7 @@ export default function App() {
       {showIntro && (
         <div onClick={closeIntro} style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.82)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center'}}>
           <div onClick={e=>e.stopPropagation()} style={{position:'relative',width:'min(90vw,720px)',borderRadius:12,overflow:'hidden',boxShadow:'0 8px 40px rgba(0,0,0,0.6)'}}>
-            <iframe src="https://www.youtube.com/embed/iXDLwa6DC8Q?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowFullScreen style={{width:'100%',aspectRatio:'16/9',display:'block',border:'none'}} />
+            <iframe src="https://www.youtube.com/embed/iXDLwa6DC8Q?autoplay=1&mute=1&rel=0" allow="autoplay; encrypted-media" allowFullScreen style={{width:'100%',aspectRatio:'16/9',display:'block',border:'none'}} />
             <button onClick={closeIntro} style={{position:'absolute',top:10,right:12,background:'rgba(0,0,0,0.55)',border:'none',color:'#fff',fontSize:22,width:36,height:36,borderRadius:'50%',cursor:'pointer',lineHeight:'36px',textAlign:'center'}}>✕</button>
           </div>
         </div>

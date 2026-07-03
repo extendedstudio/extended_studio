@@ -1256,6 +1256,16 @@
       "qty": "다수",
       "price": 10000,
       "img": "/images/mic_stand.png"
+    },
+    {
+      "id": "ac5",
+      "cat": "파워뱅크",
+      "name": "Jackery Explorer 1000 Pro",
+      "sub": "포터블 파워뱅크",
+      "spec": "컬럼어레이 스피커 + DJ장비 사용시 맥스 볼륨으로 6시간, BGM 볼륨으로 8시간 사용 가능",
+      "qty": "1ea",
+      "price": 100000,
+      "img": "/images/jackery_1000pro.png"
     }
   ]
 }

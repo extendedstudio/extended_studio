@@ -1275,7 +1275,7 @@
       "spec": "가로 120 × 폭 60 × 높이 100 (cm) 테이블 기준\n포맥스(PVC폼보드) 2T, 짧은쪽 최대 1200mm / 긴쪽 최대 2400mm\n운송료 포함",
       "qty": "주문 제작",
       "price": 400000,
-      "img": "/images/djtable_wrap.jpg"
+      "img": "/images/djtable_wrap.png"
     },
     {
       "id": "ac7",
@@ -1285,7 +1285,7 @@
       "spec": "가로 120 × 폭 60 × 높이 100 (cm) 테이블 기준\n운송료 포함",
       "qty": "주문 제작",
       "price": 600000,
-      "img": "/images/djtable_wrap.jpg"
+      "img": "/images/djtable_wrap.png"
     },
     {
       "id": "ac8",
@@ -1295,7 +1295,7 @@
       "spec": "가로 120 × 폭 60 × 높이 100 (cm) 테이블 기준\n부스 앞 로고 포맥스(PVC폼보드) 2T 별도 제작, 짧은쪽 최대 1200mm / 긴쪽 최대 2400mm\n운송료 포함",
       "qty": "주문 제작",
       "price": 700000,
-      "img": "/images/djtable_wrap.jpg"
+      "img": "/images/djtable_wrap.png"
     }
   ]
 }

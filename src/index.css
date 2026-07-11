@@ -328,7 +328,7 @@ body {
 @media (max-width: 600px) {
   .pf-grid { columns: 1; }
   .pkg-grid { grid-template-columns: 1fr; gap: 20px; }
-  .gear-img { height: 600px; }
+  .gear-img { height: 360px; }
   .gear-name { font-size: 22px; }
 }
 
@@ -379,7 +379,7 @@ body {
   transition: border-color .25s, transform .2s;
 }
 .gear-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-.gear-img { width: 100%; height: 700px; object-fit: contain; display: block; background: var(--bg); padding: 16px 0; box-sizing: border-box; }
+.gear-img { width: 100%; height: 420px; object-fit: contain; display: block; background: var(--bg); padding: 32px 48px; box-sizing: border-box; }
 .gear-body { padding: 20px; }
 .gear-cat { font-size: 13px; letter-spacing: .2em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
 .gear-name { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: .06em; margin-bottom: 6px; color: var(--text); }

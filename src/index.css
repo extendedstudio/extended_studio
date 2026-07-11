@@ -165,7 +165,7 @@ body {
 }
 .pkg-card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(184,151,58,.12); }
 .pkg-card.selected { border-color: var(--gold); box-shadow: 0 0 24px rgba(184,151,58,.25); }
-.pkg-img { width: 100%; aspect-ratio: 16 / 9; object-fit: contain; object-position: center; display: block; background: var(--bg); }
+.pkg-img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: center; display: block; background: var(--bg); }
 .pkg-img-placeholder {
   width: 100%; height: 200px;
   display: flex; align-items: center; justify-content: center;
@@ -328,7 +328,7 @@ body {
 @media (max-width: 600px) {
   .pf-grid { columns: 1; }
   .pkg-grid { grid-template-columns: 1fr; gap: 20px; }
-  .gear-img { height: 400px; }
+  .gear-img { aspect-ratio: 1 / 1; }
   .gear-name { font-size: 22px; }
 }
 
@@ -379,7 +379,7 @@ body {
   transition: border-color .25s, transform .2s;
 }
 .gear-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-.gear-img { width: 100%; height: 400px; object-fit: contain; display: block; background: var(--bg); }
+.gear-img { width: 100%; aspect-ratio: 1 / 1; object-fit: contain; display: block; background: var(--bg); }
 .gear-body { padding: 20px; }
 .gear-cat { font-size: 13px; letter-spacing: .2em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
 .gear-name { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: .06em; margin-bottom: 6px; color: var(--text); }
@@ -654,7 +654,7 @@ body {
 .lightbox-stage img {
   width: auto; height: auto;
   max-width: 100%; max-height: 92vh;
-  display: block; object-fit: contain;
+  display: block; object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   transform-origin: center center;

@@ -301,6 +301,24 @@ function GearCard({ item, onBook, inCart }) {
         <div className="gear-sub">{item.sub}</div>
         {item.price > 0 && <div style={{color:'var(--accent)',fontWeight:700,fontSize:17,margin:'10px 0'}}>{item.price.toLocaleString('ko-KR')}원/일</div>}
         {item.spec && <div className="gear-spec">{item.spec}</div>}
+        {(item.blogUrl || item.blogLinks?.length > 0) && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 14 }}>
+            {(item.blogLinks?.length ? item.blogLinks : [{ label: '설치 사례 · 블로그', url: item.blogUrl }]).map(l => (
+              <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer"
+                onClick={e => e.stopPropagation()}
+                style={{
+                  flex: '1 1 auto', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  padding: '9px 10px', background: 'transparent', border: '1px solid #e4e4e2',
+                  borderRadius: 4, color: '#555555', fontSize: 11, letterSpacing: '.08em',
+                  textDecoration: 'none', transition: 'all .15s ease', whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#e4e4e2'; e.currentTarget.style.color = '#555555' }}>
+                {item.blogLinks?.length ? `현장 · ${l.label}` : l.label} →
+              </a>
+            ))}
+          </div>
+        )}
         {onBook && !inCart && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#ffffff', border: '1px solid #e4e4e2', borderRadius: 8, padding: '6px 10px' }}>

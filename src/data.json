@@ -1003,7 +1003,8 @@
       "spec": "",
       "qty": "보유",
       "price": 150000,
-      "img": "/images/hk_polar8.png"
+      "img": "/images/hk_polar8.png",
+      "blogUrl": "https://m.blog.naver.com/extended-studio/224216135458"
     },
     {
       "id": "s12",
@@ -1013,7 +1014,8 @@
       "spec": "",
       "qty": "보유",
       "price": 250000,
-      "img": "/images/hk_polar10.png"
+      "img": "/images/hk_polar10.png",
+      "blogUrl": "https://m.blog.naver.com/extended-studio/224287533863"
     },
     {
       "id": "s10",
@@ -1023,7 +1025,8 @@
       "spec": "",
       "qty": "보유",
       "price": 180000,
-      "img": "/images/studiomaster.png"
+      "img": "/images/studiomaster.png",
+      "blogUrl": "https://m.blog.naver.com/extended-studio/224199133000"
     },
     {
       "id": "s13",
@@ -1033,7 +1036,8 @@
       "spec": "",
       "qty": "보유",
       "price": 250000,
-      "img": "/images/jbl_prx635.png"
+      "img": "/images/jbl_prx635.png",
+      "blogUrl": "https://blog.naver.com/extended-studio/224301287434"
     },
     {
       "id": "s15",
@@ -1043,7 +1047,8 @@
       "spec": "",
       "qty": "2ea",
       "price": 200000,
-      "img": "/images/ev_elx200.png"
+      "img": "/images/ev_elx200.png",
+      "blogUrl": "https://blog.naver.com/extended-studio/224301287434"
     },
     {
       "id": "s7",
@@ -1053,7 +1058,8 @@
       "spec": "",
       "qty": "보유",
       "price": 300000,
-      "img": "/images/montarbo_wind.png"
+      "img": "/images/montarbo_wind.png",
+      "blogUrl": "https://m.blog.naver.com/extended-studio/224157124104"
     },
     {
       "id": "s8",
@@ -1063,7 +1069,8 @@
       "spec": "",
       "qty": "보유",
       "price": 400000,
-      "img": "/images/montarbo_bxb.png"
+      "img": "/images/montarbo_bxb.png",
+      "blogUrl": "https://m.blog.naver.com/extended-studio/224157124104"
     },
     {
       "id": "s9",
@@ -1073,7 +1080,8 @@
       "spec": "",
       "qty": "보유",
       "price": 650000,
-      "img": "/images/biema.png"
+      "img": "/images/biema.png",
+      "blogUrl": "https://m.blog.naver.com/extended-studio/224277999234"
     },
     {
       "id": "s1",
@@ -1083,7 +1091,8 @@
       "spec": "",
       "qty": "보유",
       "price": 600000,
-      "img": "/images/martin_w8lc.png"
+      "img": "/images/martin_w8lc.png",
+      "blogUrl": "https://m.blog.naver.com/extended-studio/224183694686"
     },
     {
       "id": "s2",
@@ -1093,7 +1102,8 @@
       "spec": "",
       "qty": "보유",
       "price": 1000000,
-      "img": "/images/martin_wlx.png"
+      "img": "/images/martin_wlx.png",
+      "blogUrl": "https://m.blog.naver.com/extended-studio/224183694686"
     },
     {
       "id": "s3",
@@ -1103,7 +1113,25 @@
       "spec": "4ea | 400,000원/일",
       "qty": "보유",
       "price": 300000,
-      "img": "/images/logic_va.png"
+      "img": "/images/logic_va.png",
+      "blogLinks": [
+        {
+          "label": "SMALL",
+          "url": "https://m.blog.naver.com/extended-studio/224189432770"
+        },
+        {
+          "label": "MEDIUM",
+          "url": "https://m.blog.naver.com/extended-studio/224156967095"
+        },
+        {
+          "label": "LARGE",
+          "url": "https://m.blog.naver.com/extended-studio/224175155575"
+        },
+        {
+          "label": "MAX",
+          "url": "https://m.blog.naver.com/extended-studio/224206730640"
+        }
+      ]
     },
     {
       "id": "s4",
@@ -1113,7 +1141,25 @@
       "spec": "",
       "qty": "보유",
       "price": 500000,
-      "img": "/images/logic_sb2.png"
+      "img": "/images/logic_sb2.png",
+      "blogLinks": [
+        {
+          "label": "SMALL",
+          "url": "https://m.blog.naver.com/extended-studio/224189432770"
+        },
+        {
+          "label": "MEDIUM",
+          "url": "https://m.blog.naver.com/extended-studio/224156967095"
+        },
+        {
+          "label": "LARGE",
+          "url": "https://m.blog.naver.com/extended-studio/224175155575"
+        },
+        {
+          "label": "MAX",
+          "url": "https://m.blog.naver.com/extended-studio/224206730640"
+        }
+      ]
     },
     {
       "id": "s5",
@@ -1123,7 +1169,8 @@
       "spec": "",
       "qty": "보유",
       "price": 300000,
-      "img": "/images/xtreme_la.png"
+      "img": "/images/xtreme_la.png",
+      "blogUrl": "https://m.blog.naver.com/extended-studio/224155967251"
     },
     {
       "id": "s6",
@@ -1133,7 +1180,8 @@
       "spec": "",
       "qty": "보유",
       "price": 600000,
-      "img": "/images/xtreme_sub.png"
+      "img": "/images/xtreme_sub.png",
+      "blogUrl": "https://m.blog.naver.com/extended-studio/224155967251"
     },
     {
       "id": "s16",

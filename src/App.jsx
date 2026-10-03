@@ -1958,7 +1958,8 @@ export default function App() {
   const [rentalTab, setRentalTab] = useState('패키지')
   const [rentalCat, setRentalCat] = useState('전체')
   const [cartItems, setCartItems] = useState([])
-  const [showIntro, setShowIntro] = useState(() => !sessionStorage.getItem('introSeen'))
+  // 유튜브 인트로 팝업: 2026-10 리뉴얼에서 사용 중지 (다시 켜려면 false → () => !sessionStorage.getItem('introSeen'))
+  const [showIntro, setShowIntro] = useState(false)
 
   // 카테고리 카드 → rental 페이지로 이동 + 탭 선택
   const goToRental = (tab, cat) => {

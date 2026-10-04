@@ -102,7 +102,7 @@
       ],
       "note": "버튼 하나로 완성되는 올인원 PA / 팝업 행사 최적화 시스템",
       "img": "/images/pkg_soundcaddy.jpg",
-      "blogUrl": ""
+      "blogUrl": "https://blog.naver.com/extended-studio/224367876049"
     },
     {
       "id": 4,
@@ -1377,7 +1377,13 @@
       "spec": "",
       "qty": "보유",
       "price": 200000,
-      "img": "/images/soundcaddy_one.png"
+      "img": "/images/soundcaddy_one.png",
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://blog.naver.com/extended-studio/224367876049"
+        }
+      ]
     },
     {
       "id": "s20",

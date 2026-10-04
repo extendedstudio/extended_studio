@@ -854,3 +854,19 @@ body { font-weight: 500; -webkit-font-smoothing: auto; -moz-osx-font-smoothing: 
 .wk-lead { font-weight: 500; }
 .wk-list-t { font-weight: 600; }
 .btn-gold, .btn-gold-outline { font-weight: 700; }
+
+/* ── 글씨 힘주기 2단계 ───────────────── */
+:root { --muted: #1a1a1a; }
+body { font-weight: 600; }
+.nav-link, .section-tab, .tab-btn, .btn-booking, .mobile-menu-item { font-weight: 700; }
+.section-tab.active, .tab-btn.on { font-weight: 800; }
+.pkg-name, .gear-name { font-weight: 800; }
+.pkg-cat, .gear-cat, .hero-eyebrow, .pf-cat { font-weight: 800; font-size: 12px; }
+.pkg-sub, .gear-sub, .pkg-items li, .gear-spec, .pkg-note,
+.section-sub, .hero-sub, .pkg-price-row { font-weight: 600; color: var(--muted); }
+.pkg-items li, .gear-spec, .pkg-sub { font-size: 15px; }
+.pkg-price-note { color: #333; font-weight: 600; font-size: 12px; }
+.wk-lead { font-weight: 600; }
+.wk-list-t { font-weight: 700; }
+.wk-tile figcaption, .wk-grid-blog figcaption b { font-weight: 700; }
+.btn-gold, .btn-gold-outline { font-weight: 800; }

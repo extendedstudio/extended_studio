@@ -1004,7 +1004,16 @@
       "qty": "보유",
       "price": 150000,
       "img": "/images/hk_polar8.png",
-      "blogUrl": "https://m.blog.naver.com/extended-studio/224216135458"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://m.blog.naver.com/extended-studio/224216135458"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230577553"
+        }
+      ]
     },
     {
       "id": "s12",
@@ -1015,7 +1024,16 @@
       "qty": "보유",
       "price": 250000,
       "img": "/images/hk_polar10.png",
-      "blogUrl": "https://m.blog.naver.com/extended-studio/224287533863"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://m.blog.naver.com/extended-studio/224287533863"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230577553"
+        }
+      ]
     },
     {
       "id": "s10",
@@ -1026,7 +1044,16 @@
       "qty": "보유",
       "price": 180000,
       "img": "/images/studiomaster.png",
-      "blogUrl": "https://m.blog.naver.com/extended-studio/224199133000"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://m.blog.naver.com/extended-studio/224199133000"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230590183"
+        }
+      ]
     },
     {
       "id": "s13",
@@ -1037,7 +1064,16 @@
       "qty": "보유",
       "price": 250000,
       "img": "/images/jbl_prx635.png",
-      "blogUrl": "https://blog.naver.com/extended-studio/224301287434"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://blog.naver.com/extended-studio/224301287434"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230566676"
+        }
+      ]
     },
     {
       "id": "s15",
@@ -1048,7 +1084,12 @@
       "qty": "2ea",
       "price": 200000,
       "img": "/images/ev_elx200.png",
-      "blogUrl": "https://blog.naver.com/extended-studio/224301287434"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://blog.naver.com/extended-studio/224301287434"
+        }
+      ]
     },
     {
       "id": "s7",
@@ -1059,7 +1100,16 @@
       "qty": "보유",
       "price": 300000,
       "img": "/images/montarbo_wind.png",
-      "blogUrl": "https://m.blog.naver.com/extended-studio/224157124104"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://m.blog.naver.com/extended-studio/224157124104"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230599591"
+        }
+      ]
     },
     {
       "id": "s8",
@@ -1070,7 +1120,16 @@
       "qty": "보유",
       "price": 400000,
       "img": "/images/montarbo_bxb.png",
-      "blogUrl": "https://m.blog.naver.com/extended-studio/224157124104"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://m.blog.naver.com/extended-studio/224157124104"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230599591"
+        }
+      ]
     },
     {
       "id": "s9",
@@ -1081,7 +1140,16 @@
       "qty": "보유",
       "price": 650000,
       "img": "/images/biema.png",
-      "blogUrl": "https://m.blog.naver.com/extended-studio/224277999234"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://m.blog.naver.com/extended-studio/224277999234"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230590183"
+        }
+      ]
     },
     {
       "id": "s1",
@@ -1092,7 +1160,16 @@
       "qty": "보유",
       "price": 600000,
       "img": "/images/martin_w8lc.png",
-      "blogUrl": "https://m.blog.naver.com/extended-studio/224183694686"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://m.blog.naver.com/extended-studio/224183694686"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230516123"
+        }
+      ]
     },
     {
       "id": "s2",
@@ -1103,7 +1180,16 @@
       "qty": "보유",
       "price": 1000000,
       "img": "/images/martin_wlx.png",
-      "blogUrl": "https://m.blog.naver.com/extended-studio/224183694686"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://m.blog.naver.com/extended-studio/224183694686"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230516123"
+        }
+      ]
     },
     {
       "id": "s3",
@@ -1116,20 +1202,24 @@
       "img": "/images/logic_va.png",
       "blogLinks": [
         {
-          "label": "SMALL",
+          "label": "현장 · SMALL",
           "url": "https://m.blog.naver.com/extended-studio/224189432770"
         },
         {
-          "label": "MEDIUM",
+          "label": "현장 · MEDIUM",
           "url": "https://m.blog.naver.com/extended-studio/224156967095"
         },
         {
-          "label": "LARGE",
+          "label": "현장 · LARGE",
           "url": "https://m.blog.naver.com/extended-studio/224175155575"
         },
         {
-          "label": "MAX",
+          "label": "현장 · MAX",
           "url": "https://m.blog.naver.com/extended-studio/224206730640"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230506927"
         }
       ]
     },
@@ -1144,20 +1234,24 @@
       "img": "/images/logic_sb2.png",
       "blogLinks": [
         {
-          "label": "SMALL",
+          "label": "현장 · SMALL",
           "url": "https://m.blog.naver.com/extended-studio/224189432770"
         },
         {
-          "label": "MEDIUM",
+          "label": "현장 · MEDIUM",
           "url": "https://m.blog.naver.com/extended-studio/224156967095"
         },
         {
-          "label": "LARGE",
+          "label": "현장 · LARGE",
           "url": "https://m.blog.naver.com/extended-studio/224175155575"
         },
         {
-          "label": "MAX",
+          "label": "현장 · MAX",
           "url": "https://m.blog.naver.com/extended-studio/224206730640"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230506927"
         }
       ]
     },
@@ -1170,7 +1264,16 @@
       "qty": "보유",
       "price": 300000,
       "img": "/images/xtreme_la.png",
-      "blogUrl": "https://m.blog.naver.com/extended-studio/224155967251"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://m.blog.naver.com/extended-studio/224155967251"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230494246"
+        }
+      ]
     },
     {
       "id": "s6",
@@ -1181,7 +1284,16 @@
       "qty": "보유",
       "price": 600000,
       "img": "/images/xtreme_sub.png",
-      "blogUrl": "https://m.blog.naver.com/extended-studio/224155967251"
+      "blogLinks": [
+        {
+          "label": "현장 사례",
+          "url": "https://m.blog.naver.com/extended-studio/224155967251"
+        },
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230494246"
+        }
+      ]
     },
     {
       "id": "s16",
@@ -1191,7 +1303,13 @@
       "spec": "",
       "qty": "보유",
       "price": 150000,
-      "img": "/images/mon_montarbo.png"
+      "img": "/images/mon_montarbo.png",
+      "blogLinks": [
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224235794958"
+        }
+      ]
     },
     {
       "id": "s17",
@@ -1201,7 +1319,13 @@
       "spec": "",
       "qty": "보유",
       "price": 150000,
-      "img": "/images/mackie_hd1221.png"
+      "img": "/images/mackie_hd1221.png",
+      "blogLinks": [
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224235794958"
+        }
+      ]
     },
     {
       "id": "s18",
@@ -1211,7 +1335,13 @@
       "spec": "",
       "qty": "보유",
       "price": 100000,
-      "img": "/images/mon_xtreme.png"
+      "img": "/images/mon_xtreme.png",
+      "blogLinks": [
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224235794958"
+        }
+      ]
     },
     {
       "id": "s14",
@@ -1221,7 +1351,13 @@
       "spec": "",
       "qty": "보유",
       "price": 100000,
-      "img": "/images/jbl_eoncompact.png"
+      "img": "/images/jbl_eoncompact.png",
+      "blogLinks": [
+        {
+          "label": "장비 소개",
+          "url": "https://blog.naver.com/extended-studio/224230566676"
+        }
+      ]
     },
     {
       "id": "s15",

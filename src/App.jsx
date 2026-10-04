@@ -314,7 +314,7 @@ function GearCard({ item, onBook, inCart }) {
                 }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = '#e4e4e2'; e.currentTarget.style.color = '#555555' }}>
-                {item.blogLinks?.length ? `현장 · ${l.label}` : l.label} →
+                {l.label} →
               </a>
             ))}
           </div>

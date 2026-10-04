@@ -839,3 +839,18 @@ body { background: #fff; color: var(--wk-ink); font-family: var(--wk-font); lett
   .wk-list-m { grid-column: 1 / -1; order: 3; }
   .wk-list-t em { display: block; margin: 2px 0 0; }
 }
+
+/* ── 글씨 힘주기 (얇고 흐린 글씨 보강) ───────────────── */
+:root { --muted: #2b2b2b; }
+body { font-weight: 500; -webkit-font-smoothing: auto; -moz-osx-font-smoothing: auto; }
+.nav-link, .section-tab, .tab-btn, .btn-booking { font-weight: 600; }
+.section-tab.active, .tab-btn.on { font-weight: 700; }
+.pkg-name, .gear-name { font-weight: 700; letter-spacing: .01em; }
+.pkg-cat, .gear-cat, .hero-eyebrow, .pf-cat { font-weight: 700; }
+.section-title, .hero-title { font-weight: 800; }
+.pkg-sub, .gear-sub, .pkg-items li, .gear-spec, .pkg-note,
+.section-sub, .hero-sub, .pkg-price-row { font-weight: 500; color: var(--muted); }
+.pkg-price-note { color: #555; font-weight: 500; }
+.wk-lead { font-weight: 500; }
+.wk-list-t { font-weight: 600; }
+.btn-gold, .btn-gold-outline { font-weight: 700; }

@@ -1971,7 +1971,13 @@ function Nav({ page, setPage }) {
 
 // ─── 앱 루트 ────────────────────────────────────────────
 export default function App() {
-  const [page, setPageRaw] = useState('landing')
+  // 주소에 ?page=rental 처럼 붙어 오면 그 화면부터 연다 (윅스 RENTAL GEAR 페이지 연결용)
+  const [page, setPageRaw] = useState(() => {
+    try {
+      const p = new URLSearchParams(window.location.search).get('page')
+      return ['rental', 'portfolio', 'booking'].includes(p) ? p : 'landing'
+    } catch { return 'landing' }
+  })
   const setPage = (p) => { setPageRaw(p); window.scrollTo(0, 0) }
   const [rentalTab, setRentalTab] = useState('패키지')
   const [rentalCat, setRentalCat] = useState('전체')

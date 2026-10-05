@@ -1949,10 +1949,14 @@ function Nav({ page, setPage }) {
           <span className="nav-link admin" style={{ fontSize: 10, opacity: .4 }} onClick={() => setPage('admin')}>ADMIN</span>
         </div>
 
-        {/* 모바일 햄버거 버튼 */}
-        <button className="hamburger mobile-only" onClick={() => setMenuOpen(!menuOpen)} aria-label="menu">
-          {menuOpen ? '✕' : '☰'}
-        </button>
+        {/* 모바일: 예약·카톡 버튼은 항상 보이게 + 햄버거 */}
+        <div className="nav-cta-m mobile-only">
+          <button className="btn-booking" onClick={() => go('booking')}>장비 예약</button>
+          <a className="btn-kakao" href="http://pf.kakao.com/_mANXG/chat" target="_blank" rel="noreferrer">카카오톡</a>
+          <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="menu">
+            {menuOpen ? '✕' : '☰'}
+          </button>
+        </div>
       </div>
 
       {/* 모바일 드롭다운 메뉴 */}

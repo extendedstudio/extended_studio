@@ -839,7 +839,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
       <div className="booking-wrap">
         <div style={{ marginBottom: 44 }}>
           <div className="gold-bar" />
-          <h1 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontSize: 50, letterSpacing: '.08em', marginBottom: 6 }}>RESERVATION</h1>
+          <h1 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontSize: 'clamp(30px, 10vw, 50px)', letterSpacing: '.08em', marginBottom: 6 }}>RESERVATION</h1>
           <p style={{ color: '#1a1a1a', fontSize: 13 }}>장비 예약 문의 — 확인 후 상세 견적을 안내드립니다</p>
         </div>
 

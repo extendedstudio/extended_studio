@@ -1951,13 +1951,18 @@ function Nav({ page, setPage, cartCount = 0 }) {
 
         {/* 모바일: 렌탈기어·카톡·장바구니(→예약) 항상 보이게 + 햄버거 */}
         <div className="nav-cta-m mobile-only">
-          <button className={`btn-rental${page === 'rental' ? ' active' : ''}`} onClick={() => go('rental')}>RENTAL GEAR</button>
-          <a className="btn-kakao" href="http://pf.kakao.com/_mANXG/chat" target="_blank" rel="noreferrer">카카오톡</a>
-          <button className="nav-cart" onClick={() => go('booking')} aria-label={`장바구니 ${cartCount}개`}>
-            🛒{cartCount > 0 && <span className="nav-cart-badge">{cartCount}</span>}
+          <button className={`nav-text${page === 'rental' ? ' active' : ''}`} onClick={() => go('rental')}>RENTAL GEAR</button>
+          <a className="nav-icon" href="http://pf.kakao.com/_mANXG/chat" target="_blank" rel="noreferrer" aria-label="카카오톡 문의">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4C7 4 3 7.1 3 11c0 2.4 1.5 4.5 3.9 5.8L6 20l3.9-2.3c.7.1 1.4.2 2.1.2 5 0 9-3.1 9-6.9S17 4 12 4z"/></svg>
+          </a>
+          <button className="nav-icon" onClick={() => go('booking')} aria-label={`장바구니 ${cartCount}개`}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l2.3 10.6a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.5-1.1L20.6 8H6.4"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></svg>
+            {cartCount > 0 && <span className="nav-badge">{cartCount}</span>}
           </button>
-          <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="menu">
-            {menuOpen ? '✕' : '☰'}
+          <button className="nav-icon" onClick={() => setMenuOpen(!menuOpen)} aria-label="menu">
+            {menuOpen
+              ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>}
           </button>
         </div>
       </div>

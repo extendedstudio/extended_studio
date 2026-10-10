@@ -1928,7 +1928,7 @@ function Admin() {
 }
 
 // ─── 네비게이션 ─────────────────────────────────────────
-function Nav({ page, setPage }) {
+function Nav({ page, setPage, cartCount = 0 }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const go = p => { setPage(p); setMenuOpen(false) }
 
@@ -1949,10 +1949,13 @@ function Nav({ page, setPage }) {
           <span className="nav-link admin" style={{ fontSize: 10, opacity: .4 }} onClick={() => setPage('admin')}>ADMIN</span>
         </div>
 
-        {/* 모바일: 예약·카톡 버튼은 항상 보이게 + 햄버거 */}
+        {/* 모바일: 렌탈기어·카톡·장바구니(→예약) 항상 보이게 + 햄버거 */}
         <div className="nav-cta-m mobile-only">
-          <button className="btn-booking" onClick={() => go('booking')}>장비 예약</button>
+          <button className={`btn-rental${page === 'rental' ? ' active' : ''}`} onClick={() => go('rental')}>RENTAL GEAR</button>
           <a className="btn-kakao" href="http://pf.kakao.com/_mANXG/chat" target="_blank" rel="noreferrer">카카오톡</a>
+          <button className="nav-cart" onClick={() => go('booking')} aria-label={`장바구니 ${cartCount}개`}>
+            🛒{cartCount > 0 && <span className="nav-cart-badge">{cartCount}</span>}
+          </button>
           <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="menu">
             {menuOpen ? '✕' : '☰'}
           </button>
@@ -2038,7 +2041,7 @@ export default function App() {
           </div>
         </div>
       )}
-      <Nav page={page} setPage={setPage} />
+      <Nav page={page} setPage={setPage} cartCount={cartItems.length} />
       {/* 데스크탑 뒤로가기 버튼 (landing 제외) */}
       {page !== 'landing' && (
         <button className="back-btn" onClick={goBack} aria-label="뒤로가기" title="뒤로가기 (ESC)">

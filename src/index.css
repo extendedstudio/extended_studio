@@ -890,8 +890,32 @@ body { font-weight: 600; }
   .nav-cta-m .btn-booking, .nav-cta-m .btn-kakao { padding: 8px 11px !important; font-size: 12.5px; }
   .nav-cta-m .hamburger { padding: 4px 4px 4px 6px; }
 }
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .logo > span { display: none; }
+}
+/* 모바일 상단바: RENTAL GEAR 버튼 (테두리형) */
+.nav .btn-rental {
+  background: #fff; color: #111; border: 1.5px solid #111; border-radius: 999px;
+  padding: 7px 10px; font-size: 12px; font-weight: 800; line-height: 1;
+  letter-spacing: .02em; white-space: nowrap; cursor: pointer; font-family: inherit;
+}
+.nav .btn-rental.active { background: #111; color: #fff; }
+.nav-cta-m .btn-booking, .nav-cta-m .btn-kakao { white-space: nowrap; }
+/* 모바일 상단바: 장바구니 아이콘 + 담은 개수 배지 */
+.nav .nav-cart {
+  position: relative; background: none; border: 0; padding: 4px 6px;
+  font-size: 22px; line-height: 1; cursor: pointer;
+}
+.nav .nav-cart-badge {
+  position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px;
+  padding: 0 5px; border-radius: 999px; background: #e5322d; color: #fff;
+  font-size: 11px; font-weight: 800; line-height: 18px; text-align: center;
+  font-family: inherit; box-sizing: border-box;
+}
+@media (max-width: 360px) {
+  .nav-cta-m { gap: 4px !important; }
+  .nav .btn-rental { padding: 7px 8px; font-size: 11px; }
+  .nav-cta-m .btn-booking, .nav-cta-m .btn-kakao { padding: 8px 8px !important; font-size: 11.5px; }
 }
 
 /* ── 좁은 휴대폰(320px)에서 화면 밖으로 넘치는 글씨 정리 ── */

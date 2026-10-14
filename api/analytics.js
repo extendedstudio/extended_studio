@@ -50,7 +50,8 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method Not Allowed' })
   if (req.headers['x-admin-pin'] !== ADMIN_PIN) return res.status(401).json({ error: '권한 없음' })
 
-  const token = process.env.VERCEL_TOKEN
+  // 대문자/소문자 이름 모두 허용 (Secret 변수는 이름 변경이 안 되기 때문)
+  const token = process.env.VERCEL_TOKEN || process.env.vercel_token
   const projectId = process.env.VERCEL_PROJECT_ID
   if (!token) return res.status(500).json({ error: 'VERCEL_TOKEN 환경변수가 설정되지 않았습니다.', code: 'NO_TOKEN' })
   if (!projectId) return res.status(500).json({ error: 'VERCEL_PROJECT_ID 를 찾을 수 없습니다. 프로젝트 설정에서 "Enable access to System Environment Variables" 를 켜주세요.', code: 'NO_PROJECT' })

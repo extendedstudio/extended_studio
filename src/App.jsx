@@ -1535,6 +1535,114 @@ function Landing({ setPage, goToRental }) {
 // ─── 어드민 ─────────────────────────────────────────────
 const ADMIN_PIN = '0903'
 
+// ─── 어드민: 방문자 통계 (Vercel Web Analytics) ─────────────
+function VisitorStats() {
+  const [stats, setStats] = useState(null)
+  const [err, setErr] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  const load = async () => {
+    setLoading(true); setErr(null)
+    try {
+      const r = await fetch('/api/analytics', { headers: { 'x-admin-pin': ADMIN_PIN } })
+      const j = await r.json().catch(() => ({}))
+      if (!r.ok) throw Object.assign(new Error(j.error || `오류 (${r.status})`), { code: j.code })
+      setStats(j)
+    } catch (e) {
+      setErr({ message: e.message, code: e.code })
+    } finally {
+      setLoading(false)
+    }
+  }
+  useEffect(() => { load() }, [])
+
+  const card = { background: '#f4f4f3', border: '1px solid #e4e4e2', borderRadius: 6, padding: 16 }
+  const label = { fontSize: 11, color: '#6f6f6f', letterSpacing: '.05em', marginBottom: 6 }
+  const fmt = n => (n ?? 0).toLocaleString('ko-KR')
+
+  if (loading) return <p style={{ color: '#1a1a1a', fontSize: 13, marginTop: 24 }}>방문자 통계 불러오는 중...</p>
+  if (err) return (
+    <div style={{ ...card, marginTop: 24, fontSize: 13, color: '#1a1a1a', lineHeight: 1.7 }}>
+      <strong>방문자 통계를 불러오지 못했습니다.</strong><br />
+      {err.message}<br />
+      {err.code === 'NO_TOKEN' && <span style={{ color: '#6f6f6f' }}>Vercel 프로젝트 설정 → Environment Variables 에 VERCEL_TOKEN 을 추가하고 다시 배포해 주세요.</span>}
+      <div><button onClick={load} style={{ marginTop: 10, background: 'transparent', border: '1px solid #e4e4e2', padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 12 }}>다시 시도</button></div>
+    </div>
+  )
+
+  // 최근 30일 일별 — 데이터 없는 날은 0으로 채움
+  const byDate = {}
+  stats.daily.forEach(d => { byDate[d.date.slice(0, 10)] = d })
+  const days = []
+  for (let i = 29; i >= 0; i--) {
+    const key = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10)
+    days.push({ key, ...(byDate[key] || { visitors: 0, pageviews: 0 }) })
+  }
+  const max = Math.max(1, ...days.map(d => d.visitors))
+
+  const List = ({ title, rows }) => {
+    const top = Math.max(1, ...rows.map(r => r.visitors))
+    return (
+      <div style={card}>
+        <div style={label}>{title}</div>
+        {rows.length === 0 && <p style={{ fontSize: 12, color: '#6f6f6f' }}>아직 데이터가 없습니다.</p>}
+        {rows.map(r => (
+          <div key={r.label} style={{ marginBottom: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#1a1a1a', marginBottom: 3 }}>
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: 8 }}>{r.label}</span>
+              <span>{fmt(r.visitors)}명</span>
+            </div>
+            <div style={{ height: 4, background: '#e4e4e2', borderRadius: 2 }}>
+              <div style={{ height: 4, width: `${(r.visitors / top) * 100}%`, background: 'var(--accent)', borderRadius: 2 }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  const t = stats.totals
+  return (
+    <div style={{ marginTop: 24, display: 'grid', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12 }}>
+        {[['오늘', t.today], ['최근 7일', t.last7], ['최근 30일', t.last30]].map(([name, v]) => (
+          <div key={name} style={card}>
+            <div style={label}>{name} 방문자</div>
+            <div style={{ fontSize: 28, fontWeight: 700, color: '#111' }}>{fmt(v.visitors)}<span style={{ fontSize: 13, fontWeight: 400 }}> 명</span></div>
+            <div style={{ fontSize: 11, color: '#6f6f6f', marginTop: 4 }}>페이지뷰 {fmt(v.pageviews)}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={card}>
+        <div style={label}>최근 30일 일별 방문자</div>
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 120 }}>
+          {days.map(d => (
+            <div key={d.key} title={`${d.key} · 방문자 ${d.visitors}명 · 페이지뷰 ${d.pageviews}`}
+              style={{ flex: 1, height: `${(d.visitors / max) * 100}%`, minHeight: 2, background: d.visitors ? 'var(--accent)' : '#e4e4e2', borderRadius: '2px 2px 0 0' }} />
+          ))}
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#6f6f6f', marginTop: 6 }}>
+          <span>{days[0].key.slice(5).replace('-', '/')}</span>
+          <span>{days[29].key.slice(5).replace('-', '/')}</span>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
+        <List title="유입 경로 (최근 30일)" rows={stats.referrers} />
+        <List title="기기 (최근 30일)" rows={stats.devices} />
+        <List title="국가 (최근 30일)" rows={stats.countries} />
+      </div>
+
+      <p style={{ fontSize: 11, color: '#6f6f6f' }}>
+        업데이트: {new Date(stats.updatedAt).toLocaleString('ko-KR')} ·
+        <button onClick={load} style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontSize: 11, padding: '0 4px' }}>새로고침</button>
+      </p>
+    </div>
+  )
+}
+
+
 function Admin() {
   const [authed, setAuthed] = useState(() => sessionStorage.getItem('admin_authed') === '1')
   const [pinInput, setPinInput] = useState('')
@@ -1754,7 +1862,7 @@ function Admin() {
             <div style={{ width: 40, height: 2, background: 'var(--accent)', marginBottom: 16 }} />
             <h1 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontSize: 44, letterSpacing: '.08em', marginBottom: 4 }}>ADMIN</h1>
             <p style={{ color: $.muted, fontSize: 13 }}>
-            {adminTab === 'requests' ? `예약 신청 관리 · 총 ${requests.length}건` : `AI 상담 로그 · 총 ${chatLogs.length}건`}
+            {adminTab === 'requests' ? `예약 신청 관리 · 총 ${requests.length}건` : adminTab === 'visitors' ? '방문자 통계 · Vercel Web Analytics' : `AI 상담 로그 · 총 ${chatLogs.length}건`}
           </p>
           <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
             <button onClick={() => setAdminTab('requests')} style={{
@@ -1771,6 +1879,13 @@ function Admin() {
               border: `1px solid ${adminTab === 'chat_logs' ? 'var(--accent)' : '#f4f4f3'}`,
               borderRadius: 4, cursor: 'pointer', fontWeight: 600
             }}>💬 AI 상담 로그</button>
+            <button onClick={() => setAdminTab('visitors')} style={{
+              padding: '8px 16px', fontSize: 12, letterSpacing: '.08em',
+              background: adminTab === 'visitors' ? 'var(--accent)' : 'transparent',
+              color: adminTab === 'visitors' ? '#f2f2f2' : '#9a9a9a',
+              border: `1px solid ${adminTab === 'visitors' ? 'var(--accent)' : '#f4f4f3'}`,
+              borderRadius: 4, cursor: 'pointer', fontWeight: 600
+            }}>📈 방문자</button>
           </div>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -1887,6 +2002,8 @@ function Admin() {
           </div>
         )
         )}
+
+        {adminTab === 'visitors' && <VisitorStats />}
 
         {adminTab === 'chat_logs' && (
           <div style={{ marginTop: 24 }}>

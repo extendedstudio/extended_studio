@@ -1966,6 +1966,20 @@ function Admin() {
   const STATUS = ['신청', '확인중', '확정', '취소']
   const STATUS_COLOR = { '신청': '#1c1c1c', '확인중': '#6f6f6f', '확정': '#22c55e', '취소': '#ef4444' }
 
+  // 앱 아이콘 숫자: 처리 안 한 건수 (전체 관리자 = 예약 '신청' + 에이전시 '문의', 에이전시 담당 = 에이전시 '문의')
+  const [agencyNew, setAgencyNew] = useState(0)
+  useEffect(() => {
+    if (!authed || access === 'checking') return
+    return onSnapshot(collection(db, 'agency_requests'),
+      snap => setAgencyNew(snap.docs.filter(d => (d.data().status || '문의') === '문의').length),
+      () => setAgencyNew(0))
+  }, [authed, access])
+  useEffect(() => {
+    if (!authed || access === 'checking' || !('setAppBadge' in navigator)) return
+    const n = agencyNew + (isFull ? requests.filter(r => (r.status || '신청') === '신청').length : 0)
+    ;(n > 0 ? navigator.setAppBadge(n) : navigator.clearAppBadge()).catch(() => {})
+  }, [authed, access, isFull, requests, agencyNew])
+
   // 알림 상태 체크: 이미 허용된 기기면 관리자 화면을 열 때마다 토큰을 다시 등록 (만료·교체 대비)
   useEffect(() => {
     if (!authed || !isFull) return

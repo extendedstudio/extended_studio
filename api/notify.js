@@ -45,6 +45,16 @@ export default async function handler(req, res) {
       return res.status(200).json({ sent: 0, message: '등록된 어드민 토큰이 없습니다' })
     }
 
+    // 앱 아이콘 숫자: 아직 처리 안 한 건수 = 장비 예약 '신청' + 에이전시 '문의'
+    let badge = 0
+    try {
+      const [a, b] = await Promise.all([
+        db.collection('requests').where('status', '==', '신청').count().get(),
+        db.collection('agency_requests').where('status', '==', '문의').count().get(),
+      ])
+      badge = (a.data().count || 0) + (b.data().count || 0)
+    } catch (e) { console.warn('badge count 실패:', e?.message) }
+
     // 메시지 내용 구성
     const title = `🔔 새 예약: ${name}`
     const bodyLines = [
@@ -60,6 +70,7 @@ export default async function handler(req, res) {
         body: bodyLines,
         url: '/?page=admin',
         tag: `req-${Date.now()}`,
+        badge: String(badge),
       },
       webpush: {
         notification: {

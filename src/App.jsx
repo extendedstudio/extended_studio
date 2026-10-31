@@ -2512,7 +2512,8 @@ export default function App() {
           🛒 장바구니 <span className="cart-badge">{cartItems.length}</span>
         </button>
       )}
-      <AiChat />
+      {/* AI 상담 버튼: 예약 화면(하단 '예약 문의 보내기'와 겹침)과 관리자 화면에서는 숨김 */}
+      {page !== 'booking' && page !== 'admin' && <AiChat />}
     </div>
   )
 }

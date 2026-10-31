@@ -12,7 +12,7 @@ const won = n => `${Math.round(Number(n) || 0).toLocaleString('ko-KR')}원`
 const num = v => Number(String(v ?? '').replace(/[^0-9.-]/g, '')) || 0
 const roleKo = k => AGENCY_ROLES.find(r => r.key === k)?.ko || k || '-'
 const isActive = r => (r.status || '문의') !== '취소'
-const todayISO = () => new Date().toISOString().slice(0, 10)
+const todayISO = () => new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10) // 한국 시간 기준
 
 // 행사 일수: 시작일~종료일 포함 (예: 11/1~11/3 → 3일)
 const eventDays = r => {

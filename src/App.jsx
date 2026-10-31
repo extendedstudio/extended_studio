@@ -650,6 +650,23 @@ function calcDays(startStr, endStr) {
   return diff > 0 ? diff : 1
 }
 
+// 한국 시간 기준 오늘 (toISOString은 UTC라 오전 9시 전에는 어제 날짜가 나옴)
+const kstToday = () => new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10)
+// '2026-11-14' → '11/14(토)'
+const fmtDay = d => {
+  if (!d) return ''
+  const [y, m, dd] = d.split('-').map(Number)
+  const w = '일월화수목금토'[new Date(Date.UTC(y, m - 1, dd)).getUTCDay()]
+  return `${m}/${dd}(${w})`
+}
+// ISO 시각 → 한국 시간 'M/D HH:MM'
+const fmtKst = iso => {
+  if (!iso) return ''
+  const t = new Date(new Date(iso).getTime() + 9 * 3600 * 1000)
+  if (isNaN(t)) return ''
+  return `${t.getUTCMonth() + 1}/${t.getUTCDate()} ${String(t.getUTCHours()).padStart(2, '0')}:${String(t.getUTCMinutes()).padStart(2, '0')}`
+}
+
 // 일수 → 할인율 (장기 렌탈 할인표)
 function calcDiscount(days) {
   if (days >= 60) return { rate: 0.80, label: '2개월 이상 80% 할인' }
@@ -686,8 +703,8 @@ const OPERATOR_FEE_OPTIONAL = 350000  // 일반 요청 오퍼레이터 일당
 const INSTALL_FEE = 200000  // 전체 설치/철수 비용 (선택)
 
 function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty }) {
-  const todayISO = new Date().toISOString().slice(0, 10)
-  const [form, setForm] = useState({ name: '', phone: '', startDate: todayISO, endDate: todayISO, type: '', gear: [], qty: {}, operator: 'no', install: false, staffCount: 0, rehearsal: false, rehearsalDate: '', note: '' })
+  // 날짜는 기본값 없이 고객이 직접 고르게 함 (기본값이면 실제 필요한 날짜인지 구분 불가)
+  const [form, setForm] = useState({ name: '', phone: '', startDate: '', endDate: '', type: '', gear: [], qty: {}, operator: 'no', install: false, staffCount: 0, rehearsal: false, rehearsalDate: '', note: '' })
   const [done, setDone] = useState(false)
   const [quoteOpen, setQuoteOpen] = useState(true)
 
@@ -883,7 +900,7 @@ function Booking({ setPage, cartItems, removeFromCart, clearCart, updateCartQty 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px,1fr))', gap: 14 }}>
             <div>
               <label style={{ fontSize: 11, letterSpacing: '.12em', color: '#1a1a1a', display: 'block', marginBottom: 7 }}>대여 시작일 *</label>
-              <input type="date" className="field" value={form.startDate}
+              <input type="date" className="field" value={form.startDate} min={kstToday()}
                 onChange={e => {
                   const v = e.target.value
                   setForm(f => ({
@@ -1565,10 +1582,9 @@ const AGENCY_EVENT_TYPES = ['', '골프 대회', '팝업스토어', '브랜드 �
 const AGENCY_BUDGETS = ['', '협의', '100만원 미만', '100~300만원', '300~500만원', '500~1,000만원', '1,000만원 이상']
 
 function Agency({ setPage }) {
-  const todayISO = new Date().toISOString().slice(0, 10)
   const empty = {
     company: '', name: '', phone: '', email: '', eventName: '', eventType: '',
-    startDate: todayISO, endDate: todayISO, startTime: '', endTime: '', venue: '',
+    startDate: '', endDate: '', startTime: '', endTime: '', venue: '',
     counts: Object.fromEntries(AGENCY_ROLES.map(r => [r.key, 0])),
     dress: '', vipNote: '', budget: '', withRental: false, withDj: false, note: '',
   }
@@ -1734,7 +1750,7 @@ function Agency({ setPage }) {
 
           <div className="ag-grid ag-grid-4">
             <div>{label('행사 시작일 *')}
-              <input type="date" className="field" value={form.startDate}
+              <input type="date" className="field" value={form.startDate} min={kstToday()}
                 onChange={e => { const v = e.target.value; setForm(f => ({ ...f, startDate: v, endDate: (!f.endDate || f.endDate < v) ? v : f.endDate })) }} />
             </div>
             <div>{label('행사 종료일')}<input type="date" className="field" value={form.endDate} min={form.startDate || undefined} onChange={e => set('endDate', e.target.value)} /></div>
@@ -2251,13 +2267,13 @@ function Admin() {
                 style={{ background: '#ffffff', border: `1px solid ${selected?.id === r.id ? 'var(--accent)' : '#f4f4f3'}`, borderRadius: 12, padding: '16px 20px', cursor: 'pointer', transition: 'border-color .2s' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: selected?.id === r.id ? 16 : 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ background: STATUS_COLOR[r.status] || '#666', borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 700, color: '#111111' }}>{r.status || '신청'}</div>
+                    <div style={{ background: STATUS_COLOR[r.status] || '#666', borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 700, color: '#ffffff', whiteSpace: 'nowrap' }}>{r.status || '신청'}</div>
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: 15 }}>{r.name}</div>
-                      <div style={{ fontSize: 12, color: $.muted }}>
-                        {r.phone} · {r.startDate || r.date}
-                        {r.endDate && r.endDate !== r.startDate && ` ~ ${r.endDate}`}
-                        {' · '}{r.dur || (r.days ? `${r.days}일` : '')}
+                      <div style={{ fontWeight: 700, fontSize: 15 }}>{r.name} <span style={{ fontWeight: 400, fontSize: 12, color: $.muted }}>{r.phone}</span></div>
+                      <div style={{ fontSize: 13, color: '#111111', marginTop: 2 }}>
+                        📅 대여 <b>{fmtDay(r.startDate || r.date)}</b>
+                        {r.endDate && r.endDate !== (r.startDate || r.date) && <> ~ <b>{fmtDay(r.endDate)}</b></>}
+                        <span style={{ color: $.muted }}> · {r.days ? `${r.days}일` : r.dur}</span>
                       </div>
                     </div>
                   </div>
@@ -2267,7 +2283,7 @@ function Admin() {
                         {won(r.finalPrice)}
                       </div>
                     )}
-                    <div style={{ fontSize: 11, color: $.muted }}>{r.createdAt?.slice(0,10)}</div>
+                    <div style={{ fontSize: 11, color: $.muted }}>접수 {fmtKst(r.createdAt) || r.createdAt?.slice(0,10)}</div>
                   </div>
                 </div>
 

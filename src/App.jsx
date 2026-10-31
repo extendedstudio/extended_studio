@@ -1938,6 +1938,10 @@ function Admin() {
   const [notifStatus, setNotifStatus] = useState('default')
   const [notifMsg, setNotifMsg] = useState('')
   const [adminTab, setAdminTab] = useState('requests')
+  // 접근 범위: 'checking' | 'full'(전체 관리자) | 'agency'(에이전시 전용)
+  // 이메일 목록을 공개 코드에 두지 않기 위해, 예약 데이터 읽기 권한이 있는지로 판별 (권한 자체는 Firestore 규칙이 결정)
+  const [access, setAccess] = useState('checking')
+  const isFull = access === 'full'
   const [chatLogs, setChatLogs] = useState([])
   const [chatLoading, setChatLoading] = useState(false)
   const STATUS = ['신청', '확인중', '확정', '취소']
@@ -2067,7 +2071,7 @@ function Admin() {
   const logout = () => signOut(auth)
 
   useEffect(() => {
-    if (!authed) return
+    if (!authed) { setAccess('checking'); return }
     const unsub = onSnapshot(
       collection(db, 'requests'),
       snap => {
@@ -2076,11 +2080,20 @@ function Admin() {
         setRequests(list)
         setLoading(false)
         setError(null)
+        setAccess('full')
       },
       err => {
+        if (err?.code === 'permission-denied') {
+          // 예약 데이터 권한 없음 → 에이전시 전용 계정
+          setAccess('agency')
+          setAdminTab('agency')
+          setLoading(false)
+          return
+        }
         console.error('Firestore onSnapshot error:', err)
         setError(err?.message || '데이터를 불러올 수 없습니다 (Firestore 권한/네트워크 확인 필요)')
         setLoading(false)
+        setAccess('full')
       }
     )
     return () => unsub()
@@ -2130,6 +2143,8 @@ function Admin() {
     )
   }
 
+  if (access === 'checking') return <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: $.muted }}>권한 확인 중...</div>
+
   return (
     <div style={{ background: '#ffffff', minHeight: '100vh', padding: 'clamp(16px,4vw,40px)', fontFamily: "'Noto Sans KR', sans-serif" }}>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
@@ -2140,7 +2155,7 @@ function Admin() {
             <p style={{ color: $.muted, fontSize: 13 }}>
             {adminTab === 'requests' ? `예약 신청 관리 · 총 ${requests.length}건` : adminTab === 'agency' ? `에이전시 문의 관리 · 담당 ${AGENCY_DIRECTOR.name}` : adminTab === 'visitors' ? '방문자 통계 · Vercel Web Analytics' : `AI 상담 로그 · 총 ${chatLogs.length}건`}
           </p>
-          <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
+          {isFull && <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
             <button onClick={() => setAdminTab('requests')} style={{
               padding: '8px 16px', fontSize: 12, letterSpacing: '.08em',
               background: adminTab === 'requests' ? 'var(--accent)' : 'transparent',
@@ -2169,11 +2184,11 @@ function Admin() {
               border: `1px solid ${adminTab === 'visitors' ? 'var(--accent)' : '#f4f4f3'}`,
               borderRadius: 4, cursor: 'pointer', fontWeight: 600
             }}>📈 방문자</button>
-          </div>
+          </div>}
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-            {/* 알림 활성화 버튼 */}
-            {notifStatus === 'unsupported' ? (
+            {/* 알림 활성화 버튼 (전체 관리자만 — 알림에 예약 고객 정보가 포함됨) */}
+            {!isFull ? null : notifStatus === 'unsupported' ? (
               <span style={{ fontSize: 11, color: '#1a1a1a' }}>📵 알림 미지원</span>
             ) : notifStatus === 'granted-active' ? (
               <span style={{ fontSize: 11, color: '#22c55e', padding: '6px 12px', border: '1px solid #22c55e33', borderRadius: 6 }}>🔔 알림 ON</span>
@@ -2204,7 +2219,7 @@ function Admin() {
           </div>
         )}
 
-        {adminTab === 'requests' && (
+        {isFull && adminTab === 'requests' && (
         loading ? (
           <div style={{ color: $.muted, textAlign: 'center', padding: 60 }}>불러오는 중...</div>
         ) : error ? (
@@ -2289,9 +2304,9 @@ function Admin() {
 
         {adminTab === 'agency' && <AgencyAdmin />}
 
-        {adminTab === 'visitors' && <VisitorStats />}
+        {isFull && adminTab === 'visitors' && <VisitorStats />}
 
-        {adminTab === 'chat_logs' && (
+        {isFull && adminTab === 'chat_logs' && (
           <div style={{ marginTop: 24 }}>
             {chatLoading && <p style={{ color: '#1a1a1a', fontSize: 13 }}>로그 불러오는 중...</p>}
             {!chatLoading && chatLogs.length === 0 && (

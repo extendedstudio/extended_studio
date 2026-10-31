@@ -14,6 +14,17 @@ firebase.initializeApp({
 })
 const messaging = firebase.messaging()
 
+// 앱 아이콘 숫자 (Badging API — 아이폰 홈 화면 앱 iOS 16.4+, 설치한 Chrome/Edge/Safari 앱)
+// 서버가 보낸 '처리 안 한 건수'(data.badge)로 설정. 알림 표시는 FCM SDK가 따로 처리함
+self.addEventListener('push', event => {
+  let badge = null
+  try { const p = event.data && event.data.json(); badge = p && p.data && p.data.badge } catch (_) {}
+  const n = Number(badge)
+  if (badge != null && Number.isFinite(n) && self.navigator && 'setAppBadge' in self.navigator) {
+    event.waitUntil((n > 0 ? self.navigator.setAppBadge(n) : self.navigator.clearAppBadge()).catch(() => {}))
+  }
+})
+
 // 앱이 닫혀 있거나 백그라운드일 때 도착한 알림 (notification 필드가 없는 데이터 메시지용 — notification 필드가 있으면 SDK가 자동 표시)
 messaging.onBackgroundMessage(payload => {
   if (payload.notification) return
@@ -45,7 +56,7 @@ self.addEventListener('notificationclick', event => {
   })())
 })
 
-const CACHE_VERSION = 'v2026-11-01-1'
+const CACHE_VERSION = 'v2026-11-01-2'
 const CACHE_NAME = `extended-studio-${CACHE_VERSION}`
 
 self.addEventListener('install', () => { self.skipWaiting() })

@@ -1619,6 +1619,7 @@ function Agency({ setPage }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: `[에이전시] ${form.company || form.name}`,
+          kind: 'agency',
           phone: form.phone,
           date: form.startDate,
           dur: form.startTime && form.endTime ? `${form.startTime}~${form.endTime}` : '',
@@ -2065,7 +2066,9 @@ function Admin() {
       const r = await fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: '[알림 테스트]', phone: '이 알림이 보이면 정상입니다', gear: [] }) })
       const j = await r.json().catch(() => ({}))
       if (!r.ok) throw new Error(j.error || `서버 오류 ${r.status}`)
-      setNotifMsg(`테스트 알림 발송: 성공 ${j.sent ?? 0}대 · 실패 ${j.failed ?? 0}대${j.cleaned ? ` (만료 기기 ${j.cleaned}대 정리)` : ''} — 이 기기에 알림이 떴는지 확인하세요`)
+      const tg = j.telegram || {}
+      const tgMsg = tg.skipped ? '텔레그램: 미설정' : `텔레그램: 성공 ${tg.sent ?? 0} · 실패 ${tg.failed ?? 0}${tg.errors?.length ? ` (${tg.errors[0]})` : ''}`
+      setNotifMsg(`테스트 알림 — 웹 알림: 성공 ${j.sent ?? 0}대 · 실패 ${j.failed ?? 0}대${j.cleaned ? ` (만료 ${j.cleaned}대 정리)` : ''} / ${tgMsg}`)
     } catch (e) {
       setNotifMsg('테스트 실패: ' + (e?.message || e))
     }
@@ -2219,10 +2222,7 @@ function Admin() {
             {!isFull ? null : notifStatus === 'unsupported' ? (
               <span style={{ fontSize: 11, color: '#1a1a1a' }}>📵 알림 미지원</span>
             ) : notifStatus === 'granted-active' ? (
-              <>
-                <span style={{ fontSize: 11, color: '#22c55e', padding: '6px 12px', border: '1px solid #22c55e33', borderRadius: 6 }}>🔔 알림 ON</span>
-                <button onClick={testNotification} style={{ background: 'transparent', border: '1px solid #e4e4e2', color: '#1a1a1a', padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 11, fontFamily: 'inherit', whiteSpace: 'nowrap' }}>테스트 알림</button>
-              </>
+              <span style={{ fontSize: 11, color: '#22c55e', padding: '6px 12px', border: '1px solid #22c55e33', borderRadius: 6 }}>🔔 알림 ON</span>
             ) : notifStatus === 'denied' ? (
               <span style={{ fontSize: 11, color: '#ef4444', padding: '6px 12px', border: '1px solid #ef444433', borderRadius: 6 }}>🔕 알림 차단됨</span>
             ) : (
@@ -2234,6 +2234,7 @@ function Admin() {
                 🔔 알림 활성화
               </button>
             )}
+            {isFull && <button onClick={testNotification} style={{ background: 'transparent', border: '1px solid #e4e4e2', color: '#1a1a1a', padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 11, fontFamily: 'inherit', whiteSpace: 'nowrap' }}>테스트 알림</button>}
             <span style={{ fontSize: 11, color: '#6f6f6f' }}>{user?.email}</span>
             <button onClick={logout} style={{
               background: 'transparent', border: '1px solid #e4e4e2', color: '#1a1a1a',

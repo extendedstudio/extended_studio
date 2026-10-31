@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { getMessaging, getToken, onMessage, isSupported } from "firebase/messaging";
 
 const firebaseConfig = {
@@ -16,6 +17,9 @@ export const VAPID_KEY = "BOX_jHrv7CgYj72_zLjrAwhhaCGduiFINqBzpEv5Clj8DD9Wt9vZES
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+// 관리자 로그인 (Firebase Authentication · 이메일/비밀번호)
+export const auth = getAuth(app);
+export { signInWithEmailAndPassword, onAuthStateChanged, signOut };
 
 // Messaging은 브라우저 지원 여부 확인 후 lazy init
 let _messaging = null;

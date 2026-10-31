@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import data from './data.json'
-import { db, getFcmMessaging, getToken, onMessage, VAPID_KEY } from './firebase'
+import { db, getFcmMessaging, getToken, onMessage, VAPID_KEY, auth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from './firebase'
 import { collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc, setDoc, serverTimestamp, query, orderBy, limit } from 'firebase/firestore'
 import './index.css'
 import AgencyAdmin from './AgencyAdmin.jsx'
@@ -1922,9 +1922,14 @@ function VisitorStats() {
 
 
 function Admin() {
-  const [authed, setAuthed] = useState(() => sessionStorage.getItem('admin_authed') === '1')
-  const [pinInput, setPinInput] = useState('')
-  const [pinError, setPinError] = useState(false)
+  // 관리자 인증: Firebase 로그인 (데이터 접근은 Firestore 보안 규칙이 관리자 이메일만 허용)
+  const [user, setUser] = useState(undefined) // undefined = 확인 중, null = 로그아웃
+  const authed = !!user
+  const [loginEmail, setLoginEmail] = useState('')
+  const [loginPw, setLoginPw] = useState('')
+  const [loginError, setLoginError] = useState('')
+  const [loggingIn, setLoggingIn] = useState(false)
+  useEffect(() => onAuthStateChanged(auth, u => setUser(u || null)), [])
   const [requests, setRequests] = useState([])
   const [selected, setSelected] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -2042,23 +2047,24 @@ function Admin() {
     }
   }
 
-  const submitPin = e => {
+  const submitLogin = async e => {
     e?.preventDefault?.()
-    if (pinInput === ADMIN_PIN) {
-      sessionStorage.setItem('admin_authed', '1')
-      setAuthed(true)
-      setPinError(false)
-    } else {
-      setPinError(true)
-      setPinInput('')
-    }
+    if (!loginEmail || !loginPw) return setLoginError('이메일과 비밀번호를 입력하세요')
+    setLoggingIn(true); setLoginError('')
+    try {
+      await signInWithEmailAndPassword(auth, loginEmail.trim(), loginPw)
+      setLoginPw('')
+    } catch (err) {
+      const c = err?.code || ''
+      setLoginError(
+        c.includes('invalid-credential') || c.includes('wrong-password') || c.includes('user-not-found') ? '이메일 또는 비밀번호가 맞지 않습니다'
+        : c.includes('too-many-requests') ? '시도가 너무 많습니다. 잠시 후 다시 시도하세요'
+        : c.includes('operation-not-allowed') ? 'Firebase 콘솔에서 이메일/비밀번호 로그인이 아직 켜지지 않았습니다'
+        : '로그인 실패: ' + (err?.message || c))
+    } finally { setLoggingIn(false) }
   }
 
-  const logout = () => {
-    sessionStorage.removeItem('admin_authed')
-    setAuthed(false)
-    setPinInput('')
-  }
+  const logout = () => signOut(auth)
 
   useEffect(() => {
     if (!authed) return
@@ -2100,32 +2106,24 @@ function Admin() {
     }
   }
 
-  // PIN 입력 화면
+  if (user === undefined) return <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: $.muted }}>확인 중...</div>
+
+  // 로그인 화면
   if (!authed) {
+    const inp = { width: '100%', background: '#f4f4f3', border: '1px solid #e4e4e2', borderRadius: 10, padding: '14px 16px', color: '#111111', fontSize: 15, outline: 'none', marginBottom: 10, fontFamily: 'inherit' }
     return (
       <section style={{ maxWidth: 420, margin: '0 auto', padding: '120px 24px 80px', minHeight: '70vh' }}>
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
           <h2 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontSize: 36, letterSpacing: '.1em', marginBottom: 8 }}>ADMIN</h2>
-          <p style={{ color: $.muted, fontSize: 13 }}>비밀번호를 입력하세요</p>
+          <p style={{ color: $.muted, fontSize: 13 }}>관리자 계정으로 로그인하세요</p>
         </div>
-        <form onSubmit={submitPin}>
-          <input
-            type="password"
-            inputMode="numeric"
-            autoFocus
-            value={pinInput}
-            onChange={e => { setPinInput(e.target.value); setPinError(false) }}
-            placeholder="••••"
-            style={{
-              width: '100%', background: '#f4f4f3', border: `1px solid ${pinError ? '#ef4444' : '#e4e4e2'}`,
-              borderRadius: 10, padding: '18px 20px', color: '#111111', fontSize: 24, letterSpacing: '.4em',
-              textAlign: 'center', outline: 'none', marginBottom: 16, fontFamily: 'inherit'
-            }}
-          />
-          {pinError && <div style={{ color: '#ef4444', fontSize: 13, marginBottom: 16, textAlign: 'center' }}>비밀번호가 일치하지 않습니다</div>}
-          <button type="submit" className="btn-gold" style={{ width: '100%', padding: '14px' }}>
-            확인
+        <form onSubmit={submitLogin}>
+          <input type="email" autoComplete="username" autoFocus placeholder="이메일" value={loginEmail} onChange={e => { setLoginEmail(e.target.value); setLoginError('') }} style={inp} />
+          <input type="password" autoComplete="current-password" placeholder="비밀번호" value={loginPw} onChange={e => { setLoginPw(e.target.value); setLoginError('') }} style={{ ...inp, borderColor: loginError ? '#ef4444' : '#e4e4e2', marginBottom: 16 }} />
+          {loginError && <div style={{ color: '#ef4444', fontSize: 13, marginBottom: 16, textAlign: 'center' }}>{loginError}</div>}
+          <button type="submit" className="btn-gold" disabled={loggingIn} style={{ width: '100%', padding: '14px' }}>
+            {loggingIn ? '확인 중...' : '로그인'}
           </button>
         </form>
       </section>
@@ -2190,6 +2188,7 @@ function Admin() {
                 🔔 알림 활성화
               </button>
             )}
+            <span style={{ fontSize: 11, color: '#6f6f6f' }}>{user?.email}</span>
             <button onClick={logout} style={{
               background: 'transparent', border: '1px solid #e4e4e2', color: '#1a1a1a',
               padding: '8px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12,
@@ -2213,8 +2212,8 @@ function Admin() {
             <div style={{ fontWeight: 700, marginBottom: 8 }}>⚠ 데이터를 불러올 수 없습니다</div>
             <div style={{ fontSize: 13, color: '#1a1a1a', wordBreak: 'break-word' }}>{error}</div>
             <div style={{ fontSize: 12, color: '#1a1a1a', marginTop: 12, lineHeight: 1.6 }}>
-              해결: Firebase Console → Firestore Database → 규칙(Rules) 탭에서<br />
-              <code style={{ background: '#000', padding: '2px 6px', borderRadius: 4, color: 'var(--accent)' }}>allow read, write: if true;</code> 로 설정 (테스트용)
+              로그인한 계정({user?.email})이 관리자 목록에 없거나 Firestore 보안 규칙이 막고 있습니다.<br />
+              Firebase Console → Firestore Database → 규칙(Rules)에서 관리자 이메일을 확인하세요.
             </div>
           </div>
         ) : requests.length === 0 ? (

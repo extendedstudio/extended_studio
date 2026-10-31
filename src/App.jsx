@@ -3,6 +3,8 @@ import data from './data.json'
 import { db, getFcmMessaging, getToken, onMessage, VAPID_KEY } from './firebase'
 import { collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc, setDoc, serverTimestamp, query, orderBy, limit } from 'firebase/firestore'
 import './index.css'
+import AgencyAdmin from './AgencyAdmin.jsx'
+import { AGENCY_DIRECTOR, AGENCY_ROLES } from './agencyConfig.js'
 
 const $ = {
   gold: 'var(--accent)',
@@ -1550,14 +1552,6 @@ function Landing({ setPage, goToRental }) {
 
 // ─── 에이전시 (행사 인력: 프로모터·의전·모델·댄서·스태프) ─────────
 // 담당: 송설아 AGENCY DIRECTOR — 개인 연락처는 노출하지 않고 회사 창구(대표번호·카카오·문의 폼)로만 접수
-const AGENCY_DIRECTOR = { name: '송설아', title: 'AGENCY DIRECTOR' }
-const AGENCY_ROLES = [
-  { key: 'promoter', label: 'Promoter', ko: '프로모터', desc: '팝업스토어 · 브랜드 행사 · 샘플링 · 고객 응대', badge: '주력' },
-  { key: 'protocol', label: 'Protocol', ko: '의전', desc: 'VIP·귀빈 영접과 안내 · 시상식·개회식 · 기업·호텔 행사', badge: '강점' },
-  { key: 'model', label: 'Model', ko: '모델', desc: '런칭 · 전시 · 브랜드 행사' },
-  { key: 'dancer', label: 'Dancer', ko: '댄서', desc: '오프닝 · 퍼포먼스 · 파티' },
-  { key: 'staff', label: 'Event Staff', ko: '행사 스태프', desc: '운영 · 안내 · 등록 데스크 · 진행 보조' },
-]
 const AGENCY_EVENTS = [
   { label: 'Golf Tournament', ko: '골프 대회', desc: '의전 · 갤러리 안내 · 시상식 · 스폰서 부스', badge: '대표' },
   { label: 'Pop-up Store', ko: '팝업스토어', desc: '프로모터 · 고객 응대 · 현장 운영' },
@@ -1812,155 +1806,6 @@ function Agency({ setPage }) {
       </section>
 
       <footer className="wk-foot">© 2026 EXTENDED STUDIO all rights reserved.</footer>
-    </div>
-  )
-}
-
-// ─── 어드민: 에이전시 문의 관리 ────────────────────────────
-const AGENCY_STATUS = ['문의', '후보 추천', '확정', '행사 완료', '정산 완료', '취소']
-const AGENCY_STATUS_COLOR = { '문의': '#1c1c1c', '후보 추천': '#6f6f6f', '확정': '#22c55e', '행사 완료': '#3b82f6', '정산 완료': '#8b5cf6', '취소': '#ef4444' }
-
-function AgencyAdmin() {
-  const [rows, setRows] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [openId, setOpenId] = useState(null)
-  const [filter, setFilter] = useState('전체')
-  const [memoDraft, setMemoDraft] = useState({})
-
-  useEffect(() => {
-    const unsub = onSnapshot(collection(db, 'agency_requests'), snap => {
-      setRows(snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)))
-      setLoading(false); setError(null)
-    }, err => {
-      console.error('agency_requests 조회 실패:', err)
-      setError(err?.message || '불러오기 실패'); setLoading(false)
-    })
-    return () => unsub()
-  }, [])
-
-  const update = async (id, patch) => {
-    try { await updateDoc(doc(db, 'agency_requests', id), patch) }
-    catch (e) { alert('저장 실패: ' + (e?.message || '')) }
-  }
-  const remove = async (r) => {
-    if (!confirm(`"${r.company || r.name}" 문의를 삭제할까요?\n\n되돌릴 수 없습니다.`)) return
-    try { await deleteDoc(doc(db, 'agency_requests', r.id)) } catch (e) { alert('삭제 실패: ' + (e?.message || '')) }
-  }
-
-  const list = filter === '전체' ? rows : rows.filter(r => (r.status || '문의') === filter)
-
-  // 엑셀에서 한글이 깨지지 않도록 BOM 포함 CSV로 내보내기
-  const exportCsv = () => {
-    const cols = [
-      ['접수일', r => r.createdAt?.slice(0, 10)], ['상태', r => r.status], ['회사', r => r.company], ['담당자', r => r.name],
-      ['연락처', r => r.phone], ['이메일', r => r.email], ['행사명', r => r.eventName], ['행사유형', r => r.eventType],
-      ['시작일', r => r.startDate], ['종료일', r => r.endDate], ['근무시간', r => r.startTime && r.endTime ? `${r.startTime}~${r.endTime}` : ''],
-      ['장소', r => r.venue], ['인력', r => (r.roleSummary || []).join(' / ')], ['총 인원', r => r.totalHeads],
-      ['복장·조건', r => r.dress], ['예산', r => r.budget], ['렌탈 동시', r => r.withRental ? 'O' : ''], ['DJ 동시', r => r.withDj ? 'O' : ''],
-      ['의전 메모', r => r.vipNote], ['요청사항', r => r.note], ['내부 메모', r => r.adminMemo],
-    ]
-    const esc = v => `"${String(v ?? '').replace(/"/g, '""')}"`
-    const csv = [cols.map(c => esc(c[0])).join(','), ...list.map(r => cols.map(c => esc(c[1](r))).join(','))].join('\r\n')
-    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' })
-    const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob)
-    a.download = `에이전시_문의_${new Date().toISOString().slice(0, 10)}.csv`
-    a.click()
-    URL.revokeObjectURL(a.href)
-  }
-
-  if (loading) return <div style={{ color: '#6f6f6f', textAlign: 'center', padding: 60 }}>불러오는 중...</div>
-  if (error) return (
-    <div style={{ border: '1px solid #ef4444', borderRadius: 8, padding: 24 }}>
-      <div style={{ fontWeight: 700, marginBottom: 8 }}>⚠ 에이전시 문의를 불러올 수 없습니다</div>
-      <div style={{ fontSize: 13, wordBreak: 'break-word' }}>{error}</div>
-      <div style={{ fontSize: 12, marginTop: 12, lineHeight: 1.6 }}>Firebase Console → Firestore → 규칙에서 <code>agency_requests</code> 컬렉션 읽기·쓰기 권한을 확인해주세요.</div>
-    </div>
-  )
-
-  return (
-    <div>
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 16 }}>
-        {['전체', ...AGENCY_STATUS].map(s => {
-          const n = s === '전체' ? rows.length : rows.filter(r => (r.status || '문의') === s).length
-          return (
-            <button key={s} onClick={() => setFilter(s)} style={{
-              padding: '5px 12px', fontSize: 12, borderRadius: 20, cursor: 'pointer', fontWeight: 600,
-              border: `1px solid ${filter === s ? '#111' : '#e4e4e2'}`, background: filter === s ? '#111' : 'transparent', color: filter === s ? '#fff' : '#555',
-            }}>{s} {n}</button>
-          )
-        })}
-        <div style={{ flex: 1 }} />
-        <button onClick={exportCsv} disabled={!list.length} style={{ padding: '6px 14px', fontSize: 12, borderRadius: 6, border: '1px solid #111', background: '#fff', cursor: 'pointer', fontWeight: 600 }}>⬇ 엑셀(CSV) 내보내기</button>
-      </div>
-
-      {list.length === 0 ? (
-        <div style={{ color: '#6f6f6f', textAlign: 'center', padding: 60 }}>에이전시 문의가 없습니다</div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {list.map(r => {
-            const open = openId === r.id
-            const st = r.status || '문의'
-            const row = (k, v) => v ? <div style={{ fontSize: 13, marginBottom: 6 }}><span style={{ color: '#6f6f6f', display: 'inline-block', minWidth: 84 }}>{k}</span>{v}</div> : null
-            return (
-              <div key={r.id} style={{ border: `1px solid ${open ? '#111' : '#e4e4e2'}`, borderRadius: 12, padding: '16px 20px' }}>
-                <div onClick={() => setOpenId(open ? null : r.id)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, cursor: 'pointer' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
-                    <div style={{ background: AGENCY_STATUS_COLOR[st] || '#666', color: '#fff', borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>{st}</div>
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ fontWeight: 700, fontSize: 15 }}>{r.company || r.name}{r.eventName && <span style={{ fontWeight: 400, color: '#6f6f6f' }}> · {r.eventName}</span>}</div>
-                      <div style={{ fontSize: 12, color: '#6f6f6f' }}>
-                        {r.startDate}{r.endDate && r.endDate !== r.startDate && ` ~ ${r.endDate}`}
-                        {r.startTime && r.endTime && ` · ${r.startTime}~${r.endTime}`}
-                        {r.roleSummary?.length > 0 && ` · ${r.roleSummary.join(', ')}`}
-                      </div>
-                    </div>
-                  </div>
-                  <div style={{ fontSize: 11, color: '#6f6f6f', whiteSpace: 'nowrap' }}>{r.createdAt?.slice(0, 10)}</div>
-                </div>
-
-                {open && (
-                  <div style={{ borderTop: '1px solid #e4e4e2', marginTop: 14, paddingTop: 14 }}>
-                    {row('담당자', `${r.name || ''}${r.company ? ` (${r.company})` : ''}`)}
-                    {row('연락처', r.phone && <a href={`tel:${r.phone.replace(/-/g, '')}`}>{r.phone}</a>)}
-                    {row('이메일', r.email && <a href={`mailto:${r.email}`}>{r.email}</a>)}
-                    {row('행사 유형', r.eventType)}
-                    {row('장소', r.venue)}
-                    {row('필요 인력', r.roleSummary?.length ? `${r.roleSummary.join(', ')} (총 ${r.totalHeads}명)` : '')}
-                    {row('복장·조건', r.dress)}
-                    {row('예산', r.budget)}
-                    {row('함께 요청', [r.withRental && '음향·조명 렌탈', r.withDj && 'DJ 섭외'].filter(Boolean).join(', '))}
-                    {row('의전 메모', r.vipNote)}
-                    {row('요청사항', r.note)}
-                    {row('배정', r.assignee)}
-
-                    <div style={{ marginTop: 12 }}>
-                      <div style={{ fontSize: 12, color: '#6f6f6f', marginBottom: 6 }}>내부 메모 (고객에게 보이지 않음 — 후보 명단, PDF 발송 여부, 단가 등)</div>
-                      <textarea className="field" rows={3}
-                        value={memoDraft[r.id] ?? r.adminMemo ?? ''}
-                        onChange={e => setMemoDraft(m => ({ ...m, [r.id]: e.target.value }))} />
-                      <button onClick={() => update(r.id, { adminMemo: memoDraft[r.id] ?? r.adminMemo ?? '' })}
-                        style={{ marginTop: 6, padding: '5px 14px', fontSize: 12, borderRadius: 6, border: '1px solid #111', background: '#111', color: '#fff', cursor: 'pointer' }}>메모 저장</button>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginTop: 14 }}>
-                      {AGENCY_STATUS.map(s => (
-                        <button key={s} onClick={() => update(r.id, { status: s })} style={{
-                          border: `1px solid ${st === s ? AGENCY_STATUS_COLOR[s] : '#e4e4e2'}`, borderRadius: 20, padding: '5px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer',
-                          background: st === s ? AGENCY_STATUS_COLOR[s] : 'transparent', color: st === s ? '#fff' : '#9a9a9a',
-                        }}>{s}</button>
-                      ))}
-                      <div style={{ flex: 1 }} />
-                      <button onClick={() => remove(r)} style={{ border: '1px solid #ef4444', borderRadius: 20, padding: '5px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer', background: 'transparent', color: '#ef4444' }}>🗑 삭제</button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )
-          })}
-        </div>
-      )}
     </div>
   )
 }

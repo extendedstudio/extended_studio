@@ -965,3 +965,10 @@ body:has(.mobile-menu) .back-btn { display: none; }
   .ag-steps li span { margin: 0; }
   .ag-pkgs { grid-template-columns: 1fr; }
 }
+.ag-contact-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.ag-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 180px; padding: 15px 26px; border-radius: 999px; border: 1px solid #111; background: #111; color: #fff; font-size: 15px; font-weight: 600; text-decoration: none; cursor: pointer; font-family: 'Pretendard Variable', Pretendard, sans-serif; }
+.ag-btn:hover { opacity: .88; }
+.ag-btn-kakao { background: #FEE500; border-color: #FEE500; color: #191919; }
+.ag-rep { margin-top: 18px; font-size: 13px; color: var(--wk-sub); font-family: 'Pretendard Variable', Pretendard, sans-serif; }
+.ag-rep a { color: var(--wk-ink); text-decoration: none; margin-left: 6px; font-variant-numeric: tabular-nums; }
+@media (max-width: 480px) { .ag-btn { flex: 1 1 100%; } }

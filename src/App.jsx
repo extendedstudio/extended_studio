@@ -1925,7 +1925,10 @@ function Admin() {
   // 관리자 인증: Firebase 로그인 (데이터 접근은 Firestore 보안 규칙이 관리자 이메일만 허용)
   const [user, setUser] = useState(undefined) // undefined = 확인 중, null = 로그아웃
   const authed = !!user
-  const [loginEmail, setLoginEmail] = useState('')
+  // 아이디 저장: 이 기기 브라우저에만 이메일 저장 (비밀번호는 저장하지 않음)
+  const savedEmail = (() => { try { return localStorage.getItem('admin_saved_email') || '' } catch { return '' } })()
+  const [loginEmail, setLoginEmail] = useState(savedEmail)
+  const [rememberEmail, setRememberEmail] = useState(!!savedEmail)
   const [loginPw, setLoginPw] = useState('')
   const [loginError, setLoginError] = useState('')
   const [loggingIn, setLoggingIn] = useState(false)
@@ -2057,6 +2060,10 @@ function Admin() {
     setLoggingIn(true); setLoginError('')
     try {
       await signInWithEmailAndPassword(auth, loginEmail.trim(), loginPw)
+      try {
+        if (rememberEmail) localStorage.setItem('admin_saved_email', loginEmail.trim())
+        else localStorage.removeItem('admin_saved_email')
+      } catch { /* 저장 불가 환경은 무시 */ }
       setLoginPw('')
     } catch (err) {
       const c = err?.code || ''
@@ -2132,8 +2139,12 @@ function Admin() {
           <p style={{ color: $.muted, fontSize: 13 }}>관리자 계정으로 로그인하세요</p>
         </div>
         <form onSubmit={submitLogin}>
-          <input type="email" autoComplete="username" autoFocus placeholder="이메일" value={loginEmail} onChange={e => { setLoginEmail(e.target.value); setLoginError('') }} style={inp} />
-          <input type="password" autoComplete="current-password" placeholder="비밀번호" value={loginPw} onChange={e => { setLoginPw(e.target.value); setLoginError('') }} style={{ ...inp, borderColor: loginError ? '#ef4444' : '#e4e4e2', marginBottom: 16 }} />
+          <input type="email" autoComplete="username" autoFocus={!savedEmail} placeholder="이메일" value={loginEmail} onChange={e => { setLoginEmail(e.target.value); setLoginError('') }} style={inp} />
+          <input type="password" autoComplete="current-password" autoFocus={!!savedEmail} placeholder="비밀번호" value={loginPw} onChange={e => { setLoginPw(e.target.value); setLoginError('') }} style={{ ...inp, borderColor: loginError ? '#ef4444' : '#e4e4e2', marginBottom: 12 }} />
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#1a1a1a', marginBottom: 16, cursor: 'pointer', userSelect: 'none' }}>
+            <input type="checkbox" checked={rememberEmail} onChange={e => setRememberEmail(e.target.checked)} style={{ width: 16, height: 16 }} />
+            아이디 저장
+          </label>
           {loginError && <div style={{ color: '#ef4444', fontSize: 13, marginBottom: 16, textAlign: 'center' }}>{loginError}</div>}
           <button type="submit" className="btn-gold" disabled={loggingIn} style={{ width: '100%', padding: '14px' }}>
             {loggingIn ? '확인 중...' : '로그인'}
@@ -2407,7 +2418,7 @@ export default function App() {
   const [page, setPageRaw] = useState(() => {
     try {
       const p = new URLSearchParams(window.location.search).get('page')
-      return ['rental', 'portfolio', 'booking', 'agency'].includes(p) ? p : 'landing'
+      return ['rental', 'portfolio', 'booking', 'agency', 'admin'].includes(p) ? p : 'landing'
     } catch { return 'landing' }
   })
   const setPage = (p) => { setPageRaw(p); window.scrollTo(0, 0) }

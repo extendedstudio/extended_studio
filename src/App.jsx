@@ -1803,12 +1803,11 @@ function Agency({ setPage }) {
         <h2 className="wk-h">Contact</h2>
         <div className="wk-contact-body">
           <p className="ag-director">{AGENCY_DIRECTOR.title}<b>{AGENCY_DIRECTOR.name}</b></p>
-          <a className="wk-big" href={`tel:${CONTACT.phone.replace(/-/g, '')}`}>{CONTACT.phone}</a>
-          <div className="wk-contact-links">
-            <button onClick={scrollToForm}>섭외 문의 폼</button>
-            <a href={CONTACT.kakao} target="_blank" rel="noreferrer">KakaoTalk</a>
-            <a href={CONTACT.instagram} target="_blank" rel="noreferrer">Instagram</a>
+          <div className="ag-contact-btns">
+            <a className="ag-btn ag-btn-kakao" href={CONTACT.kakao} target="_blank" rel="noreferrer">카카오톡 문의</a>
+            <button className="ag-btn" onClick={scrollToForm}>사이트에서 문의하기</button>
           </div>
+          <p className="ag-rep">대표번호 <a href={`tel:${CONTACT.phone.replace(/-/g, '')}`}>{CONTACT.phone}</a></p>
         </div>
       </section>
 

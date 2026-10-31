@@ -1497,6 +1497,21 @@ function Landing({ setPage, goToRental }) {
         <p className="wk-note">패키지 금액은 시작가 기준이며 설치·철수 및 운송비는 별도입니다. 최종 금액은 맞춤 견적으로 안내드려요.</p>
       </section>
 
+      {/* AGENCY */}
+      <section className="wk-sec">
+        <h2 className="wk-h">Agency</h2>
+        <ul className="wk-list ag-list">
+          {AGENCY_ROLES.map(r => (
+            <li key={r.key} onClick={() => setPage('agency')}>
+              <span className="wk-list-t">{r.label}<em>{r.ko}</em></span>
+              <span className="wk-list-m">{r.desc}</span>
+              <span className="wk-list-p">{r.badge && <b className="ag-badge">{r.badge}</b>}</span>
+            </li>
+          ))}
+        </ul>
+        <button className="wk-link" onClick={() => setPage('agency')}>프로모터 · 의전 섭외 문의 →</button>
+      </section>
+
       {/* JOURNAL (블로그) */}
       {blog.posts.length > 0 && (
         <section className="wk-sec">
@@ -1521,6 +1536,7 @@ function Landing({ setPage, goToRental }) {
           <a className="wk-big" href={`tel:${CONTACT.phone.replace(/-/g, '')}`}>{CONTACT.phone}</a>
           <div className="wk-contact-links">
             <button onClick={() => setPage('booking')}>장비 예약 문의</button>
+            <button onClick={() => setPage('agency')}>인력 섭외 문의</button>
             <a href={CONTACT.kakao} target="_blank" rel="noreferrer">KakaoTalk</a>
             <a href={CONTACT.instagram} target="_blank" rel="noreferrer">Instagram</a>
           </div>
@@ -1528,6 +1544,424 @@ function Landing({ setPage, goToRental }) {
       </section>
 
       <footer className="wk-foot">© 2026 EXTENDED STUDIO all rights reserved.</footer>
+    </div>
+  )
+}
+
+// ─── 에이전시 (행사 인력: 프로모터·의전·모델·댄서·스태프) ─────────
+// 담당: 송설아 AGENCY DIRECTOR — 개인 연락처는 노출하지 않고 회사 창구(대표번호·카카오·문의 폼)로만 접수
+const AGENCY_DIRECTOR = { name: '송설아', title: 'AGENCY DIRECTOR' }
+const AGENCY_ROLES = [
+  { key: 'promoter', label: 'Promoter', ko: '프로모터', desc: '팝업스토어 · 브랜드 행사 · 샘플링 · 고객 응대', badge: '주력' },
+  { key: 'protocol', label: 'Protocol', ko: '의전', desc: 'VIP·귀빈 영접과 안내 · 시상식·개회식 · 기업·호텔 행사', badge: '강점' },
+  { key: 'model', label: 'Model', ko: '모델', desc: '런칭 · 전시 · 브랜드 행사' },
+  { key: 'dancer', label: 'Dancer', ko: '댄서', desc: '오프닝 · 퍼포먼스 · 파티' },
+  { key: 'staff', label: 'Event Staff', ko: '행사 스태프', desc: '운영 · 안내 · 등록 데스크 · 진행 보조' },
+]
+const AGENCY_EVENTS = [
+  { label: 'Golf Tournament', ko: '골프 대회', desc: '의전 · 갤러리 안내 · 시상식 · 스폰서 부스', badge: '대표' },
+  { label: 'Pop-up Store', ko: '팝업스토어', desc: '프로모터 · 고객 응대 · 현장 운영' },
+  { label: 'Brand Launch', ko: '브랜드 런칭', desc: '모델 · 프로모터 · 의전' },
+  { label: 'Corporate & Hotel', ko: '기업 · 호텔 행사', desc: '의전 · 등록 데스크 · 진행 스태프' },
+  { label: 'Exhibition', ko: '전시 · 박람회', desc: '부스 모델 · 프로모터' },
+  { label: 'Festival & Party', ko: '페스티벌 · 파티', desc: '댄서 · 운영 스태프' },
+]
+const AGENCY_STEPS = ['문의 접수', '후보 프로필 PDF 전달', '확정 · 계약', '행사 당일 운영', '정산']
+const AGENCY_EVENT_TYPES = ['', '골프 대회', '팝업스토어', '브랜드 런칭', '기업 행사', '호텔 행사', '전시 · 박람회', '페스티벌 · 파티', '기타']
+const AGENCY_BUDGETS = ['', '협의', '100만원 미만', '100~300만원', '300~500만원', '500~1,000만원', '1,000만원 이상']
+
+function Agency({ setPage }) {
+  const todayISO = new Date().toISOString().slice(0, 10)
+  const empty = {
+    company: '', name: '', phone: '', email: '', eventName: '', eventType: '',
+    startDate: todayISO, endDate: todayISO, startTime: '', endTime: '', venue: '',
+    counts: Object.fromEntries(AGENCY_ROLES.map(r => [r.key, 0])),
+    dress: '', vipNote: '', budget: '', withRental: false, withDj: false, note: '',
+  }
+  const [form, setForm] = useState(empty)
+  const [sending, setSending] = useState(false)
+  const [done, setDone] = useState(false)
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
+  const setCount = (k, n) => setForm(f => ({ ...f, counts: { ...f.counts, [k]: Math.max(0, Math.min(99, n)) } }))
+  const totalHeads = Object.values(form.counts).reduce((s, n) => s + n, 0)
+  const scrollToForm = () => document.getElementById('ag-form')?.scrollIntoView({ behavior: 'smooth' })
+
+  const submit = async () => {
+    if (!form.name || !form.phone) return alert('담당자 이름과 연락처를 입력해주세요')
+    if (!form.startDate) return alert('행사 날짜를 선택해주세요')
+    if (totalHeads === 0) return alert('필요한 인력을 1명 이상 선택해주세요')
+    setSending(true)
+    const roleSummary = AGENCY_ROLES.filter(r => form.counts[r.key] > 0).map(r => `${r.ko} ${form.counts[r.key]}명`)
+    try {
+      await addDoc(collection(db, 'agency_requests'), {
+        ...form,
+        roleSummary,
+        totalHeads,
+        assignee: AGENCY_DIRECTOR.name,
+        status: '문의',
+        adminMemo: '',
+        createdAt: new Date().toISOString(),
+        serverTime: serverTimestamp(),
+      })
+      // 어드민 푸시 알림 (기존 /api/notify 형식 재사용, 실패해도 접수는 유지)
+      fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: `[에이전시] ${form.company || form.name}`,
+          phone: form.phone,
+          date: form.startDate,
+          dur: form.startTime && form.endTime ? `${form.startTime}~${form.endTime}` : '',
+          type: form.eventType,
+          gear: roleSummary,
+          note: form.note,
+        }),
+      }).catch(err => console.warn('알림 발송 실패 (무시됨):', err))
+      setDone(true)
+      window.scrollTo(0, 0)
+    } catch (e) {
+      console.error('에이전시 문의 저장 실패:', e)
+      alert('문의 접수 중 오류가 발생했습니다. 대표번호 또는 카카오톡으로 연락 부탁드립니다.\n\n' + (e?.message || ''))
+    } finally {
+      setSending(false)
+    }
+  }
+
+  if (done) return (
+    <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#ffffff', padding: 24 }}>
+      <div style={{ textAlign: 'center', maxWidth: 460 }}>
+        <div style={{ fontSize: 44, marginBottom: 20 }}>✓</div>
+        <h2 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontSize: 34, letterSpacing: '.08em', marginBottom: 14 }}>문의 접수 완료</h2>
+        <p style={{ color: '#1a1a1a', marginBottom: 36, fontSize: 14, lineHeight: 1.7 }}>
+          담당 디렉터가 행사 조건을 확인한 뒤<br />후보 프로필(PDF)과 함께 연락드리겠습니다.
+        </p>
+        <button className="btn-ghost" onClick={() => setPage('landing')}>홈으로</button>
+      </div>
+    </div>
+  )
+
+  const label = (t, sub) => (
+    <label className="ag-label">{t}{sub && <span>{sub}</span>}</label>
+  )
+
+  return (
+    <div className="wk ag">
+      {/* 상단 소개 */}
+      <section className="wk-band ag-band">
+        <p className="ag-kicker">EXTENDED STUDIO · AGENCY</p>
+        <h1 className="ag-title">Promoter &amp; Protocol</h1>
+        <p className="wk-band-sub">프로모터 · 의전 · 모델 · 댄서 · 행사 스태프 섭외</p>
+        <button className="ag-cta" onClick={scrollToForm}>인력 섭외 문의하기</button>
+      </section>
+
+      <section className="wk-sec wk-about">
+        <h2 className="wk-h">Agency</h2>
+        <div className="wk-about-body">
+          <p className="wk-lead">팝업스토어부터 골프 대회까지, 현장에 맞는 사람을 섭외합니다.</p>
+          <p>프로모터와 의전을 중심으로 모델 · 댄서 · 행사 스태프를 행사 성격에 맞게 구성합니다. 음향 · DJ 렌탈과 함께 맡기시면 장비와 인력을 한 창구에서 진행할 수 있습니다.</p>
+        </div>
+      </section>
+
+      {/* 인력 카테고리 */}
+      <section className="wk-sec">
+        <h2 className="wk-h">Talent</h2>
+        <ul className="wk-list ag-list">
+          {AGENCY_ROLES.map(r => (
+            <li key={r.key} onClick={scrollToForm}>
+              <span className="wk-list-t">{r.label}<em>{r.ko}</em></span>
+              <span className="wk-list-m">{r.desc}</span>
+              <span className="wk-list-p">{r.badge && <b className="ag-badge">{r.badge}</b>}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="wk-note">인력 프로필은 공개하지 않습니다. 문의를 확인한 뒤 행사 조건에 맞는 후보 프로필을 PDF로 보내드립니다.</p>
+      </section>
+
+      {/* 행사 유형 */}
+      <section className="wk-sec">
+        <h2 className="wk-h">Events</h2>
+        <ul className="wk-list ag-list">
+          {AGENCY_EVENTS.map(ev => (
+            <li key={ev.label} onClick={scrollToForm}>
+              <span className="wk-list-t">{ev.label}<em>{ev.ko}</em></span>
+              <span className="wk-list-m">{ev.desc}</span>
+              <span className="wk-list-p">{ev.badge && <b className="ag-badge">{ev.badge}</b>}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* 진행 과정 */}
+      <section className="wk-sec">
+        <h2 className="wk-h">Process</h2>
+        <ol className="ag-steps">
+          {AGENCY_STEPS.map((s, i) => (
+            <li key={s}><span>{String(i + 1).padStart(2, '0')}</span>{s}</li>
+          ))}
+        </ol>
+      </section>
+
+      {/* 결합 패키지 */}
+      <section className="wk-sec">
+        <h2 className="wk-h">Package</h2>
+        <div className="ag-pkgs">
+          <div className="ag-pkg">
+            <b>팝업 · 브랜드 패키지</b>
+            <span>음향 · DJ 렌탈 + 프로모터 · 모델</span>
+          </div>
+          <div className="ag-pkg">
+            <b>기업 · 호텔 · 골프 대회 패키지</b>
+            <span>음향 렌탈 + 의전 · 진행 스태프</span>
+          </div>
+        </div>
+        <p className="wk-note">패키지 구성과 금액은 행사 규모에 따라 맞춤 견적으로 안내드립니다.</p>
+      </section>
+
+      {/* 문의 폼 */}
+      <section className="wk-sec" id="ag-form">
+        <h2 className="wk-h">Inquiry</h2>
+        <div className="ag-form">
+          <div className="ag-grid">
+            <div>{label('회사 / 브랜드명')}<input className="field" value={form.company} onChange={e => set('company', e.target.value)} placeholder="회사 또는 브랜드명" /></div>
+            <div>{label('담당자 이름 *')}<input className="field" value={form.name} onChange={e => set('name', e.target.value)} placeholder="홍길동" /></div>
+            <div>{label('연락처 *')}<input className="field" type="tel" value={form.phone} onChange={e => set('phone', e.target.value)} placeholder="010-0000-0000" /></div>
+            <div>{label('이메일', '· 후보 프로필 PDF 수신용')}<input className="field" type="email" value={form.email} onChange={e => set('email', e.target.value)} placeholder="name@company.com" /></div>
+          </div>
+
+          <div className="ag-grid">
+            <div>{label('행사명')}<input className="field" value={form.eventName} onChange={e => set('eventName', e.target.value)} placeholder="행사명" /></div>
+            <div>{label('행사 유형')}
+              <select className="field" value={form.eventType} onChange={e => set('eventType', e.target.value)}>
+                {AGENCY_EVENT_TYPES.map(t => <option key={t} value={t}>{t || '선택'}</option>)}
+              </select>
+            </div>
+            <div>{label('장소')}<input className="field" value={form.venue} onChange={e => set('venue', e.target.value)} placeholder="행사 장소 (주소 또는 장소명)" /></div>
+          </div>
+
+          <div className="ag-grid ag-grid-4">
+            <div>{label('행사 시작일 *')}
+              <input type="date" className="field" value={form.startDate}
+                onChange={e => { const v = e.target.value; setForm(f => ({ ...f, startDate: v, endDate: (!f.endDate || f.endDate < v) ? v : f.endDate })) }} />
+            </div>
+            <div>{label('행사 종료일')}<input type="date" className="field" value={form.endDate} min={form.startDate || undefined} onChange={e => set('endDate', e.target.value)} /></div>
+            <div>{label('근무 시작')}<input type="time" className="field" value={form.startTime} onChange={e => set('startTime', e.target.value)} /></div>
+            <div>{label('근무 종료')}<input type="time" className="field" value={form.endTime} onChange={e => set('endTime', e.target.value)} /></div>
+          </div>
+
+          <div>
+            {label('필요 인력 *', totalHeads > 0 ? `· 총 ${totalHeads}명` : '')}
+            <div className="ag-counts">
+              {AGENCY_ROLES.map(r => {
+                const n = form.counts[r.key]
+                return (
+                  <div key={r.key} className={`ag-count${n > 0 ? ' on' : ''}`}>
+                    <div><b>{r.ko}</b>{r.badge && <em>{r.badge}</em>}</div>
+                    <div className="ag-stepper">
+                      <button type="button" onClick={() => setCount(r.key, n - 1)} aria-label={`${r.ko} 줄이기`}>−</button>
+                      <span>{n}</span>
+                      <button type="button" onClick={() => setCount(r.key, n + 1)} aria-label={`${r.ko} 늘리기`}>+</button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="ag-grid">
+            <div>{label('복장 · 조건')}<input className="field" value={form.dress} onChange={e => set('dress', e.target.value)} placeholder="예: 검정 정장, 키 165cm 이상, 영어 가능" /></div>
+            <div>{label('예산 범위')}
+              <select className="field" value={form.budget} onChange={e => set('budget', e.target.value)}>
+                {AGENCY_BUDGETS.map(b => <option key={b} value={b}>{b || '선택'}</option>)}
+              </select>
+            </div>
+          </div>
+
+          {form.counts.protocol > 0 && (
+            <div>{label('VIP 동선 · 의전 메모')}
+              <textarea className="field" rows={3} value={form.vipNote} onChange={e => set('vipNote', e.target.value)} placeholder="VIP 인원, 도착 시간, 동선, 시상식 순서 등" />
+            </div>
+          )}
+
+          <div>
+            {label('함께 필요한 서비스', '· 선택')}
+            <div className="ag-checks">
+              <label><input type="checkbox" checked={form.withRental} onChange={e => set('withRental', e.target.checked)} /> 음향 · 조명 렌탈</label>
+              <label><input type="checkbox" checked={form.withDj} onChange={e => set('withDj', e.target.checked)} /> DJ 섭외</label>
+            </div>
+          </div>
+
+          <div>{label('기타 요청')}
+            <textarea className="field" rows={4} value={form.note} onChange={e => set('note', e.target.value)} placeholder="행사 내용, 참고 사항을 자유롭게 적어주세요" />
+          </div>
+
+          <button className="btn-gold ag-submit" disabled={sending} onClick={submit}>{sending ? '접수 중…' : '섭외 문의 보내기'}</button>
+        </div>
+      </section>
+
+      {/* 연락처 — 대표번호만 노출 */}
+      <section className="wk-sec wk-contact">
+        <h2 className="wk-h">Contact</h2>
+        <div className="wk-contact-body">
+          <p className="ag-director">{AGENCY_DIRECTOR.title}<b>{AGENCY_DIRECTOR.name}</b></p>
+          <a className="wk-big" href={`tel:${CONTACT.phone.replace(/-/g, '')}`}>{CONTACT.phone}</a>
+          <div className="wk-contact-links">
+            <button onClick={scrollToForm}>섭외 문의 폼</button>
+            <a href={CONTACT.kakao} target="_blank" rel="noreferrer">KakaoTalk</a>
+            <a href={CONTACT.instagram} target="_blank" rel="noreferrer">Instagram</a>
+          </div>
+        </div>
+      </section>
+
+      <footer className="wk-foot">© 2026 EXTENDED STUDIO all rights reserved.</footer>
+    </div>
+  )
+}
+
+// ─── 어드민: 에이전시 문의 관리 ────────────────────────────
+const AGENCY_STATUS = ['문의', '후보 추천', '확정', '행사 완료', '정산 완료', '취소']
+const AGENCY_STATUS_COLOR = { '문의': '#1c1c1c', '후보 추천': '#6f6f6f', '확정': '#22c55e', '행사 완료': '#3b82f6', '정산 완료': '#8b5cf6', '취소': '#ef4444' }
+
+function AgencyAdmin() {
+  const [rows, setRows] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [openId, setOpenId] = useState(null)
+  const [filter, setFilter] = useState('전체')
+  const [memoDraft, setMemoDraft] = useState({})
+
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, 'agency_requests'), snap => {
+      setRows(snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)))
+      setLoading(false); setError(null)
+    }, err => {
+      console.error('agency_requests 조회 실패:', err)
+      setError(err?.message || '불러오기 실패'); setLoading(false)
+    })
+    return () => unsub()
+  }, [])
+
+  const update = async (id, patch) => {
+    try { await updateDoc(doc(db, 'agency_requests', id), patch) }
+    catch (e) { alert('저장 실패: ' + (e?.message || '')) }
+  }
+  const remove = async (r) => {
+    if (!confirm(`"${r.company || r.name}" 문의를 삭제할까요?\n\n되돌릴 수 없습니다.`)) return
+    try { await deleteDoc(doc(db, 'agency_requests', r.id)) } catch (e) { alert('삭제 실패: ' + (e?.message || '')) }
+  }
+
+  const list = filter === '전체' ? rows : rows.filter(r => (r.status || '문의') === filter)
+
+  // 엑셀에서 한글이 깨지지 않도록 BOM 포함 CSV로 내보내기
+  const exportCsv = () => {
+    const cols = [
+      ['접수일', r => r.createdAt?.slice(0, 10)], ['상태', r => r.status], ['회사', r => r.company], ['담당자', r => r.name],
+      ['연락처', r => r.phone], ['이메일', r => r.email], ['행사명', r => r.eventName], ['행사유형', r => r.eventType],
+      ['시작일', r => r.startDate], ['종료일', r => r.endDate], ['근무시간', r => r.startTime && r.endTime ? `${r.startTime}~${r.endTime}` : ''],
+      ['장소', r => r.venue], ['인력', r => (r.roleSummary || []).join(' / ')], ['총 인원', r => r.totalHeads],
+      ['복장·조건', r => r.dress], ['예산', r => r.budget], ['렌탈 동시', r => r.withRental ? 'O' : ''], ['DJ 동시', r => r.withDj ? 'O' : ''],
+      ['의전 메모', r => r.vipNote], ['요청사항', r => r.note], ['내부 메모', r => r.adminMemo],
+    ]
+    const esc = v => `"${String(v ?? '').replace(/"/g, '""')}"`
+    const csv = [cols.map(c => esc(c[0])).join(','), ...list.map(r => cols.map(c => esc(c[1](r))).join(','))].join('\r\n')
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = `에이전시_문의_${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
+
+  if (loading) return <div style={{ color: '#6f6f6f', textAlign: 'center', padding: 60 }}>불러오는 중...</div>
+  if (error) return (
+    <div style={{ border: '1px solid #ef4444', borderRadius: 8, padding: 24 }}>
+      <div style={{ fontWeight: 700, marginBottom: 8 }}>⚠ 에이전시 문의를 불러올 수 없습니다</div>
+      <div style={{ fontSize: 13, wordBreak: 'break-word' }}>{error}</div>
+      <div style={{ fontSize: 12, marginTop: 12, lineHeight: 1.6 }}>Firebase Console → Firestore → 규칙에서 <code>agency_requests</code> 컬렉션 읽기·쓰기 권한을 확인해주세요.</div>
+    </div>
+  )
+
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 16 }}>
+        {['전체', ...AGENCY_STATUS].map(s => {
+          const n = s === '전체' ? rows.length : rows.filter(r => (r.status || '문의') === s).length
+          return (
+            <button key={s} onClick={() => setFilter(s)} style={{
+              padding: '5px 12px', fontSize: 12, borderRadius: 20, cursor: 'pointer', fontWeight: 600,
+              border: `1px solid ${filter === s ? '#111' : '#e4e4e2'}`, background: filter === s ? '#111' : 'transparent', color: filter === s ? '#fff' : '#555',
+            }}>{s} {n}</button>
+          )
+        })}
+        <div style={{ flex: 1 }} />
+        <button onClick={exportCsv} disabled={!list.length} style={{ padding: '6px 14px', fontSize: 12, borderRadius: 6, border: '1px solid #111', background: '#fff', cursor: 'pointer', fontWeight: 600 }}>⬇ 엑셀(CSV) 내보내기</button>
+      </div>
+
+      {list.length === 0 ? (
+        <div style={{ color: '#6f6f6f', textAlign: 'center', padding: 60 }}>에이전시 문의가 없습니다</div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {list.map(r => {
+            const open = openId === r.id
+            const st = r.status || '문의'
+            const row = (k, v) => v ? <div style={{ fontSize: 13, marginBottom: 6 }}><span style={{ color: '#6f6f6f', display: 'inline-block', minWidth: 84 }}>{k}</span>{v}</div> : null
+            return (
+              <div key={r.id} style={{ border: `1px solid ${open ? '#111' : '#e4e4e2'}`, borderRadius: 12, padding: '16px 20px' }}>
+                <div onClick={() => setOpenId(open ? null : r.id)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, cursor: 'pointer' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+                    <div style={{ background: AGENCY_STATUS_COLOR[st] || '#666', color: '#fff', borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>{st}</div>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontWeight: 700, fontSize: 15 }}>{r.company || r.name}{r.eventName && <span style={{ fontWeight: 400, color: '#6f6f6f' }}> · {r.eventName}</span>}</div>
+                      <div style={{ fontSize: 12, color: '#6f6f6f' }}>
+                        {r.startDate}{r.endDate && r.endDate !== r.startDate && ` ~ ${r.endDate}`}
+                        {r.startTime && r.endTime && ` · ${r.startTime}~${r.endTime}`}
+                        {r.roleSummary?.length > 0 && ` · ${r.roleSummary.join(', ')}`}
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ fontSize: 11, color: '#6f6f6f', whiteSpace: 'nowrap' }}>{r.createdAt?.slice(0, 10)}</div>
+                </div>
+
+                {open && (
+                  <div style={{ borderTop: '1px solid #e4e4e2', marginTop: 14, paddingTop: 14 }}>
+                    {row('담당자', `${r.name || ''}${r.company ? ` (${r.company})` : ''}`)}
+                    {row('연락처', r.phone && <a href={`tel:${r.phone.replace(/-/g, '')}`}>{r.phone}</a>)}
+                    {row('이메일', r.email && <a href={`mailto:${r.email}`}>{r.email}</a>)}
+                    {row('행사 유형', r.eventType)}
+                    {row('장소', r.venue)}
+                    {row('필요 인력', r.roleSummary?.length ? `${r.roleSummary.join(', ')} (총 ${r.totalHeads}명)` : '')}
+                    {row('복장·조건', r.dress)}
+                    {row('예산', r.budget)}
+                    {row('함께 요청', [r.withRental && '음향·조명 렌탈', r.withDj && 'DJ 섭외'].filter(Boolean).join(', '))}
+                    {row('의전 메모', r.vipNote)}
+                    {row('요청사항', r.note)}
+                    {row('배정', r.assignee)}
+
+                    <div style={{ marginTop: 12 }}>
+                      <div style={{ fontSize: 12, color: '#6f6f6f', marginBottom: 6 }}>내부 메모 (고객에게 보이지 않음 — 후보 명단, PDF 발송 여부, 단가 등)</div>
+                      <textarea className="field" rows={3}
+                        value={memoDraft[r.id] ?? r.adminMemo ?? ''}
+                        onChange={e => setMemoDraft(m => ({ ...m, [r.id]: e.target.value }))} />
+                      <button onClick={() => update(r.id, { adminMemo: memoDraft[r.id] ?? r.adminMemo ?? '' })}
+                        style={{ marginTop: 6, padding: '5px 14px', fontSize: 12, borderRadius: 6, border: '1px solid #111', background: '#111', color: '#fff', cursor: 'pointer' }}>메모 저장</button>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginTop: 14 }}>
+                      {AGENCY_STATUS.map(s => (
+                        <button key={s} onClick={() => update(r.id, { status: s })} style={{
+                          border: `1px solid ${st === s ? AGENCY_STATUS_COLOR[s] : '#e4e4e2'}`, borderRadius: 20, padding: '5px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                          background: st === s ? AGENCY_STATUS_COLOR[s] : 'transparent', color: st === s ? '#fff' : '#9a9a9a',
+                        }}>{s}</button>
+                      ))}
+                      <div style={{ flex: 1 }} />
+                      <button onClick={() => remove(r)} style={{ border: '1px solid #ef4444', borderRadius: 20, padding: '5px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer', background: 'transparent', color: '#ef4444' }}>🗑 삭제</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
@@ -1862,9 +2296,9 @@ function Admin() {
             <div style={{ width: 40, height: 2, background: 'var(--accent)', marginBottom: 16 }} />
             <h1 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontSize: 44, letterSpacing: '.08em', marginBottom: 4 }}>ADMIN</h1>
             <p style={{ color: $.muted, fontSize: 13 }}>
-            {adminTab === 'requests' ? `예약 신청 관리 · 총 ${requests.length}건` : adminTab === 'visitors' ? '방문자 통계 · Vercel Web Analytics' : `AI 상담 로그 · 총 ${chatLogs.length}건`}
+            {adminTab === 'requests' ? `예약 신청 관리 · 총 ${requests.length}건` : adminTab === 'agency' ? `에이전시 문의 관리 · 담당 ${AGENCY_DIRECTOR.name}` : adminTab === 'visitors' ? '방문자 통계 · Vercel Web Analytics' : `AI 상담 로그 · 총 ${chatLogs.length}건`}
           </p>
-          <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+          <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
             <button onClick={() => setAdminTab('requests')} style={{
               padding: '8px 16px', fontSize: 12, letterSpacing: '.08em',
               background: adminTab === 'requests' ? 'var(--accent)' : 'transparent',
@@ -1872,6 +2306,13 @@ function Admin() {
               border: `1px solid ${adminTab === 'requests' ? 'var(--accent)' : '#f4f4f3'}`,
               borderRadius: 4, cursor: 'pointer', fontWeight: 600
             }}>📋 예약 신청</button>
+            <button onClick={() => setAdminTab('agency')} style={{
+              padding: '8px 16px', fontSize: 12, letterSpacing: '.08em',
+              background: adminTab === 'agency' ? 'var(--accent)' : 'transparent',
+              color: adminTab === 'agency' ? '#f2f2f2' : '#9a9a9a',
+              border: `1px solid ${adminTab === 'agency' ? 'var(--accent)' : '#f4f4f3'}`,
+              borderRadius: 4, cursor: 'pointer', fontWeight: 600
+            }}>🤝 에이전시</button>
             <button onClick={() => setAdminTab('chat_logs')} style={{
               padding: '8px 16px', fontSize: 12, letterSpacing: '.08em',
               background: adminTab === 'chat_logs' ? 'var(--accent)' : 'transparent',
@@ -2003,6 +2444,8 @@ function Admin() {
         )
         )}
 
+        {adminTab === 'agency' && <AgencyAdmin />}
+
         {adminTab === 'visitors' && <VisitorStats />}
 
         {adminTab === 'chat_logs' && (
@@ -2061,6 +2504,7 @@ function Nav({ page, setPage, cartCount = 0 }) {
         <div className="nav-links desktop-only">
           <span className={`nav-link${page === 'rental' ? ' active' : ''}`} onClick={() => setPage('rental')}>RENTAL GEAR</span>
           <span className={`nav-link${page === 'portfolio' ? ' active' : ''}`} onClick={() => setPage('portfolio')}>PORTFOLIO</span>
+          <span className={`nav-link${page === 'agency' ? ' active' : ''}`} onClick={() => setPage('agency')}>AGENCY</span>
           <button className="btn-booking" onClick={() => setPage('booking')}>장비 예약</button>
           <a className="btn-kakao" href="http://pf.kakao.com/_mANXG/chat" target="_blank" rel="noreferrer">카카오톡</a>
           <span className="nav-link admin" style={{ fontSize: 10, opacity: .4 }} onClick={() => setPage('admin')}>ADMIN</span>
@@ -2089,6 +2533,7 @@ function Nav({ page, setPage, cartCount = 0 }) {
         <div className="mobile-menu mobile-only">
           <div className={`mobile-menu-item${page === 'rental' ? ' active' : ''}`} onClick={() => go('rental')}>RENTAL GEAR</div>
           <div className={`mobile-menu-item${page === 'portfolio' ? ' active' : ''}`} onClick={() => go('portfolio')}>PORTFOLIO</div>
+          <div className={`mobile-menu-item${page === 'agency' ? ' active' : ''}`} onClick={() => go('agency')}>AGENCY · 인력 섭외</div>
           <div className={`mobile-menu-item${page === 'booking' ? ' active' : ''}`} onClick={() => go('booking')}>장비 예약</div>
           <a className="mobile-menu-item kakao" href="http://pf.kakao.com/_mANXG/chat" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)}>카카오톡 문의</a>
           <div className="mobile-menu-item admin" onClick={() => go('admin')}>ADMIN</div>
@@ -2104,7 +2549,7 @@ export default function App() {
   const [page, setPageRaw] = useState(() => {
     try {
       const p = new URLSearchParams(window.location.search).get('page')
-      return ['rental', 'portfolio', 'booking'].includes(p) ? p : 'landing'
+      return ['rental', 'portfolio', 'booking', 'agency'].includes(p) ? p : 'landing'
     } catch { return 'landing' }
   })
   const setPage = (p) => { setPageRaw(p); window.scrollTo(0, 0) }
@@ -2173,6 +2618,7 @@ export default function App() {
       {page === 'landing' && <Landing setPage={setPage} goToRental={goToRental} />}
       {page === 'rental' && <RentalGear setPage={setPage} addToCart={addToCart} cartItems={cartItems} clearCart={clearCart} initialTab={rentalTab} initialCat={rentalCat} />}
       {page === 'portfolio' && <Portfolio setPage={setPage} />}
+      {page === 'agency' && <Agency setPage={setPage} />}
       {page === 'booking' && <Booking setPage={setPage} cartItems={cartItems} removeFromCart={removeFromCart} clearCart={clearCart} updateCartQty={updateCartQty} />}
       {page === 'admin' && <Admin />}
       {/* Floating cart button (rental 페이지에서만 보임, 1개 이상일 때) */}

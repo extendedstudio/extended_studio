@@ -1966,24 +1966,17 @@ function Admin() {
   const STATUS = ['신청', '확인중', '확정', '취소']
   const STATUS_COLOR = { '신청': '#1c1c1c', '확인중': '#6f6f6f', '확정': '#22c55e', '취소': '#ef4444' }
 
-  // 알림 권한 상태 체크
+  // 알림 상태 체크: 이미 허용된 기기면 관리자 화면을 열 때마다 토큰을 다시 등록 (만료·교체 대비)
   useEffect(() => {
-    if (!authed) return
+    if (!authed || !isFull) return
     if (!('Notification' in window) || !('serviceWorker' in navigator)) {
       setNotifStatus('unsupported')
       return
     }
-    if (Notification.permission === 'denied') {
-      setNotifStatus('denied')
-      return
-    }
-    if (Notification.permission === 'granted') {
-      // 토큰이 Firestore에 저장되어 있는지 확인할 수도 있지만, 일단 활성으로 표시
-      setNotifStatus('granted-active')
-    } else {
-      setNotifStatus('default')
-    }
-  }, [authed])
+    if (Notification.permission === 'denied') { setNotifStatus('denied'); return }
+    if (Notification.permission === 'granted') registerPush(false)
+    else setNotifStatus('default')
+  }, [authed, isFull])
 
   // 채팅 로그 실시간 조회
   useEffect(() => {
@@ -2000,73 +1993,67 @@ function Admin() {
     return () => unsub()
   }, [authed, adminTab])
 
-  // 채팅 로그 실시간 조회
-  useEffect(() => {
-    if (!authed || adminTab !== 'chat_logs') return
-    setChatLoading(true)
-    const q = query(collection(db, 'chat_logs'), orderBy('createdAt', 'desc'), limit(200))
-    const unsub = onSnapshot(q, snap => {
-      setChatLogs(snap.docs.map(d => ({ id: d.id, ...d.data() })))
-      setChatLoading(false)
-    }, err => {
-      console.error('채팅 로그 조회 실패:', err)
-      setChatLoading(false)
-    })
-    return () => unsub()
-  }, [authed, adminTab])
 
-  // 알림 활성화 + 토큰 발급 + Firestore 저장
-  const enableNotifications = async () => {
+  // 푸시 알림 등록: 서비스워커는 /sw.js 하나로 통일 (FCM 수신 포함)
+  // ※ 예전엔 /sw.js 와 /firebase-messaging-sw.js 가 같은 범위('/')를 두고 서로 덮어써서, 페이지를 열 때마다 알림 수신 코드가 사라졌음
+  const fgHooked = useRef(false)
+  const registerPush = async (interactive) => {
     try {
-      setNotifMsg('권한 요청 중...')
-      const permission = await Notification.requestPermission()
-      if (permission !== 'granted') {
-        setNotifStatus('denied')
-        setNotifMsg('알림이 차단되었습니다. 브라우저 설정에서 허용해주세요.')
-        return
+      if (interactive) {
+        setNotifMsg('권한 요청 중...')
+        const permission = await Notification.requestPermission()
+        if (permission !== 'granted') {
+          setNotifStatus('denied')
+          setNotifMsg('알림이 차단되었습니다. 브라우저(또는 휴대폰) 설정에서 이 사이트 알림을 허용해주세요.')
+          return
+        }
+        setNotifMsg('알림 등록 중...')
       }
-
-      // Service Worker 등록
-      setNotifMsg('Service Worker 등록 중...')
-      const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js')
-
-      // FCM 토큰 받기
-      setNotifMsg('FCM 토큰 발급 중...')
+      const reg = await navigator.serviceWorker.register('/sw.js')
+      await navigator.serviceWorker.ready
       const messaging = await getFcmMessaging()
       if (!messaging) {
         setNotifStatus('unsupported')
-        setNotifMsg('이 브라우저는 푸시 알림을 지원하지 않습니다.')
+        if (interactive) setNotifMsg('이 브라우저는 푸시 알림을 지원하지 않습니다. 아이폰은 Safari에서 "홈 화면에 추가"한 앱에서만 알림이 됩니다.')
         return
       }
       const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg })
-      if (!token) {
-        setNotifMsg('토큰 발급 실패. 다시 시도해주세요.')
-        return
-      }
-
-      // Firestore에 토큰 저장 (admin_tokens 컬렉션, 토큰 자체를 ID로 사용해 중복 방지)
-      setNotifMsg('토큰 등록 중...')
+      if (!token) throw new Error('토큰 발급 실패')
+      // 토큰 자체를 문서 ID로 사용 → 같은 기기는 덮어쓰기 (중복 없음)
       await setDoc(doc(db, 'admin_tokens', token), {
         token,
         userAgent: navigator.userAgent,
-        createdAt: new Date().toISOString(),
-      })
-
-      // 포그라운드 메시지 핸들러 (탭이 열려있을 때)
-      onMessage(messaging, (payload) => {
-        console.log('[FG] Message:', payload)
-        new Notification(payload.notification?.title || '새 예약', {
-          body: payload.notification?.body || '',
-          icon: '/pwa-192.png',
+        email: user?.email || '',
+        updatedAt: new Date().toISOString(),
+      }, { merge: true })
+      // 화면을 보고 있을 때 도착한 알림도 표시
+      if (!fgHooked.current) {
+        fgHooked.current = true
+        onMessage(messaging, payload => {
+          const title = payload.notification?.title || payload.data?.title || '새 예약'
+          reg.showNotification(title, { body: payload.notification?.body || payload.data?.body || '', icon: '/pwa-192.png', data: payload.data || {} })
         })
-      })
-
+      }
       setNotifStatus('granted-active')
-      setNotifMsg('알림이 활성화되었습니다 ✓')
-      setTimeout(() => setNotifMsg(''), 3000)
+      if (interactive) { setNotifMsg('이 기기에서 알림을 받습니다 ✓'); setTimeout(() => setNotifMsg(''), 3000) }
     } catch (e) {
-      console.error('enableNotifications error:', e)
-      setNotifMsg('오류: ' + (e?.message || e))
+      console.error('registerPush error:', e)
+      setNotifStatus('default')
+      if (interactive) setNotifMsg('오류: ' + (e?.message || e))
+    }
+  }
+  const enableNotifications = () => registerPush(true)
+
+  // 알림 테스트: 등록된 모든 관리자 기기로 테스트 알림 발송
+  const testNotification = async () => {
+    setNotifMsg('테스트 알림 보내는 중...')
+    try {
+      const r = await fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: '[알림 테스트]', phone: '이 알림이 보이면 정상입니다', gear: [] }) })
+      const j = await r.json().catch(() => ({}))
+      if (!r.ok) throw new Error(j.error || `서버 오류 ${r.status}`)
+      setNotifMsg(`테스트 알림 발송: 성공 ${j.sent ?? 0}대 · 실패 ${j.failed ?? 0}대${j.cleaned ? ` (만료 기기 ${j.cleaned}대 정리)` : ''} — 이 기기에 알림이 떴는지 확인하세요`)
+    } catch (e) {
+      setNotifMsg('테스트 실패: ' + (e?.message || e))
     }
   }
 
@@ -2218,7 +2205,10 @@ function Admin() {
             {!isFull ? null : notifStatus === 'unsupported' ? (
               <span style={{ fontSize: 11, color: '#1a1a1a' }}>📵 알림 미지원</span>
             ) : notifStatus === 'granted-active' ? (
-              <span style={{ fontSize: 11, color: '#22c55e', padding: '6px 12px', border: '1px solid #22c55e33', borderRadius: 6 }}>🔔 알림 ON</span>
+              <>
+                <span style={{ fontSize: 11, color: '#22c55e', padding: '6px 12px', border: '1px solid #22c55e33', borderRadius: 6 }}>🔔 알림 ON</span>
+                <button onClick={testNotification} style={{ background: 'transparent', border: '1px solid #e4e4e2', color: '#1a1a1a', padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 11, fontFamily: 'inherit', whiteSpace: 'nowrap' }}>테스트 알림</button>
+              </>
             ) : notifStatus === 'denied' ? (
               <span style={{ fontSize: 11, color: '#ef4444', padding: '6px 12px', border: '1px solid #ef444433', borderRadius: 6 }}>🔕 알림 차단됨</span>
             ) : (

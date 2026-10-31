@@ -2503,8 +2503,8 @@ function Nav({ page, setPage, cartCount = 0 }) {
         {/* 데스크탑 메뉴 */}
         <div className="nav-links desktop-only">
           <span className={`nav-link${page === 'rental' ? ' active' : ''}`} onClick={() => setPage('rental')}>RENTAL GEAR</span>
-          <span className={`nav-link${page === 'portfolio' ? ' active' : ''}`} onClick={() => setPage('portfolio')}>PORTFOLIO</span>
           <span className={`nav-link${page === 'agency' ? ' active' : ''}`} onClick={() => setPage('agency')}>AGENCY</span>
+          <span className={`nav-link${page === 'portfolio' ? ' active' : ''}`} onClick={() => setPage('portfolio')}>PORTFOLIO</span>
           <button className="btn-booking" onClick={() => setPage('booking')}>장비 예약</button>
           <a className="btn-kakao" href="http://pf.kakao.com/_mANXG/chat" target="_blank" rel="noreferrer">카카오톡</a>
           <span className="nav-link admin" style={{ fontSize: 10, opacity: .4 }} onClick={() => setPage('admin')}>ADMIN</span>
@@ -2532,8 +2532,8 @@ function Nav({ page, setPage, cartCount = 0 }) {
       {menuOpen && (
         <div className="mobile-menu mobile-only">
           <div className={`mobile-menu-item${page === 'rental' ? ' active' : ''}`} onClick={() => go('rental')}>RENTAL GEAR</div>
-          <div className={`mobile-menu-item${page === 'portfolio' ? ' active' : ''}`} onClick={() => go('portfolio')}>PORTFOLIO</div>
           <div className={`mobile-menu-item${page === 'agency' ? ' active' : ''}`} onClick={() => go('agency')}>AGENCY · 인력 섭외</div>
+          <div className={`mobile-menu-item${page === 'portfolio' ? ' active' : ''}`} onClick={() => go('portfolio')}>PORTFOLIO</div>
           <div className={`mobile-menu-item${page === 'booking' ? ' active' : ''}`} onClick={() => go('booking')}>장비 예약</div>
           <a className="mobile-menu-item kakao" href="http://pf.kakao.com/_mANXG/chat" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)}>카카오톡 문의</a>
           <div className="mobile-menu-item admin" onClick={() => go('admin')}>ADMIN</div>

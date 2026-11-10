@@ -115,7 +115,7 @@ function PfModal({ item, onClose }) {
 }
 
 // ─── 포트폴리오 페이지 ──────────────────────────────────
-const PF_CATS = ['전체', '브랜드 이벤트', '클럽/파티', '공연', '기업 행사', '야외 이벤트', '야외 페스티벌', '웨딩']
+const PF_CATS = ['전체', '브랜드 이벤트', '페스티벌/콘서트', '기업 행사', '웨딩/프라이빗']
 
 function Portfolio({ setPage }) {
   const [cat, setCat] = useState('전체')

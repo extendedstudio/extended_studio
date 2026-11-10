@@ -432,10 +432,22 @@
   ],
   "portfolio": [
     {
+      "img": "/images/portfolio/waterbomb-2026-kintex.jpg",
+      "title": "2026 WATERBOMB 트로피컬 스테이지",
+      "venue": "KINTEX 7,8홀",
+      "cat": "페스티벌/콘서트"
+    },
+    {
       "img": "/images/portfolio/cookierun-5y-kintex.jpg",
       "title": "쿠키런 5주년",
       "venue": "KINTEX 7,8 Hall",
       "cat": "기업 행사"
+    },
+    {
+      "img": "/images/portfolio/gtws-salomon-muju.jpg",
+      "title": "GTWS × SALOMON",
+      "venue": "무주 덕유산 리조트",
+      "cat": "브랜드 이벤트"
     },
     {
       "img": "/images/portfolio/nike-pie-factory.jpg",
@@ -450,9 +462,159 @@
       "cat": "브랜드 이벤트"
     },
     {
+      "img": "/images/portfolio/bts-city-arirang.jpg",
+      "title": "BTS 'The City Arirang' 애프터파티",
+      "venue": "이들스",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/fast-furious-sinchon.jpg",
+      "title": "Fast & Furious Seoul Drift",
+      "venue": "신촌 현대백화점",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/monster-uci-mtb.jpg",
+      "title": "Monster Energy × UCI MTB World Series",
+      "venue": "모나용평",
+      "cat": "페스티벌/콘서트"
+    },
+    {
+      "img": "/images/portfolio/swarovski-popera-dosan.jpg",
+      "title": "Swarovski 팝페라 공연",
+      "venue": "스와로브스키 도산",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/hypebeast-lotte.jpg",
+      "title": "Hypebeast",
+      "venue": "롯데갤러리 잠실",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/moet-chandon-signiel.jpg",
+      "title": "Moët & Chandon",
+      "venue": "시그니엘 잠실",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/veuve-clicquot-kream.jpg",
+      "title": "Veuve Clicquot × Zac Muis",
+      "venue": "KREAM 도산 플래그쉽",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/yeouido-fireworks-cruise.jpg",
+      "title": "여의도 세계불꽃축제",
+      "venue": "서울크루즈",
+      "cat": "페스티벌/콘서트"
+    },
+    {
+      "img": "/images/portfolio/korea-open-wilson.jpg",
+      "title": "Korea Open × Wilson",
+      "venue": "테니스 오픈",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/jagermeister-ximximbar.jpg",
+      "title": "Jägermeister",
+      "venue": "ximximbar 성수",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/musinsa-taylormade.jpg",
+      "title": "Musinsa × TaylorMade",
+      "venue": "스포츠 콜라보",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/kolon-pro-am.jpg",
+      "title": "Kolon Pro Am",
+      "venue": "우정힐스 CC",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/yandex-ads-seoul-2026.jpg",
+      "title": "YANDEX ADS SEOUL 2026",
+      "venue": "온리고앤코",
+      "cat": "기업 행사"
+    },
+    {
+      "img": "/images/portfolio/noran-usan-jeju.jpg",
+      "title": "2026 노란우산 발전 유공자 워크숍",
+      "venue": "제주 신라호텔 한라홀",
+      "cat": "기업 행사"
+    },
+    {
+      "img": "/images/portfolio/cookierun-4y-suwon.jpg",
+      "title": "쿠키런 4주년",
+      "venue": "수원 컨벤션센터",
+      "cat": "기업 행사"
+    },
+    {
+      "img": "/images/portfolio/cookierun-deoksugung.jpg",
+      "title": "쿠키런 - 사라진 국사유산을 찾아서",
+      "venue": "덕수궁",
+      "cat": "기업 행사"
+    },
+    {
+      "img": "/images/portfolio/grand-hyatt-jeju.jpg",
+      "title": "Grand Hyatt Jeju",
+      "venue": "DJ Pool Party",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/thr-moon-party-hyatt.jpg",
+      "title": "THR Moon Party Seoul",
+      "venue": "Grand Hyatt Seoul",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/woodford-wonderful-race-2026.jpg",
+      "title": "Woodford Reserve Wonderful Race 2026",
+      "venue": "몬드리안 서울",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/ncnc-fashion-show.jpg",
+      "title": "NC&C 패션쇼 (NEWNEW COLLECTION 5)",
+      "venue": "SJ 쿤스트할레",
+      "cat": "브랜드 이벤트"
+    },
+    {
       "img": "/images/portfolio/dalmore-strux.jpg",
       "title": "Dalmore",
-      "venue": "스트럭스",
+      "venue": "STRX 하우스",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/soundbite-bunjang-nodeul.jpg",
+      "title": "SoundBite × 번개장터",
+      "venue": "노들섬",
+      "cat": "페스티벌/콘서트"
+    },
+    {
+      "img": "/images/portfolio/ninja-morning-smoothie.jpg",
+      "title": "Ninja 모닝 스무디 클럽",
+      "venue": "북촌 수헌재",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/subdued-seongsu.jpg",
+      "title": "Subdued Open",
+      "venue": "성수동 팝업",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/stitch-by-stitch-adekuver.jpg",
+      "title": "Stitch by Stitch",
+      "venue": "아데쿠베",
+      "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/longevity-paulas-choice.jpg",
+      "title": "롱진콘 × 폴라초이스",
+      "venue": "디아트스튜디오 삼청점",
       "cat": "브랜드 이벤트"
     },
     {
@@ -470,7 +632,7 @@
     {
       "img": "/images/portfolio/atw-2024.jpg",
       "title": "A.T.W 2024",
-      "venue": "페스티벌",
+      "venue": "콘래드 호텔",
       "cat": "페스티벌/콘서트"
     },
     {
@@ -482,13 +644,7 @@
     {
       "img": "/images/portfolio/glendronach.jpg",
       "title": "Glendronach",
-      "venue": "위스키 테이스팅",
-      "cat": "브랜드 이벤트"
-    },
-    {
-      "img": "/images/portfolio/grand-hyatt-jeju.jpg",
-      "title": "Grand Hyatt Jeju",
-      "venue": "리조트 행사",
+      "venue": "신라호텔 영빈관",
       "cat": "브랜드 이벤트"
     },
     {
@@ -496,12 +652,6 @@
       "title": "Jack Daniel's 기자간담회",
       "venue": "프레스 이벤트",
       "cat": "기업 행사"
-    },
-    {
-      "img": "/images/portfolio/jagermeister-ximximbar.jpg",
-      "title": "Jägermeister",
-      "venue": "ximximbar 성수",
-      "cat": "브랜드 이벤트"
     },
     {
       "img": "/images/portfolio/jagermeister-hyundai-dosan.jpg",
@@ -522,22 +672,10 @@
       "cat": "브랜드 이벤트"
     },
     {
-      "img": "/images/portfolio/korea-open-wilson.jpg",
-      "title": "Korea Open × Wilson",
-      "venue": "테니스 오픈",
-      "cat": "브랜드 이벤트"
-    },
-    {
       "img": "/images/portfolio/madeon-opening.jpg",
       "title": "Madeon Opening Party",
       "venue": "내한 공연 애프터",
       "cat": "페스티벌/콘서트"
-    },
-    {
-      "img": "/images/portfolio/moet-chandon-signiel.jpg",
-      "title": "Moët & Chandon",
-      "venue": "시그니엘 잠실",
-      "cat": "브랜드 이벤트"
     },
     {
       "img": "/images/portfolio/monster-energy-ss33.jpg",
@@ -564,18 +702,6 @@
       "cat": "브랜드 이벤트"
     },
     {
-      "img": "/images/portfolio/soundbite-bunjang-nodeul.jpg",
-      "title": "SoundBite × 번개장터",
-      "venue": "노들섬",
-      "cat": "페스티벌/콘서트"
-    },
-    {
-      "img": "/images/portfolio/thr-moon-party-hyatt.jpg",
-      "title": "THR Moon Party Seoul",
-      "venue": "Grand Hyatt Seoul",
-      "cat": "브랜드 이벤트"
-    },
-    {
       "img": "/images/portfolio/talkshow-adecube.jpg",
       "title": "Talk Show",
       "venue": "도산 아데쿠베",
@@ -586,36 +712,6 @@
       "title": "Wedding Party",
       "venue": "프라이빗 웨딩",
       "cat": "웨딩/프라이빗"
-    },
-    {
-      "img": "/images/portfolio/bts-city-arirang.jpg",
-      "title": "BTS 'The City Arirang' 애프터파티",
-      "venue": "이들스",
-      "cat": "브랜드 이벤트"
-    },
-    {
-      "img": "/images/portfolio/hypebeast-lotte.jpg",
-      "title": "Hypebeast",
-      "venue": "롯데갤러리 잠실",
-      "cat": "브랜드 이벤트"
-    },
-    {
-      "img": "/images/portfolio/kolon-pro-am.jpg",
-      "title": "Kolon Pro Am",
-      "venue": "골프 이벤트",
-      "cat": "브랜드 이벤트"
-    },
-    {
-      "img": "/images/portfolio/monster-uci-mtb.jpg",
-      "title": "Monster UCI MTB World Champ.",
-      "venue": "용평",
-      "cat": "페스티벌/콘서트"
-    },
-    {
-      "img": "/images/portfolio/musinsa-taylormade.jpg",
-      "title": "Musinsa × TaylorMade",
-      "venue": "스포츠 콜라보",
-      "cat": "브랜드 이벤트"
     },
     {
       "img": "/images/portfolio/woodford-alice.jpg",
@@ -639,12 +735,6 @@
       "img": "/images/portfolio/mukkkrop-popup.jpg",
       "title": "묵끄럽 팝업",
       "venue": "성수동 Space X",
-      "cat": "브랜드 이벤트"
-    },
-    {
-      "img": "/images/portfolio/veuve-clicquot-kream.jpg",
-      "title": "Veuve Clicquot × Zac Muis",
-      "venue": "KREAM 도산 플래그쉽",
       "cat": "브랜드 이벤트"
     },
     {
@@ -690,18 +780,6 @@
       "cat": "브랜드 이벤트"
     },
     {
-      "img": "/images/portfolio/cookierun-deoksugung.jpg",
-      "title": "쿠키런 - 사라진 국사유산을 찾아서",
-      "venue": "덕수궁",
-      "cat": "기업 행사"
-    },
-    {
-      "img": "/images/portfolio/cookierun-4y-suwon.jpg",
-      "title": "쿠키런 4주년",
-      "venue": "수원 컨벤션센터",
-      "cat": "기업 행사"
-    },
-    {
       "img": "/images/portfolio/cookierun-4y-suwon-2.jpg",
       "title": "쿠키런 4주년 (2)",
       "venue": "수원 컨벤션센터",
@@ -712,6 +790,12 @@
       "title": "통영 어부장터",
       "venue": "지역 페스티벌",
       "cat": "브랜드 이벤트"
+    },
+    {
+      "img": "/images/portfolio/hyangdong-school-festival.jpg",
+      "title": "향기울림제",
+      "venue": "향동중학교",
+      "cat": "페스티벌/콘서트"
     }
   ],
   "mics": [

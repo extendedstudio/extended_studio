@@ -205,14 +205,14 @@ body {
   transition: all .2s;
 }
 .tab-btn.on, .tab-btn:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
-.pf-grid { columns: 3 280px; gap: 12px; margin-bottom: 60px; }
-@media (max-width: 700px) { .pf-grid { columns: 1; } }
+.pf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 60px; }
+@media (max-width: 700px) { .pf-grid { grid-template-columns: 1fr; } }
 .pf-card {
-  break-inside: avoid; margin-bottom: 12px; cursor: pointer;
+  break-inside: avoid; cursor: pointer;
   position: relative; overflow: hidden; border-radius: 8px;
   display: block;
 }
-.pf-card img { width: 100%; display: block; transition: transform .4s; }
+.pf-card img { width: 100%; aspect-ratio: 1065 / 612; object-fit: cover; display: block; transition: transform .4s; }
 .pf-card:hover img { transform: scale(1.04); }
 .pf-overlay {
   position: absolute; inset: 0;
@@ -327,7 +327,7 @@ body {
 
 /* 반응형 */
 @media (max-width: 600px) {
-  .pf-grid { columns: 1; }
+  .pf-grid { grid-template-columns: 1fr; }
   .pkg-grid { grid-template-columns: 1fr; gap: 20px; }
   .gear-img { aspect-ratio: 1 / 1; }
   .gear-name { font-size: 22px; }
